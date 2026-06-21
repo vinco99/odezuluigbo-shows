@@ -58,7 +58,7 @@ export default function LoginPage(){
                     className="border p-2"
                 />
 
-                <button type="submit" className="bg-black text-white px-5 py-2">
+                <button type="submit" className="bg-white text-black px-5 py-2">
                     Login
                 </button>
 
@@ -66,6 +66,21 @@ export default function LoginPage(){
 
             </form>
 
+            <div>
+
+                <button className="bg-white text-black px-5 py-2"
+                    onClick={() => signIn("google", {callbackUrl:"/dashboard"})}
+                >
+                    Continue with Google
+                </button>
+
+                <button className="bg-white text-black px-5 py-2"
+                    onClick={() => signIn("facebook", {callbackUrl:"/dashboard"})}
+                >
+                    Continue with Facebook
+                </button>
+
+            </div>
 
         </div>
 
