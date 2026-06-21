@@ -25,6 +25,10 @@ export default async function Dashboard(){
             
             <div className="mt-4">
                 <LogoutButton />
+
+                <a href="/profile" className="text-yellow-400">
+                    Profile
+                </a>
             </div>
         </main>
 
