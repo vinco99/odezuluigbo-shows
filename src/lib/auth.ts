@@ -11,6 +11,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
     adapter: PrismaAdapter(prisma),
 
+    secret: process.env.AUTH_SECRET,
+
     providers:[
 
         Credentials({
@@ -78,7 +80,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             process.env.GOOGLE_CLIENT_ID!,
 
             clientSecret:
-            process.env.GOOGLE_CLIENT_SECRET!
+            process.env.GOOGLE_CLIENT_SECRET!,
+
+            allowDangerousEmailAccountLinking: true,
 
         }),
 
@@ -89,9 +93,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             process.env.FACEBOOK_CLIENT_ID!,
 
             clientSecret:
-            process.env.FACEBOOK_CLIENT_SECRET!
+            process.env.FACEBOOK_CLIENT_SECRET!,
+
+            allowDangerousEmailAccountLinking:true
 
         })
+
     ],
 
 

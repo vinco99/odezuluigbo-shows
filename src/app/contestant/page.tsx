@@ -17,7 +17,3 @@ export default async function ContestantPage() {
         </main>
     );
 }
-
-await requireRole([
- "ADMIN", "CONTESTANT"
-]);

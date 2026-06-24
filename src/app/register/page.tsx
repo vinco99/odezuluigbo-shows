@@ -1,114 +1,104 @@
 "use client";
-
-import {useState} from "react";
+import { signIn } from "next-auth/react";
+import { useState } from "react";
 
 
 export default function RegisterPage(){
 
-const [message,setMessage]=useState("");
+    const [message,setMessage]=useState("");
+
+    
+    async function handleSubmit( e:React.FormEvent<HTMLFormElement>){
+
+        e.preventDefault();
+
+        const form = new FormData(e.currentTarget);
 
 
-async function handleSubmit(
-e:React.FormEvent<HTMLFormElement>
-){
+        const response = await fetch("/api/register",{
 
-e.preventDefault();
+            method:"POST",
 
+            headers:{
+            "Content-Type":"application/json"
+            },
 
-const form =
-new FormData(e.currentTarget);
+            body:JSON.stringify({
+                name:form.get("name"),
+                email:form.get("email"),
+                password:form.get("password")
 
+            })
 
-const response =
-await fetch("/api/register",{
-
-method:"POST",
-
-headers:{
-"Content-Type":"application/json"
-},
-
-body:JSON.stringify({
-
-name:form.get("name"),
-
-email:form.get("email"),
-
-password:form.get("password")
-
-})
-
-});
+        });
 
 
-const data =
-await response.json();
+        const data = await response.json();
 
 
-setMessage(data.message || data.error);
+        setMessage(data.message || data.error);
 
-
-}
+    }
 
 
 
-return (
+    return (
 
-<div className="min-h-screen flex items-center justify-center">
+        <div className="min-h-screen flex items-center justify-center">
 
+            <form onSubmit={handleSubmit} className="space-y-4">
 
-<form
-onSubmit={handleSubmit}
-className="space-y-4"
->
+                <h1 className="text-3xl">
+                    Create Account
+                </h1>
 
+                <input
+                    name="name"
+                    placeholder="Name"
+                    className="border p-2"
+                />
 
-<h1 className="text-3xl">
-Create Account
-</h1>
+                <input
+                    name="email"
+                    placeholder="Email"
+                    className="border p-2"
+                />
 
+                <input
+                    name="password"
+                    type="password"
+                    placeholder="Password"
+                    className="border p-2"
+                />
 
-<input
-name="name"
-placeholder="Name"
-className="border p-2"
-/>
+                <button className="bg-white text-black px-5 py-2">
+                    Register
+                </button>
 
+                <p>
+                    {message}
+                </p>
 
-<input
-name="email"
-placeholder="Email"
-className="border p-2"
-/>
+            </form>
 
+            <div>
 
-<input
-name="password"
-type="password"
-placeholder="Password"
-className="border p-2"
-/>
+                <button className="bg-white text-black px-5 py-2"
+                    onClick={() => signIn("google", {callbackUrl:"/dashboard"})}
+                >
+                    Continue with Google
+                </button>
 
+                <button className="bg-white text-black px-5 py-2"
+                    onClick={() => signIn("facebook", {callbackUrl:"/dashboard"})}
+                >
+                    Continue with Facebook
+                </button>
 
-<button
-className="bg-black text-white px-5 py-2"
->
+            </div>
 
-Register
+        </div>
 
-</button>
-
-
-<p>
-{message}
-</p>
-
-
-</form>
-
-
-</div>
-
-)
+    )
 
 }
