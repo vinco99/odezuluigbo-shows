@@ -29,10 +29,13 @@ model User {
 
   accounts   Account[]
   sessions   Session[]
+  events     Event[]
+  contestants Contestant[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
 
 model Account {
   id                String @id @default(cuid())
@@ -55,6 +58,7 @@ model Account {
   @@unique([provider, providerAccountId])
 }
 
+
 model Session {
   id           String   @id @default(cuid())
   sessionToken String   @unique
@@ -70,4 +74,100 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+
+model Event {
+  id              String @id @default(cuid())
+
+  title           String
+  description     String
+  logo            String?
+  banner          String?
+
+  registrationFee Float   @default(0)
+  votingFee       Float   @default(0)
+
+  status  EventStatus @default(PENDING)
+
+  organizerId     String
+
+  organizer User  @relation(fields:[organizerId], references:[id])
+
+  contestants     Contestant[]
+  judges          Judge[]
+  sponsors        Sponsor[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum EventStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  COMPLETED
+}
+
+
+model Contestant {
+  id               String   @id   @default(cuid())
+  userId           String
+  name             String
+  photo            String?
+  bio              String?
+  eventId          String
+
+  paymentStatus     PaymentStatus     @default(PENDING)
+
+  paymentReference String?
+
+  applicationStatus ApplicationStatus @default(PENDING)
+
+
+  user      User     @relation(fields:[userId], references:[id], onDelete:Cascade)
+
+  event     Event    @relation(fields:[eventId], references:[id], onDelete:Cascade)
+
+  votes     Int      @default(0)
+
+  createdAt DateTime @default(now())
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+}
+
+enum ApplicationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+
+model Judge {
+  id        String   @id   @default(cuid())
+  name      String
+  image     String?
+  title     String?
+  eventId   String
+
+  event     Event    @relation(fields:[eventId], references:[id], onDelete:Cascade)
+
+  createdAt DateTime @default(now())
+}
+
+
+model Sponsor {
+  id        String   @id @default(cuid())
+  name      String
+  logo      String?
+  website   String?
+  eventId   String
+
+  event     Event    @relation(fields:[eventId], references:[id], onDelete:Cascade)
+
+  createdAt DateTime @default(now())
 }

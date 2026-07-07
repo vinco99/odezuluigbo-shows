@@ -1,6 +1,6 @@
 "use client"
-import React, { useState } from "react";
-import Link from "next/link";
+
+import { useState } from "react";
 import { signOut } from "next-auth/react";
 import { redirect } from "next/navigation";
 
@@ -41,18 +41,18 @@ export default function Navbar({ session }: NavbarProps){
 
                         {/*Desktop Navigation Items*/}
                         <div className="hidden md:flex items-center space-x-6">
-                            <Link href="/dashboard" className="text-sm font-medium text-slate-300 hover:text-white transition-colors duration-200">
+                            <a href="/dashboard" className="text-sm font-medium text-slate-300 hover:text-white transition-colors duration-200">
                                 Dashboard
-                            </Link>
-                            <Link href="/profile" className="text-sm font-medium text-slate-300 hover:text-white transition-colors duration-200">
+                            </a>
+                            <a href="/profile" className="text-sm font-medium text-slate-300 hover:text-white transition-colors duration-200">
                                 Profile
-                            </Link>
+                            </a>
                                 
                             {/*Role Display Badge*/}
                             <div className="flex items-center space-x-2 bg-purple-950/50 border border-purple-500/30 px-3 py-1 rounded-full">
                                 <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
                                 <span className="text-xs font-semibold tracking-wider text-purple-300">
-                                    Role: {role}
+                                    Role: {role || "User"}
                                 </span>
                             </div>
 
@@ -123,12 +123,12 @@ export default function Navbar({ session }: NavbarProps){
 
                         {/*Desktop Navigation Items*/}
                         <div className="hidden md:flex items-center space-x-6">
-                            <Link href="/dashboard" className="text-sm font-medium text-slate-300 hover:text-white transition-colors duration-200">
+                            <a href="/dashboard" className="text-sm font-medium text-slate-300 hover:text-white transition-colors duration-200">
                                 Dashboard
-                            </Link>
-                            <Link href="/profile" className="text-sm font-medium text-slate-300 hover:text-white transition-colors duration-200">
+                            </a>
+                            <a href="/profile" className="text-sm font-medium text-slate-300 hover:text-white transition-colors duration-200">
                                 Profile
-                            </Link>
+                            </a>
                             
                             {/*Role Display Badge*/}
                             <div className="flex items-center space-x-2 bg-purple-950/50 border border-purple-500/30 px-3 py-1 rounded-full">
@@ -174,8 +174,8 @@ export default function Navbar({ session }: NavbarProps){
                         <span className="text-xs font-semibold uppercase tracking-wider text-purple-400">Current Session</span>
                         <span className="text-xs bg-purple-950/80 border border-purple-500/30 px-2 py-0.5 rounded text-purple-300">{role}</span>
                     </div>
-                    <Link href="/dashboard" className="block text-base font-medium text-slate-300 hover:text-white py-2 rounded-md">Dashboard</Link>
-                    <Link href="/profile" className="block text-base font-medium text-slate-300 hover:text-white py-2 rounded-md">Profile</Link>
+                    <a href="/dashboard" className="block text-base font-medium text-slate-300 hover:text-white py-2 rounded-md">Dashboard</a>
+                    <a href="/profile" className="block text-base font-medium text-slate-300 hover:text-white py-2 rounded-md">Profile</a>
 
                     <button
                         onClick={async () => {
