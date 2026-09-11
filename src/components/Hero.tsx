@@ -3,6 +3,8 @@
 import {useEffect, useRef} from "react";
 import * as THREE from "three";
 import {motion} from "framer-motion";
+import Image from "next/image";
+import Link from "next/link";
 
 
 export default function Hero(){
@@ -104,7 +106,7 @@ export default function Hero(){
         );
 
         knot.position.set(
-            5, 0, -2
+            2, -3, -2
         );
         scene.add(knot);
 
@@ -247,20 +249,17 @@ return(
 <section
     id="hero"
 >
-    <canvas ref={canvasRef} id="hero-canvas" 
+    <canvas ref={canvasRef} id="hero-canvas" />
 
-    />
-
-    <div className="hero-overlay" />
+    <div id="hero-logo-watermark" style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", zIndex: -1, pointerEvents: "none" }}>
+        <Image src="/images/logo.webp" alt="Odezuluigbo Shows" style={{ width: "68%", maxWidth: "600px", objectFit: "contain", opacity: 0.9, filter: "drop-shadow(0 0 40px rgba(201,168,76,.5))" }} />
+    </div>
+    
+    <div className="hero-overlay"></div>
 
     <div className="hero-content">
-        <div className="hero-badge">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ verticalAlign: "middle", marginRight: "4px" }}>
-                <circle cx="12" cy="12" r="10"/>
-                <line x1="2" y1="12" x2="22" y2="12"/>
-                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-            </svg>Africa's #1 Igbo Entertainment Platform
-            </div>
+        <div className="hero-badge"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{verticalAlign: "middle", marginRight: "4px"}}><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> Africa's #1 Igbo Entertainment Platform</div>
+
         <h1 className="hero-title">
             <span className="t-line">ODEZULUIGBO</span>
             <span className="t-line accent">SHOWS</span>
@@ -269,12 +268,12 @@ return(
         <p className="hero-sub">Celebrating Igbo Culture · Talent · Beauty · Excellence</p>
 
         <div className="hero-btns">
-            <a className="btn btn-gold">
+            <Link href="/events" className="btn btn-gold">
                 Explore Events
-            </a>
-            <a className="btn btn-outline">
+            </Link>
+            <Link href="/vote" className="btn btn-outline">
                 Vote Now
-            </a>
+            </Link>
         </div>
         <div className="hero-cd">
             <div className="cd-label">⏳ Next Event: AdaomaIgbonile Pageant — Nov 30, 2025</div>

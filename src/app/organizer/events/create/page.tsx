@@ -6,6 +6,7 @@ export default async function CreateEventPage() {
         "ORGANIZER"
     ]);
 
+    
     return (
         <main className="p-10">
 

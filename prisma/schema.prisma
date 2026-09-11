@@ -15,27 +15,36 @@ enum Role {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  
-  name      String
-  email     String   @unique
-  password  String?
+  id String @id @default(cuid())
 
-  phone     String?
-  image     String?
+  name       String
+  email      String  @unique
+  password   String?
+  username   String? @unique
+  phone      String?
+  image      String?
+  coverImage String?
+
+  bio     String?
+  state   String?
+  country String?
+
   emailVerified DateTime?
 
-  role      Role     @default(USER)
+  role Role @default(USER)
 
-  accounts   Account[]
-  sessions   Session[]
-  events     Event[]
+  accounts    Account[]
+  sessions    Session[]
+  events      Event[]
+  payments    Payment[]
+  voter       Vote[]
   contestants Contestant[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  blogs         Blog[]
+  notifications Notification[]
 }
-
 
 model Account {
   id                String @id @default(cuid())
@@ -44,20 +53,18 @@ model Account {
   provider          String
   providerAccountId String
 
-  refresh_token     String?
-  access_token      String?
-  expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String?
-  
-  session_state     String?
+  refresh_token String?
+  access_token  String?
+  expires_at    Int?
+  token_type    String?
+  scope         String?
+  id_token      String?
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  session_state String?
+  user          User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
-
 
 model Session {
   id           String   @id @default(cuid())
@@ -70,36 +77,48 @@ model Session {
 
 model VerificationToken {
   identifier String
-  token      String @unique
+  token      String   @unique
   expires    DateTime
 
   @@unique([identifier, token])
 }
 
-
 model Event {
-  id              String @id @default(cuid())
+  id String @id @default(cuid())
 
-  title           String
-  description     String
-  logo            String?
-  banner          String?
+  title       String
+  slug        String  @unique
+  description String
+  logo        String?
+  banner      String?
 
-  registrationFee Float   @default(0)
-  votingFee       Float   @default(0)
+  venue   String?
+  state   String?
+  country String?
 
-  status  EventStatus @default(PENDING)
+  registrationStart DateTime?
+  registrationEnd   DateTime?
+  eventDate         DateTime?
 
-  organizerId     String
+  maxContestants Int?
+  isVotingOpen   Boolean @default(false)
 
-  organizer User  @relation(fields:[organizerId], references:[id])
+  registrationFee Float       @default(0)
+  votingFee       Float       @default(0)
+  status          EventStatus @default(PENDING)
+  type            EventType
 
-  contestants     Contestant[]
-  judges          Judge[]
-  sponsors        Sponsor[]
+  organizerId String
+  organizer   User   @relation(fields: [organizerId], references: [id])
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  payments    Payment[]
+  contestants Contestant[]
+  judges      Judge[]
+  sponsors    Sponsor[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  galleries Gallery[]
 }
 
 enum EventStatus {
@@ -109,29 +128,48 @@ enum EventStatus {
   COMPLETED
 }
 
+enum EventType {
+  PAGEANT
+  REALITY_SHOW
+  TALENT_SHOW
+  CULTURAL_FESTIVAL
+  MUSIC
+  COMEDY
+}
 
 model Contestant {
-  id               String   @id   @default(cuid())
-  userId           String
-  name             String
-  photo            String?
-  bio              String?
-  eventId          String
+  id     String @id @default(cuid())
+  userId String
 
-  paymentStatus     PaymentStatus     @default(PENDING)
+  name      String
+  photo     String?
+  bio       String?
+  instagram String?
+  facebook  String?
+  tiktok    String?
 
-  paymentReference String?
+  eventId   String
+  paymentId String  @unique
+  payment   Payment @relation(fields: [paymentId], references: [id])
 
   applicationStatus ApplicationStatus @default(PENDING)
 
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
 
-  user      User     @relation(fields:[userId], references:[id], onDelete:Cascade)
-
-  event     Event    @relation(fields:[eventId], references:[id], onDelete:Cascade)
-
-  votes     Int      @default(0)
+  votes Vote[]
 
   createdAt DateTime @default(now())
+}
+
+model Gallery {
+  id String @id @default(cuid())
+
+  image   String
+  caption String?
+
+  eventId String
+  event   Event  @relation(fields: [eventId], references: [id])
 }
 
 enum PaymentStatus {
@@ -146,28 +184,92 @@ enum ApplicationStatus {
   REJECTED
 }
 
+model Payment {
+  id String @id @default(cuid())
 
-model Judge {
-  id        String   @id   @default(cuid())
-  name      String
-  image     String?
-  title     String?
-  eventId   String
+  reference String @unique
+  amount    Float
 
-  event     Event    @relation(fields:[eventId], references:[id], onDelete:Cascade)
+  type   PaymentType
+  status PaymentStatus @default(PENDING)
+
+  userId  String
+  eventId String
+
+  user       User        @relation(fields: [userId], references: [id])
+  event      Event       @relation(fields: [eventId], references: [id])
+  contestant Contestant?
 
   createdAt DateTime @default(now())
 }
 
+enum PaymentType {
+  CONTESTANT_REGISTRATION
+  VOTE
+  SPONSORSHIP
+  EVENT_REGISTRATION
+}
+
+model Judge {
+  id      String  @id @default(cuid())
+  name    String
+  image   String?
+  title   String?
+  eventId String
+
+  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+}
 
 model Sponsor {
-  id        String   @id @default(cuid())
-  name      String
-  logo      String?
-  website   String?
-  eventId   String
+  id      String  @id @default(cuid())
+  name    String
+  logo    String?
+  website String?
+  eventId String
 
-  event     Event    @relation(fields:[eventId], references:[id], onDelete:Cascade)
-
+  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
+}
+
+model Vote {
+  id String @id @default(cuid())
+
+  voterId      String
+  contestantId String
+
+  quantity Int
+  amount   Float
+
+  reference String        @unique
+  status    PaymentStatus
+
+  voter      User       @relation(fields: [voterId], references: [id])
+  contestant Contestant @relation(fields: [contestantId], references: [id])
+  createdAt  DateTime   @default(now())
+}
+
+model Blog {
+  id String @id @default(cuid())
+
+  title      String
+  slug       String  @unique
+  content    String
+  coverImage String?
+
+  authorId String
+
+  author    User     @relation(fields: [authorId], references: [id])
+  createdAt DateTime @default(now())
+}
+
+model Notification {
+  id String @id @default(cuid())
+
+  userId String
+  title  String
+  body   String
+
+  read Boolean @default(false)
+  user User    @relation(fields: [userId], references: [id])
 }

@@ -65,7 +65,7 @@ export default function Navbar(){
             <div className="nav-container">
                 {/* LOGO */}
                 <Link href="/" className="nav-logo">
-                    <img src="https://oss-macaron-user.macaron.im/photo/0b736685-251b-465e-bfdc-c5bf92ada669.jpeg" alt="Odezuluigbo" className="logo-mark" />
+                    <Image src="/images/logo.webp" alt="Odezuluigbo" className="logo-mark" />
                     <div className="logo-text">
                         <span className="logo-main">ODEZULUIGBO</span>
                         <span className="logo-sub">SHOWS</span>

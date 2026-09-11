@@ -1,6 +1,6 @@
 import Hero from "@/components/Hero";
 import motion from "framer-motion";
-import { redirect } from "next/navigation";
+import Footer from "@/components/Homefooter";
 import Link from "next/link";
 
 
@@ -23,18 +23,18 @@ export default function Home(){
           </span>
           <span>
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ verticalAlign: "middle", marginRight: "4px"}}>
-              <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/>
-              <line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/>
-              <line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/>
-              <line x1="2" y1="17" x2="7" y2="17"/><line x1="17" y1="17" x2="22" y2="17"/>
+            <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/>
+            <line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/>
+            <line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/>
+            <line x1="2" y1="17" x2="7" y2="17"/><line x1="17" y1="17" x2="22" y2="17"/>
               <line x1="17" y1="7" x2="22" y2="7"/>
             </svg>Odenigwe Reality TV
           </span>
           <span>
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ verticalAlign: "middle", marginRight: "4px"}}>
-              <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
-              <path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/>
-              <line x1="8" y1="23" x2="16" y2="23"/>
+            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/>
+            <line x1="8" y1="23" x2="16" y2="23"/>
             </svg>Igbo Talent Hunt
           </span>
           <span>
@@ -44,16 +44,16 @@ export default function Home(){
           </span>
           <span>
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ verticalAlign: "middle", marginRight: "4px"}}>
-              <circle cx="12" cy="12" r="10"/>
-              <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
-              <line x1="9" y1="9" x2="9.01" y2="9"/>
-              <line x1="15" y1="9" x2="15.01" y2="9"/>
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
+            <line x1="9" y1="9" x2="9.01" y2="9"/>
+            <line x1="15" y1="9" x2="15.01" y2="9"/>
             </svg>Comedy Showdown
           </span>
           <span>
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ verticalAlign: "middle", marginRight: "4px"}}>
-              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
-              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
             </svg>Quiz Competition
           </span>
           <span>
@@ -75,10 +75,10 @@ export default function Home(){
           </span>
           <span>
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ verticalAlign: "middle", marginRight: "4px"}}>
-              <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
-              <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
-              <line x1="12" y1="19" x2="12" y2="23"/>
-              <line x1="8" y1="23" x2="16" y2="23"/>
+            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+            <line x1="12" y1="19" x2="12" y2="23"/>
+            <line x1="8" y1="23" x2="16" y2="23"/>
             </svg>Igbo Talent Hunt
           </span>
           <span>
@@ -88,16 +88,16 @@ export default function Home(){
           </span>
           <span>
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ verticalAlign: "middle", marginRight: "4px"}}>
-              <circle cx="12" cy="12" r="10"/>
-              <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
-              <line x1="9" y1="9" x2="9.01" y2="9"/>
-              <line x1="15" y1="9" x2="15.01" y2="9"/>
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
+            <line x1="9" y1="9" x2="9.01" y2="9"/>
+            <line x1="15" y1="9" x2="15.01" y2="9"/>
             </svg>Comedy Showdown
           </span>
           <span>
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ verticalAlign: "middle", marginRight: "4px"}}>
-              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
-              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
             </svg>Quiz Competition
           </span>
         </div>
@@ -130,8 +130,12 @@ export default function Home(){
                 <p>Celebrating the beauty, intelligence, elegance and excellence of the Igbo woman. Grand Prize: ₦1,000,000</p>
                 <div className="ev-prize"><span>Grand Prize</span><strong>₦1,000,000</strong></div>
                 <div className="ev-actions">
-                  <button className="btn btn-gold btn-sm" onClick={() => redirect('/pageant')}>Learn More</button>
-                  <button className="btn btn-outline btn-sm" onClick={() => redirect('/vote')}>Vote</button>
+                  <Link className="btn btn-gold btn-sm" href="/pageant">
+                    Learn More
+                  </Link>
+                  <Link className="btn btn-outline btn-sm" href="/vote">
+                    Vote
+                  </Link>
                 </div>
               </div>
             </div>
@@ -162,8 +166,12 @@ export default function Home(){
                 </div>
                 <h3>Odenigwe Reality TV Show</h3>
                 <div className="ev-actions">
-                  <button className="btn btn-gold btn-sm" onClick={() => redirect('/reality-tv')}>Learn More</button>
-                  <button className="btn btn-outline btn-sm" onClick={() => redirect('/vote')}>Vote</button>
+                  <Link className="btn btn-gold btn-sm" href="/reality-tv">
+                    Learn More
+                  </Link>
+                  <Link className="btn btn-outline btn-sm" href="/vote">
+                    Vote
+                  </Link>
                 </div>
               </div>
             </div>
@@ -202,13 +210,19 @@ export default function Home(){
                 <h3>Igbo Talent Hunt</h3>
                 <p>Discover and showcase extraordinary Igbo talent across music, dance, comedy, and more.</p>
                 <div className="ev-actions">
-                  <button className="btn btn-gold btn-sm" onClick={() => redirect('/contact')}>Learn More</button>
+                  <Link className="btn btn-gold btn-sm" href="/contact">
+                    Learn More
+                  </Link>
                 </div>
               </div>
             </div>
 
           </div>
-          <div className="section-cta"><button className="btn btn-ghost" onClick={() => redirect('/events')}>View All Events →</button></div>
+          <div className="section-cta">
+            <Link className="btn btn-ghost" href="/events">
+              View All Events →
+            </Link>
+          </div>
         </div>
       </section>
 
@@ -244,7 +258,9 @@ export default function Home(){
                   <div className="vote-fill" style={{ width: '0%' }}></div>
                 </div>
                 <small>0 votes</small>
-                <button className="btn btn-gold btn-xs" onClick={() => redirect('/vote')}>Vote</button>
+                <Link className="btn btn-gold btn-xs" href="/vote">
+                  Vote
+                </Link>
               </div>
             </div>
             <div className="contestant-card" data-aos data-aos-delay="200">
@@ -256,7 +272,9 @@ export default function Home(){
                   <div className="vote-fill" style={{ width: '0%' }}></div>
                 </div>
                 <small>0 votes</small>
-                <button className="btn btn-gold btn-xs" onClick={() => redirect('/vote')}>Vote</button>
+                <Link href="/vote" className="btn btn-gold btn-xs" >
+                  Vote
+                </Link>
               </div>
             </div>
             <div className="contestant-card" data-aos data-aos-delay="300">
@@ -268,7 +286,9 @@ export default function Home(){
                   <div className="vote-fill" style={{ width: '0%' }}></div>
                 </div>
                 <small>0 votes</small>
-                <button className="btn btn-gold btn-xs" onClick={() => redirect('/vote')}>Vote</button>
+                <Link href="/vote" className="btn btn-gold btn-xs" >
+                  Vote
+                </Link>
               </div>
             </div>
             <div className="contestant-card" data-aos data-aos-delay="400">
@@ -280,7 +300,9 @@ export default function Home(){
                   <div className="vote-fill" style={{ width: '0%' }}></div>
                 </div>
                 <small>0 votes</small>
-                <button className="btn btn-gold btn-xs" onClick={() => redirect('/vote')}>Vote</button>
+                <Link href="/vote" className="btn btn-gold btn-xs" >
+                  Vote
+                </Link>
               </div>
             </div>
             <div className="contestant-card" data-aos data-aos-delay="500">
@@ -292,7 +314,9 @@ export default function Home(){
                   <div className="vote-fill" style={{ width: '0%' }}></div>
                 </div>
                 <small>0 votes</small>
-                <button className="btn btn-gold btn-xs" onClick={() => redirect('/vote')}>Vote</button>
+                <Link href="/vote" className="btn btn-gold btn-xs" >
+                  Vote
+                </Link>
               </div>
             </div>
             <div className="contestant-card" data-aos data-aos-delay="600">
@@ -304,7 +328,9 @@ export default function Home(){
                   <div className="vote-fill" style={{ width: '0%' }}></div>
                 </div>
                 <small>0 votes</small>
-                <button className="btn btn-gold btn-xs" onClick={() => redirect('/vote')}>Vote</button>
+                <Link href="/vote" className="btn btn-gold btn-xs" >
+                  Vote
+                </Link>
               </div>
             </div>
             <div className="contestant-card" data-aos data-aos-delay="700">
@@ -316,7 +342,9 @@ export default function Home(){
                   <div className="vote-fill" style={{ width: '0%' }}></div>
                 </div>
                 <small>0 votes</small>
-                <button className="btn btn-gold btn-xs" onClick={() => redirect('/vote')}>Vote</button>
+                <Link href="/vote" className="btn btn-gold btn-xs" >
+                  Vote
+                </Link>
               </div>
             </div>
             <div className="contestant-card" data-aos data-aos-delay="800">
@@ -328,12 +356,18 @@ export default function Home(){
                   <div className="vote-fill" style={{ width: '0%' }}></div>
                 </div>
                 <small>0 votes</small>
-                <button className="btn btn-gold btn-xs" onClick={() => redirect('/vote')}>Vote</button>
+                <Link href="/vote" className="btn btn-gold btn-xs" >
+                  Vote
+                </Link>
               </div>
             </div>
 
           </div>
-          <div className="section-cta"><button className="btn btn-gold" onClick={() => redirect('/vote')}>Vote for Your Favourite →</button></div>
+          <div className="section-cta">
+            <Link href="/vote" className="btn btn-gold" >
+              Vote for Your Favourite →
+            </Link>
+          </div>
         </div>
       </section>
 
@@ -346,7 +380,9 @@ export default function Home(){
               <span className="section-badge">Our Mission</span>
               <h2>Rooted in Igbo Wisdom,<br />Built for the World</h2>
               <p>Odezuluigbo is here to bring joy, pride, and world-class entertainment to Igbo people everywhere. We discover talent, celebrate our culture, and put Igbo excellence on the global stage.</p>
-              <button className="btn btn-gold" onClick={() => redirect('/about')}>Our Story →</button>
+              <Link href="/about" className="btn btn-gold" >
+                Our Story →
+              </Link>
             </div>
             <div>
               <img className="about-visual-img" src="https://oss-macaron-user.macaron.im/photo/6e6be563-ea55-4e69-ae7d-8caf6fb1eeb8.jpeg" alt="Igbo Cultural Celebration" style={{ width: '100%', borderRadius: 'var(--radius)', objectFit: 'cover' }} />
@@ -370,7 +406,9 @@ export default function Home(){
                 <span className="b-cat">Culture</span>
                 <h4>The Beauty and Power of Igbo Womanhood</h4>
                 <p>Exploring the rich traditions and modern achievements of Igbo women across generations...</p>
-                <span className="b-link" onClick={() => redirect('/blog')}>Read More →</span>
+                <Link href="/blog" className="b-link">
+                  Read More →
+                </Link>
               </div>
             </div>
             <div className="blog-card" data-aos data-aos-delay="100">
@@ -379,7 +417,9 @@ export default function Home(){
                 <span className="b-cat">Entertainment</span>
                 <h4>How Odezuluigbo Is Changing Igbo Entertainment</h4>
                 <p>A deep dive into how our platform is revolutionizing talent discovery and cultural promotion...</p>
-                <span className="b-link" onClick={() => redirect('/blog')}>Read More →</span>
+                <Link href="/blog" className="b-link" >
+                  Read More →
+                </Link>
               </div>
             </div>
             <div className="blog-card" data-aos data-aos-delay="200">
@@ -388,7 +428,9 @@ export default function Home(){
                 <span className="b-cat">Diaspora</span>
                 <h4>Igbos Worldwide: Staying Connected to Culture</h4>
                 <p>How the global Igbo diaspora is keeping the flame of culture alive through entertainment...</p>
-                <span className="b-link" onClick={() => redirect('/blog')}>Read More →</span>
+                <Link href="/blog" className="b-link" >
+                  Read More →
+                </Link>
               </div>
             </div>
           </div>
@@ -406,7 +448,11 @@ export default function Home(){
             <div className="sponsor-logo"><div className="img-placeholder sponsor-img" data-desc="SPONSOR LOGO 4: Brand logo placeholder"><span className="ph-txt">Sponsor Logo 4</span></div></div>
             <div className="sponsor-logo"><div className="img-placeholder sponsor-img" data-desc="SPONSOR LOGO 5: Brand logo placeholder"><span className="ph-txt">Sponsor Logo 5</span></div></div>
           </div>
-          <div className="section-cta"><button className="btn btn-outline" onClick={() => redirect('/contact')}>Become a Sponsor →</button></div>
+          <div className="section-cta">
+            <Link href="/contact" className="btn btn-outline" >
+              Become a Sponsor →
+            </Link>
+          </div>
         </div>
       </div>
 
@@ -528,11 +574,14 @@ export default function Home(){
 
             <div className="nl-form">
               <input type="email" id="nlEmail" placeholder="Enter your email address" className="nl-input"/>
-              <button className="btn btn-gold" onClick={() => redirect('/newsletter')}>Subscribe</button>
+              <Link href="/newsletter" className="btn btn-gold" >
+                Subscribe
+              </Link>
             </div>
           </div>
         </div>
       </div>
+
 
 
       {/* SOCIAL */}
@@ -549,77 +598,7 @@ export default function Home(){
         </div>
       </div>
 
-      <footer className="footer">
-        <div className="container">
-          <div className="footer-grid">
-            <div className="footer-brand">
-              <div className="footer-logo">
-                <img className="logo-mark" src="https://oss-macaron-user.macaron.im/photo/0b736685-251b-465e-bfdc-c5bf92ada669.jpeg" alt="Odezuluigbo" />
-                <div className="logo-text"><span className="logo-main">ODEZULUIGBO</span><span className="logo-sub">SHOWS</span>
-                </div>
-              </div>
-              <p>Africa's leading Igbo entertainment and cultural platform. Promoting beauty, talent, and excellence worldwide.</p>
-              <p className="footer-tagline">Ka ọ si dị na Ala Igbo</p>
-            </div>
-            <div className="footer-col">
-              <h4>Events</h4>
-              <ul>
-                <li>
-                  <a onClick={() => redirect('/events/adaoma-igbonile-pageant')}>AdaomaIgbonile Pageant</a>
-                </li>
-                <li>
-                  <a onClick={() => redirect('/events/odenigwe-reality-tv')}>Odenigwe Reality TV</a>
-                </li>
-                <li>
-                  <a onClick={() => redirect('/events')}>All Events</a>
-                </li>
-              </ul>
-            </div>
-            <div className="footer-col">
-              <h4>Platform</h4>
-              <ul>
-                <li>
-                  <a onClick={() => redirect('/vote')}>Vote</a>
-                </li>
-                <li>
-                  <a onClick={() => redirect('/blog')}>Blog</a>
-                </li>
-                <li>
-                  <a onClick={() => redirect('/about')}>About Us</a>
-                </li>
-                <li>
-                  <a onClick={() => redirect('/contact')}>Contact</a>
-                </li>
-              </ul>
-            </div>
-            <div className="footer-col">
-              <h4>Social</h4>
-              <ul>
-                <li>
-                  <a href="https://www.instagram.com/odezuluigbo_tv" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" style={{ verticalAlign: "middle", marginRight: "6px" }}><rect x="2" y="2" width="20" height="20" rx="5" ry="5" stroke="url(#ig-grad-1)" strokeWidth="2"/><circle cx="12" cy="12" r="5" stroke="url(#ig-grad-1)" strokeWidth="2"/><circle cx="17.5" cy="6.5" r="1.5" fill="url(#ig-grad-1)"/><defs><linearGradient id="ig-grad-1" x1="0" y1="24" x2="24" y2="0"><stop offset="0%" stopColor="#FD5"/><stop offset="25%" stopColor="#F56040"/><stop offset="50%" stopColor="#E1306C"/><stop offset="75%" stopColor="#C13584"/><stop offset="100%" stopColor="#833AB4"/></linearGradient></defs></svg>Instagram</a>
-                </li>
-                <li>
-                  <a href="https://youtube.com/@odezuluigbo__tv" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" style={{ verticalAlign: "middle", marginRight: "6px" }}><path d="M23.498 6.186a2.955 2.955 0 0 0-2.074-2.09C19.542 3.5 12 3.5 12 3.5s-7.542 0-9.424.596A2.955 2.955 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a2.955 2.955 0 0 0 2.074 2.09C4.458 20.5 12 20.5 12 20.5s7.542 0 9.424-.596a2.955 2.955 0 0 0 2.074-2.09C24 15.93 24 12 24 12s0-3.93-.502-5.814z" fill="#FF0000"/><polygon points="9.75,7.5 16.5,12 9.75,16.5" fill="#FFF"/></svg>YouTube</a>
-                </li>
-                <li>
-                  <a href="https://www.tiktok.com/@odezuluigbotv" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 48 48" style={{ verticalAlign: "middle", marginRight: "6px" }}><path d="M34.1,11.4c-2.2-1.4-3.7-3.7-4.1-6.3c-0.1-0.5-0.1-1.1-0.1-1.7h-6.3v23.3c0,3-2.5,5.5-5.5,5.5c-1,0-2-0.3-2.9-0.8c-1.6-0.9-2.6-2.6-2.6-4.5c0-2.9,2.4-5.3,5.3-5.3c0.5,0,1,0.1,1.5,0.2v-6.4c-0.5-0.1-1-0.1-1.5-0.1c-6.6,0-12,5.4-12,12s5.4,12,12,12s12-5.4,12-12V13.5c2.2,1.6,4.9,2.5,7.8,2.5V9.8C36,9.8,35,9.6,34.1,11.4z" fill="#25F4EE"/><path d="M35.1,12.4c-2.2-1.4-3.7-3.7-4.1-6.3c-0.1-0.5-0.1-1.1-0.1-1.7h-6.3v23.3c0,3-2.5,5.5-5.5,5.5c-1,0-2-0.3-2.9-0.8c-1.6-0.9-2.6-2.6-2.6-4.5c0-2.9,2.4-5.3,5.3-5.3c0.5,0,1,0.1,1.5,0.2v-6.4c-0.5-0.1-1-0.1-1.5-0.1c-6.6,0-12,5.4-12,12s5.4,12,12,12s12-5.4,12-12V14.5c2.2,1.6,4.9,2.5,7.8,2.5V10.8C37,10.8,36,10.6,35.1,12.4z" fill="#FE2C55"/><path d="M33.1,10.4c-2.2-1.4-3.7-3.7-4.1-6.3c-0.1-0.5-0.1-1.1-0.1-1.7h-6.3v23.3c0,3-2.5,5.5-5.5,5.5c-1,0-2-0.3-2.9-0.8c-1.6-0.9-2.6-2.6-2.6-4.5c0-2.9,2.4-5.3,5.3-5.3c0.5,0,1,0.1,1.5,0.2v-6.4c-0.5-0.1-1-0.1-1.5-0.1c-6.6,0-12,5.4-12,12s5.4,12,12,12s12-5.4,12-12V12.5c2.2,1.6,4.9,2.5,7.8,2.5V8.8C35,8.8,34,8.6,33.1,10.4z" fill="#FFF"/></svg>TikTok</a>
-                </li>
-                <li>
-                  <a href="https://www.facebook.com/share/1Bq6LaMjwa" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" style={{ verticalAlign: "middle", marginRight: "6px" }}><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" fill="#1877F2"/></svg>Facebook</a>
-                </li>
-                <li>
-                  <a href="https://x.com/odezuluigbotv" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" style={{ verticalAlign: "middle", marginRight: "6px" }}><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" fill="#FFF"/></svg>X (Twitter)</a>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div className="footer-bottom">
-            <p>© 2025 Odezuluigbo Global Ltd. All Rights Reserved.</p>
-            <p>Designed with <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" style={{ verticalAlign: "middle" }}><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> for the Igbo people worldwide.</p>
-          </div>
-        </div>
-      </footer>
-
+      <Footer />
     </div>
   )
 
