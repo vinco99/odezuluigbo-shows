@@ -48,6 +48,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 }
 
 
+                if (!user.password) return null;
                 const validPassword =
                 await bcrypt.compare(
                     credentials.password as string,
@@ -75,7 +76,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
 
         Google({
-
             clientId:
             process.env.GOOGLE_CLIENT_ID!,
 
@@ -83,12 +83,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             process.env.GOOGLE_CLIENT_SECRET!,
 
             allowDangerousEmailAccountLinking: true,
-
         }),
 
 
         Facebook({
-
             clientId:
             process.env.FACEBOOK_CLIENT_ID!,
 
@@ -96,20 +94,14 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             process.env.FACEBOOK_CLIENT_SECRET!,
 
             allowDangerousEmailAccountLinking:true
-
         })
 
     ],
 
 
-    session:{
-        strategy:"jwt"
-    },
+    session:{ strategy:"jwt" },
 
-
-    pages:{
-        signIn:"/login"
-    },
+    pages:{ signIn:"/login" },
 
     callbacks:{
 
@@ -117,7 +109,16 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
             if (user) {
                 token.id = user.id;
-                token.role = user.role;
+
+                const dbUser = await prisma.user.findUnique({
+                    where: { id: user.id},
+                    select: { role: true }
+                });
+
+                token.role = dbUser?.role ?? "USER";
+            } else if (token.id) {
+                const dbUser = await prisma.user.findUnique({ where: { id: token.id as string }, select: { role: true } });
+                token.role = dbUser?.role ?? "USER";
             }
             return token;
         },

@@ -129,7 +129,7 @@ function ContestantCard({
                 <div className="vote-bar">
                     <div className="vote-fill" style={{width: `${contestant.percentage}%`}}></div>
                 </div>
-                <small>{contestant.percentage}%</small>$
+                <small>{contestant.percentage}%</small>
                 <button  className="btn btn-gold btn-xs">
                     Vote
                 </button>
@@ -150,7 +150,7 @@ function ContestantCard({
 export default function RealityPage(){
 
     return (
-        <div className="page" id="page-reality">
+        <div className="page active" id="page-reality">
             <div className="page-hero" style={{background: "linear-gradient(135deg,#000510,#001020,#000510)"}}>
                 <div className="container">
                     <div style={{display: "inline-block",
@@ -165,10 +165,9 @@ export default function RealityPage(){
                             fontWeight: "700",
                             animation: "pulse-red 2s infinite"
                         }}>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="currentColor">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="currentColor" style={{flexShrink: 0}}>
                         <circle cx="12" cy="12" r="10"/>
-                        </svg> {" "}
-                        LIVE STREAMING 24/7
+                        </svg> LIVE STREAMING 24/7
                     </div>
                     <h1>ODENIGWE</h1>
                     <p>
@@ -195,11 +194,11 @@ export default function RealityPage(){
                     </div>
                     <div style={{marginTop:"32px", display: "flex", gap: "14px", justifyContent: "center", flexWrap: "wrap"}}>
                         <Link href="/vote" className="btn btn-gold">Vote for Favourite</Link>
-                        <Link href="/contestant/apply" className="btn btn-outline">Apply as Contestant</Link>
+                        <Link href="/events" className="btn btn-outline">Apply as Contestant</Link>
                     </div>
                 </div>
             </div>
-,
+
             <section className="section">
                 <div className="container">
                     <div className="section-header">
@@ -367,5 +366,5 @@ export default function RealityPage(){
 
             <Footer />
         </div>
-    );
+    )
 }

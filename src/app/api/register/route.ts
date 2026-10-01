@@ -5,17 +5,24 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
 
-    const { name, email, password } = body;
+    const { name, email, password, confirmPassword } = body;
+    const normalizedEmail = typeof email === "string" ? email.trim().toLowerCase() : "";
 
-    if (!name || !email || !password) {
+    if (typeof name !== "string" || 
+        name.trim().length < 2 || !normalizedEmail || 
+        typeof password !== "string" || 
+        password.length < 8 || 
+        password !== confirmPassword
+      ) 
+    {
       return Response.json(
-        { error: "All fields are required" },
+        { error: password !== confirmPassword ? "Passwords do not match" : "Name, email, and a password of at least 8 characters are required" },
         { status: 400 }
       );
     }
 
     const existingUser = await prisma.user.findUnique({
-      where: { email },
+      where: { email: normalizedEmail },
     });
 
     if (existingUser) {
@@ -29,8 +36,8 @@ export async function POST(request: Request) {
 
     const user = await prisma.user.create({
       data: {
-        name,
-        email,
+        name: name.trim(),
+        email: normalizedEmail,
         password: hashedPassword,
       },
     });
@@ -47,7 +54,9 @@ export async function POST(request: Request) {
       },
       { status: 201 }
     );
-  } catch (error) {
+    
+  } 
+  catch (error) {
     console.error(error);
 
     return Response.json(

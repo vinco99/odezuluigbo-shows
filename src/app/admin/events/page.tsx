@@ -1,5 +1,8 @@
 import { requireRole } from "@/lib/permissions";
 import { prisma } from "@/lib/prisma";
+import {EventsTable} from "./_components/EventsTable";
+import {OrganizersTable} from "./_components/OrganizerSubmissionsTable";
+import Link from "next/link";
 
 
 export default async function AdminEventsPage(){
@@ -8,60 +11,33 @@ export default async function AdminEventsPage(){
         "ADMIN"
     ]);
 
-    const events = await prisma.event.findMany({
-        where:{status:"PENDING"},
-        include:{organizer:true}
-    });
+    const events = await prisma.event.findMany({ include:{organizer:true}, orderBy:{createdAt:"desc"} });
+    const organizerApplications = await prisma.organizerApplication.findMany({ include: { user: { select: { name: true, email: true } } }, orderBy: { createdAt: "desc" } });
 
 
     return (
-        <main className="p-10">
-
-            <h1 className="text-4xl font-bold">
-                Pending Events
-            </h1>
-
-            <div className="mt-8 space-y-4">
-                {
-                    events.map(event=>(
-
-                        <div key={event.id} className="border p-5">
-
-                            <h2 className="text-xl font-bold">
-                                {event.title}
-                            </h2>
-
-                            <p>Organizer: {event.organizer.name}</p>
-
-                            <p>Status: {event.status}</p>
-
-
-                            <div className="mt-4 flex gap-3">
-
-                                <form
-                                    action={`/api/admin/events/${event.id}/approve`}
-                                    method="POST"
-                                >
-                                    <button className="bg-green-600 text-white px-4 py-2">
-                                        Approve
-                                    </button>
-                                </form>
-
-                                <form
-                                    action={`/api/admin/events/${event.id}/reject`}
-                                    method="POST"
-                                >
-                                    <button className="bg-red-600 text-white px-4 py-2">
-                                        Reject
-                                    </button>
-                                </form>
-                                
-                            </div>
-                        </div>
-                    ))
-                }
+        <div className="admin-tab-content active" id="admin-tab-events">
+            <div className="section-header">
+                <span className="section-badge">Approvals</span>
+                <h2 className="section-title">Manage Events & Organizers</h2>
+                <p className="section-sub">Every event currently live or in draft on the platform</p>
             </div>
 
-        </main>
+            <EventsTable events={events} />
+
+            <div style={{textAlign: "right", marginBottom: "36px"}}>
+                <Link href="/organizer/events/create" className="btn btn-gold btn-sm" >+ Add New Event</Link>
+            </div>
+
+
+            <div className="section-header">
+                <span className="section-badge">Pending</span>
+                <h2 className="section-title">Organizer Submissions</h2>
+                <p className="section-sub">Applications from the Organizer Portal awaiting your review</p>
+            </div>
+
+            <OrganizersTable applications={organizerApplications} />
+        </div>
+
     )
 }

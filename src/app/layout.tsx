@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import { Inter, Poppins } from "next/font/google";
 import "./globals.css";
 import Preloader from "@/components/Preloader";
-import Navbar from "@/components/Navbar2";
-
+import Navbar from "@/components/Navbar";
+import { auth } from "@/lib/auth";
+import Providers from "@/components/Providers";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -22,11 +23,13 @@ export const metadata: Metadata = {
   description: "Get the latest Igbo entertainment news, events, and shows. Odezuluigbo Shows is your go-to source for all things Igbo entertainment.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await auth();
+
   return (
     <html
       lang="en"
@@ -34,8 +37,16 @@ export default function RootLayout({
     >
       <body>
         <Preloader />
-        <Navbar />
-        {children}
+        <div id="toast"></div>
+        <Navbar 
+          session={
+            session ? { name: session.user?.name ?? null, 
+            role: session.user?.role ?? "USER" } : null
+          } 
+        />
+        <Providers>
+          {children}
+        </Providers>
       </body>
     </html>
   );

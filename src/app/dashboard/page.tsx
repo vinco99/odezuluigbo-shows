@@ -1,37 +1,18 @@
+import Link from "next/link";
 import { auth } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
-import LogoutButton  from "@/components/auth/LogoutButton";
+import LogoutButton from "@/components/auth/LogoutButton";
 
-
-export default async function Dashboard(){
-
+export default async function Dashboard() {
     const session = await auth();
-
-    if(!session){
-        redirect("/login");
-    }
-
-
-    return (
-
-        <main className="flex flex-col items-center justify-center min-h-screen">
-            <h1>
-                Welcome {session.user?.name}
-            </h1>
-
-            <p>
-                {session.user?.email}
-            </p>
-            
-            <div className="mt-4">
-                <LogoutButton />
-
-                <a href="/profile" className="text-yellow-400">
-                    Profile
-                </a>
-            </div>
-        </main>
-
-    )
-
+    if (!session?.user?.id) redirect("/login");
+    const [payments, votes, participations] = await Promise.all([
+        prisma.payment.findMany({ where: { userId: session.user.id }, include: { event: { select: { id: true, title: true } } }, orderBy: { createdAt: "desc" } }),
+        prisma.vote.findMany({ where: { voterId: session.user.id }, include: { contestant: { include: { event: { select: { id: true, title: true } } } } }, orderBy: { createdAt: "desc" } }),
+        prisma.contestant.findMany({ where: { userId: session.user.id }, include: { event: { select: { id: true, title: true, status: true, eventDate: true } } }, orderBy: { createdAt: "desc" } }),
+    ]);
+    const paidPayments = payments.filter((payment) => payment.status === "PAID");
+    const totalVotes = votes.filter((vote) => vote.status === "PAID").reduce((total, vote) => total + vote.quantity, 0);
+    return <main className="page active"><section className="page-hero"><div className="container"><span className="section-badge">My Account</span><h1>Welcome, {session.user.name ?? "there"}</h1><p>{session.user.email}</p></div></section><section className="section"><div className="container"><div className="tv-show-stats" style={{ marginBottom: "36px" }}><div className="tv-stat"><span className="tv-val">₦{paidPayments.reduce((total, payment) => total + payment.amount, 0).toLocaleString()}</span><small>Total Payments</small></div><div className="tv-stat"><span className="tv-val">{totalVotes}</span><small>Votes Purchased</small></div><div className="tv-stat"><span className="tv-val">{votes.length}</span><small>Voting Transactions</small></div><div className="tv-stat"><span className="tv-val">{participations.length}</span><small>Events Joined</small></div></div><div className="flex justify-between items-center gap-4 flex-wrap mb-6"><div><span className="section-badge">Activity</span><h2 className="section-title">Your Account</h2></div><div className="flex gap-3"><Link href="/events" className="btn btn-gold btn-sm">Browse Events</Link><Link href="/vote" className="btn btn-outline btn-sm">Vote Now</Link><LogoutButton /></div></div><div className="blog-main-grid"><div><section className="form-box mb-6"><h3>Voting History</h3>{votes.length === 0 ? <p className="section-sub">You have not voted yet.</p> : <div className="dashboard-list">{votes.map((vote) => <div className="dashboard-row" key={vote.id}><div><strong>{vote.contestant.name}</strong><small>{vote.contestant.event.title}</small></div><div><strong>{vote.quantity} votes</strong><small>₦{vote.amount.toLocaleString()} · {vote.createdAt.toLocaleDateString()}</small></div></div>)}</div>}</section><section className="form-box"><h3>Transactions</h3>{payments.length === 0 ? <p className="section-sub">No transactions yet.</p> : <div className="dashboard-list">{payments.map((payment) => <div className="dashboard-row" key={payment.id}><div><strong>{payment.type.replaceAll("_", " ")}</strong><small>{payment.event.title}</small></div><div><strong>₦{payment.amount.toLocaleString()}</strong><small>{payment.status} · {payment.createdAt.toLocaleDateString()}</small></div></div>)}</div>}</section></div><aside><div className="form-box"><h3>Events You Joined</h3>{participations.length === 0 ? <p className="section-sub">You are not registered for an event yet.</p> : <div className="dashboard-list">{participations.map((participation) => <div className="dashboard-row" key={participation.id}><div><strong>{participation.event.title}</strong><small>{participation.applicationStatus}</small></div><Link className="btn btn-outline btn-xs" href={`/events/${participation.event.id}`}>View</Link></div>)}</div>}</div></aside></div></div></section></main>;
 }

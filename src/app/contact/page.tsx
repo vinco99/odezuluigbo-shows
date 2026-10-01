@@ -1,10 +1,8 @@
-import Link from "next/link";
-import Image from "next/image";
 import Footer from "@/components/Footer";
 
 export default function ContactPage() {
     return (
-        <div className="page" id="page-contact">
+        <div className="page active" id="page-contact">
             <div className="page-hero">
                 <div className="container">
                     <span className="section-badge">Reach Us</span>
@@ -168,5 +166,5 @@ export default function ContactPage() {
             <Footer />
         </div>
 
-    );
+    )
 }

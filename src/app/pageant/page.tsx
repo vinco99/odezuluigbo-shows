@@ -1,24 +1,12 @@
-import { useState } from "react"
-import { redirect } from "next/navigation"
-import submit from "../events/[id]/apply/page";
+import FAQ from "./FAQ";
+import ApplyButton from "./ApplyButton";
 import Footer from "@/components/Footer";
+import { prisma } from "@/lib/prisma";
+import Link from "next/link";
 
 
-export default function PageantPage(){
-
-    const scrollToRegister = () => {
-        const element = document.getElementById('pgnt-register');
-        if (element) {
-            element.scrollIntoView({ behavior: 'smooth' });
-        }
-    };
-
-    const [openIndex, setOpenIndex] = useState<number | null>(null);
-
-    const toggleFaq = (index: number) => {
-        setOpenIndex(openIndex === index ? null : index);
-    };
-
+export default async function PageantPage(){
+    const pageantEvent = await prisma.event.findFirst({ where: { type: "PAGEANT", status: "APPROVED" }, orderBy: { createdAt: "desc" }, select: { id: true } });
     return (
         <div className="page active" id="page-pageant">
             <div className="page-hero" style={{background: "linearGradient(135deg,#0a0000,#1a0808,#0a0000)"}}>
@@ -78,7 +66,7 @@ export default function PageantPage(){
                             <span className="section-badge">About</span>
                             <h2>What is AdaomaIgbonile?</h2>
                             <p>AdaomaIgbonile means "The beautiful daughter of a noble Igbo land." This isn't just a beauty pageant — it's a celebration of Igbo womanhood, an empowerment platform, and a stage for the brightest, most graceful Igbo women to shine.</p>
-                            <button className="btn btn-gold" style={{marginTop: "20px"}} onClick={scrollToRegister}>Apply Now</button>
+                            <ApplyButton eventId={pageantEvent?.id} />
                         </div>
                         <div>
                             <div className="img-placeholder about-visual-img" data-desc="SPLIT PORTRAIT: Left half — Igbo woman in full coral beads, isiagu blouse and traditional headgear. Right half — same woman in an elegant floor-length gown. Gold dividing line. Represents Traditional meets Modern elegance for the pageant.">
@@ -123,11 +111,11 @@ export default function PageantPage(){
                         <div className="section-header"><span className="section-badge">Apply</span><h2 className="section-title">Registration Form</h2><p className="section-sub">Registration Fee: ₦15,000 — paid via Paystack after submission</p></div>
                         <div className="form-section">
                             <div className="form-box">
-                                <form id="registrationForm" onSubmit={submit}>
+                                <div id="registrationForm">
                                     <div className="form-row">
                                         <div className="form-group">
                                             <label>Full Name *</label>
-                                            <input type="text" placeholder="First name" required/>
+                                            <input type="text" placeholder="Full Name" required/>
                                         </div>
                                     </div>
                                     <div className="form-row">
@@ -175,8 +163,8 @@ export default function PageantPage(){
                                         <label>Profile Photo Upload Area</label>
                                         <div className="img-placeholder" style={{height: "75px", cursor: "pointer"}} data-desc="FILE UPLOAD: Contestant uploads passport/headshot photo here — clear frontal face photo required, JPG/PNG, max 5MB"><span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg> Click to upload profile photo (JPG/PNG)</span></div>
                                     </div>
-                                    <button type="submit" className="btn btn-gold btn-full" style={{marginTop: "8px"}}>Submit Application → Pay ₦15,000</button>
-                                </form>
+                                    {pageantEvent ? <Link href={`/events/${pageantEvent.id}/apply`} className="btn btn-gold btn-full" style={{marginTop: "8px"}}>Continue to Application and Payment</Link> : <p className="section-sub">The next pageant application event has not opened yet.</p>}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -185,68 +173,7 @@ export default function PageantPage(){
                         <span className="section-badge">FAQ</span>
                         <h2 className="section-title">Frequently Asked Questions</h2>
                     </div>
-                    <div className="faq-list">
-                        
-                        <div className={`faq-item ${openIndex === 0 ? 'active' : ''}`}>
-                            <div className="faq-q" onClick={() => toggleFaq(0)}>
-                                Can diaspora Igbo women apply? {' '}
-                                <span className="faq-icon">{openIndex === 0 ? '-' : '+'}</span>
-                            </div>
-                            {openIndex === 0 && (
-                                <div className="faq-ans">
-                                    <p>Yes! Igbo women in the diaspora are warmly welcome to apply. You must have valid Nigerian documentation and proof of Igbo heritage.</p>
-                                </div>
-                            )}
-                        </div>
-
-                        <div className={`faq-item ${openIndex === 1 ? 'active' : ''}`}>
-                            <div className="faq-q" onClick={() => toggleFaq(1)}>
-                                When is the registration deadline? {' '}
-                                <span className="faq-icon">{openIndex === 1 ? '-' : '+'}</span>
-                            </div>
-                            {openIndex === 1 && (
-                                <div className="faq-ans">
-                                    <p>Registration closes October 31, 2025 — 30 days before the event. We encourage early registration as slots are limited.</p>
-                                </div>
-                            )}
-                        </div>
-
-                        <div className={`faq-item ${openIndex === 2 ? 'active' : ''}`}>
-                            <div className="faq-q" onClick={() => toggleFaq(2)}>
-                                How are contestants scored? {' '}
-                                <span className="faq-icon">{openIndex === 2 ? '-' : '+'}</span>
-                            </div>
-                            {openIndex === 2 && (
-                                <div className="faq-ans">
-                                    <p>Scoring: Public voting (40%) + Judges scoring (40%) + Social media engagement (20%). All criteria are transparent.</p>
-                                </div>
-                            )}
-                        </div>
-
-                        <div className={`faq-item ${openIndex === 3 ? 'active' : ''}`}>
-                            <div className="faq-q" onClick={() => toggleFaq(3)}>
-                                What does the ₦15,000 fee cover? {' '}
-                                <span className="faq-icon">{openIndex === 3 ? '-' : '+'}</span>
-                            </div>
-                            {openIndex === 3 && (
-                                <div className="faq-ans">
-                                    <p>Covers your event package, training sessions, professional photoshoot, branding materials, and all pre-event activities.</p>
-                                </div>
-                            )}
-                        </div>
-
-                        <div className={`faq-item ${openIndex === 4 ? 'active' : ''}`}>
-                            <div className="faq-q" onClick={() => toggleFaq(4)}>
-                                Are there prizes besides the grand prize? {' '}
-                                <span className="faq-icon">{openIndex === 4 ? '-' : '+'}</span>
-                            </div>
-                            {openIndex === 4 && (
-                                <div className="faq-ans">
-                                    <p>Yes — prizes for 1st & 2nd Runner Up, Best Traditional Wear, Most Intelligent, Most Talented, and People's Choice Award.</p>
-                                </div>
-                            )}
-                        </div>
-                    </div>
+                    <FAQ />
 
                 </div>
             </section>

@@ -8,9 +8,9 @@ export async function POST(request: Request) {
     const body = await request.json();
 
     const { email, password } = body;
+    const normalizedEmail = typeof email === "string" ? email.trim().toLowerCase() : "";
 
-    if (!email || !password) {
-
+    if (!normalizedEmail || typeof password !== "string") {
       return Response.json(
         {error: "Email and password required"},
         {status: 400}
@@ -18,74 +18,57 @@ export async function POST(request: Request) {
 
     }
 
-
-    const user =
-      await prisma.user.findUnique({
-        where:{
-          email
-        }
-      });
+    const user = await prisma.user.findUnique({
+      where:{ email: normalizedEmail}
+    });
 
 
     if(!user){
-
       return Response.json(
         {error:"Invalid email or password"},
         {status:401}
       );
-
     }
 
+    if (!user.password) 
+      return Response.json(
+        {error: "Invalid email or password"}, 
+        {status:401}
+      );
 
-    const passwordMatch =
-      await bcrypt.compare(
+    const passwordMatch = await bcrypt.compare(
         password,
         user.password
-      );
+    );
 
 
-    if(!passwordMatch){
-
+    if (!passwordMatch) {
       return Response.json(
-        {
-          error:"Invalid email or password"
-        },
-        {
-          status:401
-        }
+        {error:"Invalid email or password"},
+        {status:401}
       );
-
     }
 
 
     return Response.json({
-
       message:"Login successful",
-
       user:{
         id:user.id,
         name:user.name,
         email:user.email,
         role:user.role
       }
-
     });
 
-
-  } catch(error){
-
+  } 
+  catch(error){
     console.log(error);
 
-
     return Response.json(
-      {
-        error:"Server error"
-      },
-      {
-        status:500
-      }
+      { error:"Server error" },
+      { status:500 }
     );
-
+    
   }
 
 }

@@ -10,7 +10,7 @@ export default function Footer(){
                 <div className="footer-grid">
                     <div className="footer-brand">
                         <div className="footer-logo">
-                            <Image className="logo-mark" src="/images/logo.webp" alt="Odezuluigbo" />
+                            <img className="logo-mark" src="/images/logo.webp" alt="Odezuluigbo" />
                             <div className="logo-text">
                                 <span className="logo-main">ODEZULUIGBO</span>
                                 <span className="logo-sub">SHOWS</span>
@@ -27,7 +27,7 @@ export default function Footer(){
                                 <Link href="/pageant">AdaomaIgbonile Pageant</Link>
                             </li>
                             <li>
-                                <Link href="/reality">Odenigwe Reality TV</Link>
+                                <Link href="/reality-tv">Odenigwe Reality TV</Link>
                             </li>
                             <li>
                                 <Link href="/events">All Events</Link>
@@ -51,7 +51,7 @@ export default function Footer(){
                                 <Link href="/contact">Contact</Link>
                             </li>
                             <li>
-                                <Link href="/organizer">Become an Organizer</Link>
+                                <Link href="/organizer/apply">Become an Organizer</Link>
                             </li>
                             <li>
                                 <Link href="/dashboard">My Dashboard</Link>
@@ -72,11 +72,11 @@ export default function Footer(){
                                         <circle cx="17.5" cy="6.5" r="1.5" fill="url(#ig-grad-1)"/>
                                         <defs>
                                             <linearGradient id="ig-grad-1" x1="0" y1="24" x2="24" y2="0">
-                                                <stop offset="0%" stop-color="#FD5"/>
-                                                <stop offset="25%" stop-color="#F56040"/>
-                                                <stop offset="50%" stop-color="#E1306C"/>
-                                                <stop offset="75%" stop-color="#C13584"/>
-                                                <stop offset="100%" stop-color="#833AB4"/>
+                                                <stop offset="0%" stopColor="#FD5"/>
+                                                <stop offset="25%" stopColor="#F56040"/>
+                                                <stop offset="50%" stopColor="#E1306C"/>
+                                                <stop offset="75%" stopColor="#C13584"/>
+                                                <stop offset="100%" stopColor="#833AB4"/>
                                             </linearGradient>
                                         </defs>
                                     </svg>Instagram

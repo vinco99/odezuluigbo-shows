@@ -1,89 +1,86 @@
+import Link from "next/link";
 import { requireRole } from "@/lib/permissions";
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
+import EditEventForm from "./EditEventForm";
+import PeopleForm from "./PeopleForm";
 
-export default async function ManageEventPage({params}:{params: Promise<{ id:string }>}){
-
-    const session = await requireRole([
-        "ADMIN",
-        "ORGANIZER"
-    ]);
-
-
+export default async function ManageEventPage({ params }: { params: Promise<{ id: string }> }) {
+    const session = await requireRole(["ADMIN", "ORGANIZER"]);
     const { id } = await params;
-
-    const event =
-        await prisma.event.findUnique({
-            where:{ id },
-            include:{
-                contestants:true,
-                judges:true,
-                sponsors:true
-            }
-        });
-
-    if(!event){
+    const event = await prisma.event.findUnique(
+        { 
+            where: { id }, 
+            include: { 
+                contestants: true, 
+                judges: true, 
+                sponsors: true, 
+                payments: true, 
+                votePackages: { where: { active: true } } 
+            } 
+        }
+    );
+    if (!event || (session.user.role === "ORGANIZER" && event.organizerId !== session.user.id)) 
         notFound();
-    }
-
+    const paidVotes = event.payments.filter(
+        (payment) => payment.status === "PAID" &&
+         payment.type === "VOTE").reduce((total, payment) => total + payment.amount, 0
+    );
+    const paidRegistrations = event.payments.filter(
+        (payment) => payment.status === "PAID" &&
+         payment.type === "CONTESTANT_REGISTRATION").reduce((total, payment) => total + payment.amount, 0
+    );
+    
     return (
+        <main className="page active">
+            <section className="page-hero">
+                <div className="container">
+                    <Link href="/organizer/events" className="btn btn-ghost btn-sm" style={{float: "left"}}>← All Events</Link>
+                    <span className="section-badge" style={{ marginTop: "18px" }}>
+                        {event.status}
+                    </span>
+                    <h1>{event.title}</h1>
+                    <p>{event.description}</p>
+                </div>
+            </section>
+            <section className="section">
+                <div className="container">
+                    <div className="tv-show-stats" style={{ marginBottom: "40px" }}>
+                        <div className="tv-stat">
+                            <span className="tv-val">{event.contestants.length}</span>
+                            <small>Contestants</small>
+                        </div>
+                        <div className="tv-stat">
+                            <span className="tv-val">₦{paidRegistrations.toLocaleString()}</span>
+                            <small>Registration Revenue</small>
+                        </div>
+                        <div className="tv-stat">
+                            <span className="tv-val">₦{paidVotes.toLocaleString()}</span>
+                            <small>Vote Revenue</small>
+                        </div>
+                        <div className="tv-stat">
+                            <span className="tv-val">{event.isVotingOpen ? "Open" : "Closed"}</span>
+                            <small>Voting</small>
+                        </div>
+                    </div>
+                    <EditEventForm 
+                        event={
+                            { ...event, 
+                                registrationStart: event.registrationStart?.toISOString() ?? null, 
+                                registrationEnd: event.registrationEnd?.toISOString() ?? null, 
+                                eventDate: event.eventDate?.toISOString() ?? null 
+                            }
+                        } 
+                    />
+                    <PeopleForm eventId={event.id} />
+                </div>
+            </section>
 
-        <main className="p-10">
-
-            <h1 className="text-4xl font-bold">
-                {event.title}
-            </h1>
-
-            <p className="mt-3 capitalize">
-                Status: {event.status}
-            </p>
-
-            <div className="mt-8 flex gap-4 flex-wrap">
-
-                <a
-                    href={`/organizer/events/${event.id}/contestants`}
-                    className="bg-green-600 text-white px-5 py-3 rounded"
-                >
-                    Manage Contestants
-                </a>
-
-                <a
-                    href={`/organizer/events/${event.id}/judges`}
-                    className="bg-purple-600 text-white px-5 py-3 rounded"
-                >
-                    Manage Judges
-                </a>
-
-                <a
-                    href={`/organizer/events/${event.id}/sponsors`}
-                    className="bg-orange-600 text-white px-5 py-3 rounded"
-                >
-                    Manage Sponsors
-                </a>
-
+            <footer className="footer">
+            <div className="container">
+                <div className="footer-bottom"><p>© 2025 Odezuluigbo Global Ltd. All Rights Reserved.</p></div>
             </div>
-
-            <div className="mt-10">
-
-                <h2 className="text-2xl font-bold">
-                    Statistics
-                </h2>
-
-                <p>
-                    Contestants: {event.contestants.length}
-                </p>
-
-                <p>
-                    Judges: {event.judges.length}
-                </p>
-
-                <p>
-                    Sponsors: {event.sponsors.length}
-                </p>
-
-            </div>
-
+            </footer>
         </main>
-
     );
 }

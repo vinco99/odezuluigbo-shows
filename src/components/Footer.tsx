@@ -9,7 +9,7 @@ import Image from "next/image";
                 <div className="footer-grid">
                     <div className="footer-brand">
                         <div className="footer-logo">
-                            <Image className="logo-mark" src="/images/logo.webp" alt="Odezuluigbo" />
+                            <img className="logo-mark" src="/images/logo.webp" alt="Odezuluigbo" />
                             <div className="logo-text">
                                 <span className="logo-main">ODEZULUIGBO</span>
                                 <span className="logo-sub">SHOWS</span>
@@ -50,9 +50,9 @@ import Image from "next/image";
                                 <circle cx="12" cy="12" r="5" stroke="url(#ig-grad-4)" strokeWidth="2"/><circle cx="17.5" cy="6.5" r="1.5" fill="url(#ig-grad-4)"/>
                                 <defs>
                                     <linearGradient id="ig-grad-4" x1="0" y1="24" x2="24" y2="0">
-                                        <stop offset="0%" stop-color="#FD5"/>
-                                        <stop offset="25%" stop-color="#F56040"/>
-                                        <stop offset="50%" stop-color="#E1306C"/>
+                                        <stop offset="0%" stopColor="#FD5"/>
+                                        <stop offset="25%" stopColor="#F56040"/>
+                                        <stop offset="50%" stopColor="#E1306C"/>
                                         <stop offset="75%" stopColor="#C13584"/>
                                         <stop offset="100%" stopColor="#833AB4"/>
                                     </linearGradient>
