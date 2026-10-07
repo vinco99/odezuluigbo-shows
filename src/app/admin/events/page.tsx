@@ -3,23 +3,42 @@ import { prisma } from "@/lib/prisma";
 import {EventsTable} from "./_components/EventsTable";
 import {OrganizersTable} from "./_components/OrganizerSubmissionsTable";
 import Link from "next/link";
+import { ContestantTable } from "./_components/ContestantTable";
 
 
 export default async function AdminEventsPage(){
 
-    await requireRole([
-        "ADMIN"
-    ]);
+    await requireRole(["ADMIN"]);
 
-    const events = await prisma.event.findMany({ include:{organizer:true}, orderBy:{createdAt:"desc"} });
-    const organizerApplications = await prisma.organizerApplication.findMany({ include: { user: { select: { name: true, email: true } } }, orderBy: { createdAt: "desc" } });
+    const events = await prisma.event.findMany(
+        { 
+            include:{organizer:true}, 
+            orderBy:{createdAt:"desc"} 
+        }
+    );
+
+    const organizerApplications = await prisma.organizerApplication.findMany(
+        { 
+            include: { user: { select: { name: true, email: true } } }, 
+            orderBy: { createdAt: "desc" } 
+        }
+    );
+
+    const contestants = await prisma.contestant.findMany({
+        where: { payment: { status: "PAID" } },
+        include: {
+            event: true,
+            payment: true,
+        },
+        orderBy: { createdAt: "desc" },
+    });
 
 
     return (
         <div className="admin-tab-content active" id="admin-tab-events">
             <div className="section-header">
                 <span className="section-badge">Approvals</span>
-                <h2 className="section-title">Manage Events & Organizers</h2>
+                <h2 className="section-title">Manage Events</h2>
                 <p className="section-sub">Every event currently live or in draft on the platform</p>
             </div>
 
@@ -37,6 +56,16 @@ export default async function AdminEventsPage(){
             </div>
 
             <OrganizersTable applications={organizerApplications} />
+
+
+            <div className="section-header">
+                <span className="section-badge">Contestants</span>
+                <h2 className="section-title">Contestants Submissions</h2>
+                <p className="section-sub">Contestants who have successfully registered for the show</p>
+            </div>
+
+            <ContestantTable contestants={contestants} />
+
         </div>
 
     )

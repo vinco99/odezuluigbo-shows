@@ -2,7 +2,7 @@ import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 
 
-export async function requireRole(allowedRoles: string[]) {
+export async function requireRole(allowedRoles: string[], redirectUrl: string) {
 
     const session = await auth();
 
@@ -11,7 +11,7 @@ export async function requireRole(allowedRoles: string[]) {
     }
 
     if(!allowedRoles.includes(session.user.role)){
-        redirect("/unauthorized");
+        redirect(redirectUrl);
     }
 
     return session;

@@ -41,9 +41,11 @@ export default function EditEventForm({ event }: { event: { id: string; title: s
 
             <div className="form-row">
               <div className="form-group">
+                <label>Registration Fee</label>
                 <input name="registrationFee" type="number" min="0" defaultValue={event.registrationFee} />
               </div>
               <div className="form-group">
+                <label>Voting Fee</label>
                 <input name="votingFee" type="number" min="0" defaultValue={event.votingFee} />
               </div>
             </div>

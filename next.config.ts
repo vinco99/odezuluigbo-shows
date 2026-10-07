@@ -7,7 +7,12 @@ const nextConfig: NextConfig = {
     remotePatterns:[
       {
         protocol:"https",
-        hostname:"oss-macaron-user.macaron.im"
+        hostname: "oss-macaron-user.macaron.im"
+      },
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+        pathname: "/**"
       }
     ]
   }

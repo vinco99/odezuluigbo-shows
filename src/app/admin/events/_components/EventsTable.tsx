@@ -1,4 +1,7 @@
 import Link from "next/link";
+import EventReviewButtons from "./ReviewEventButton";
+import GoLiveButton from "./GoLiveButton";
+import SuspendEventButton from "./SuspendEventButton";
 
 type EventRow = { 
     id: string; 
@@ -9,34 +12,6 @@ type EventRow = {
     _count?: { contestants: number } 
 };
 
-type EventStatus = "PENDING" | "APPROVED" | "LIVE" | "REJECTED" | "COMPLETED" | "SUSPENDED";
-
-const STATUS_CONFIG: Record<EventStatus, { label: string; className: string }> = {
-  PENDING: {
-    label: "Draft",
-    className: "bg-yellow-100 text-yellow-800",
-  },
-  APPROVED: {
-    label: "Approved",
-    className: "bg-green-100 text-green-800",
-  },
-  LIVE: {
-    label: "Approved",
-    className: "bg-green-100 text-green-800",
-  },
-  REJECTED: {
-    label: "Rejected",
-    className: "bg-red-100 text-red-800",
-  },
-  COMPLETED: {
-    label: "Suspended",
-    className: "bg-gray-100 text-gray-800"
-  },
-  SUSPENDED: {
-    label: "Cancelled",
-    className: "bg-gray-100 text-gray-800",
-  },
-};
 
 export function EventsTable({ events }: { events: EventRow[] }) {
     return (
@@ -55,19 +30,29 @@ export function EventsTable({ events }: { events: EventRow[] }) {
                         {events.map((event) => 
                             <tr key={event.id} style={{ borderBottom: "1px solid var(--w10)" }}>
                                 <td style={{ padding: "10px" }}>{event.title}</td>
-                                <td style={{ padding: "10px" }}>{event.type.replaceAll("_", " ")}</td>
+                                <td style={{ padding: "10px" }} className="lowercase first-letter:uppercase">{event.type.replaceAll("_", " ")}</td>
                                 <td style={{ padding: "10px" }}>{event.organizer.name}</td>
-                                <td style={{ padding: "10px" }}>
-                                    {event.status === "PENDING" ? 
-                                        (<span >Draft</span>) : 
-                                        ((event.status === "APPROVED" || event.status === "LIVE") && <span>Approved</span>) 
-                                    }
+                                <td style={{ padding: "10px" }} >
+                                    <span className={`status-badge ${event.status.toLowerCase()}`}>{event.status.toLocaleLowerCase()}</span>
                                 </td>
                                 <td style={{ padding: "10px" }}>
-                                    <Link href={`/events/${event.id}`} className="btn btn-outline btn-xs">View</Link>
-                                    <button className="btn btn-gold btn-xs" >Approve</button>
-                                    <button className="btn btn-outline btn-xs" >Reject</button>
-                                    <button className="btn btn-xs"  style={{backgroundColor: "red", color: "white"}}>Go Live</button>
+                                    <Link href={`/organizer/events/${event.id}`} className="btn btn-outline btn-xs">View</Link>
+
+                                    <EventReviewButtons 
+                                        id={event.id}  
+                                        disabled={event.status !== "PENDING"} 
+                                    />
+
+                                    <GoLiveButton 
+                                        id={event.id} 
+                                        disabled={event.status !== "APPROVED"} 
+                                    />
+
+                                    <SuspendEventButton 
+                                        id={event.id} 
+                                        disabled={event.status !== "LIVE"} 
+                                    />
+                                    
                                 </td>
                             </tr>
                         )}

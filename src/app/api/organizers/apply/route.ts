@@ -13,6 +13,7 @@ export async function POST(request: Request) {
     const body = await request.json().catch(() => null);
     const businessName = typeof body?.businessName === "string" ? body.businessName.trim() : "";
     const phone = typeof body?.phone === "string" ? body.phone.trim() : "";
+    const email = typeof body?.email === "string" ? body.phone.trim() : "";
     const proposal = typeof body?.proposal === "string" ? body.proposal.trim() : "";
     const experience = typeof body?.experience === "string" ? body.experience.trim() : undefined;
 
@@ -26,7 +27,7 @@ export async function POST(request: Request) {
     const application = await prisma.organizerApplication.upsert({
         where: { userId: session.user.id },
         update: { businessName, phone, proposal, experience, status: "PENDING", reviewNote: null, reviewedAt: null },
-        create: { userId: session.user.id, businessName, phone, proposal, experience },
+        create: { userId: session.user.id, businessName, phone, email, proposal, experience, },
     });
     
     return Response.json(

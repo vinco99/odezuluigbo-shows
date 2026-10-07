@@ -1,7 +1,10 @@
 'use client'
-
-export function StatusBage () {
+type Event = {
+    id: string;
+    status: string;
+}
+export function StatusBage ({ event }: { event: Event }) {
     return (
-        <div className="ev-badge live">Event status here</div>
+        <div className={`status-badge ${event.status.toLowerCase()}`}>{event.status}</div>
     )
 }

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { BlogPreview } from "@/components/BlogPreview";
 import { EventPreview } from "@/components/EventPreview";
 import { ContestantPreview } from "@/components/ContestantPreview";
+import { TicketsPreview } from "@/components/TicketsPreview";
 
 
 export default function Home(){
@@ -142,6 +143,11 @@ export default function Home(){
 
           <EventPreview />
 
+      </section>
+
+      {/* BUY TICKETS*/}
+      <section className="section" style={{paddingTop: "0"}}>
+        <TicketsPreview />
       </section>
 
       {/* ADS */}

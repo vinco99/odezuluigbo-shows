@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Footer from "@/components/Footer";
-import { EventsTabs } from "./_components/EventsTab";
+import { EventsTabs } from "../_components/EventsTab";
 
 
 export default async function EventLayout({ children }: { children: React.ReactNode }) {

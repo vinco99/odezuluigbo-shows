@@ -15,8 +15,7 @@ export default function Hero(){
 
         const canvas = canvasRef.current;
 
-        if(!canvas) 
-        return;
+        if(!canvas) return;
 
         const renderer = new THREE.WebGLRenderer({
             canvas,
@@ -297,9 +296,7 @@ export default function Hero(){
 
 return(
 
-<section
-    id="hero"
->
+<section id="hero">
     <canvas ref={canvasRef} id="hero-canvas" />
 
     <div id="hero-logo-watermark" style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", zIndex: -1, pointerEvents: "none" }}>

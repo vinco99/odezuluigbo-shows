@@ -4,7 +4,6 @@ import "./globals.css";
 import Preloader from "@/components/Preloader";
 import Navbar from "@/components/Navbar";
 import { auth } from "@/lib/auth";
-import Providers from "@/components/Providers";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -44,9 +43,7 @@ export default async function RootLayout({
             role: session.user?.role ?? "USER" } : null
           } 
         />
-        <Providers>
           {children}
-        </Providers>
       </body>
     </html>
   );

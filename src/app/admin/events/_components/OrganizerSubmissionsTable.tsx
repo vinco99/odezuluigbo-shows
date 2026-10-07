@@ -32,7 +32,9 @@ export function OrganizersTable({ applications }: { applications: ApplicationRow
                             <td style={{ padding: "10px" }}>{application.phone}</td>
                             <td style={{ padding: "10px" }}>{application.status}</td>
                             <td style={{ padding: "10px" }}>
-                                <Link href="/admin/organizers" className="btn btn-outline btn-xs">Review</Link>
+                                {application.status === "PENDING" &&
+                                    <Link href={`/admin/events/organizers/${application.id}`} className="btn btn-outline btn-xs">Review Application</Link>
+                                }
                             </td>
                         </tr>
                     )}

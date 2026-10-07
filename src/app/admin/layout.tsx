@@ -1,11 +1,10 @@
 import { requireRole } from "@/lib/permissions";
-import Link from "next/link";
 import { AdminTabs } from "./_components/AdminTabs";
 import { Footer } from "./_components/AdminFooter";
 import LogoutButton from "@/components/auth/LogoutButton";
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
-    await requireRole(["ADMIN"]);
+    await requireRole(["ADMIN"], "/");
     return (
         <div className="page active" id="page-admin">
             <div className="page-hero">

@@ -2,8 +2,8 @@ import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import { StatusBage } from "./_components/StatusBage";
 import { showToast } from "@/components/Toast";
-import EventCountdown from "@/components/EventCountdown";
 import VotePackageSelector from "@/components/VotePackageSelector";
+import EventTimelineCountdown from "./_components/EventTimelineCountdown";
 
 
 export default async function EventDetailsPage({params}:{params: Promise<{id:string}>}){
@@ -43,7 +43,7 @@ export default async function EventDetailsPage({params}:{params: Promise<{id:str
                         <span className="section-badge mb-0">
                             {event.type.replaceAll("_", " ")}
                         </span>
-                        <StatusBage />
+                        <StatusBage event={event} />
                     </div>
                     <h1>{event.title}</h1>
                 </div>
@@ -55,56 +55,48 @@ export default async function EventDetailsPage({params}:{params: Promise<{id:str
                     <div className="pgnt-detail-row">
                         <div className="pgnt-detail">
                             <span>Event Date</span>
-                            <strong>{event.eventDate?.toLocaleDateString() ?? "To be announced"}</strong>
-                            
-                            <small className="block text-[0.68rem] text-w70 mt-1">
-                                {event.eventDate?.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) ?? "Event time TBA"}
-                            </small>
+                            <strong>
+                                {event.eventDate?.toLocaleDateString("en-GB", {
+                                    month: "short",
+                                    day: "numeric",
+                                    year: "numeric",
+                                }) ?? "To be announced"}
+                            </strong>
                     
                         </div>
                         <div className="pgnt-detail">
                             <span>Location</span>
-                            <strong>{event.venue ?? event.state ?? event.country ?? "Location TBA"}</strong>
-                            
-                            <small className="block text-[0.68rem] text-w70 mt-1">
-                                Event location
-                            </small>
-
+                            <strong>{event.venue}, {event.state}</strong>
                         </div>
+
                         <div className="pgnt-detail">
                             <span>Winner Prize</span>
                             <strong>{event.type.replaceAll("_", " ")}</strong>
                         </div>
                         <div className="pgnt-detail">
                             <span>Voting Fee</span>
-                            <strong>₦{event.votingFee} / vote</strong>
+                            <strong>₦{event.votingFee}</strong>
                         </div>
                         <div className="pgnt-detail">
                             <span>Registration Fee</span>
                             <strong>₦{event.registrationFee.toLocaleString()}</strong>
                         </div>
-                        <div className="pgnt-detail">
-                            <span>Event countdown</span>
-                            <EventCountdown target={event.eventDate?.toISOString() ?? null} />
-                        </div>
-                        <div className="pgnt-detail">
-                            <span>Organizer</span>
-                            <strong>{event.organizer.name}</strong>
-                        
-                            <small className="block text-[0.68rem] text-gold mt-1">
-                            ✓ Verified
-                            </small>
-                        </div>
                     </div>
                 </div>
             </div>
+
+            <EventTimelineCountdown 
+                registrationStart={event.registrationStart?.toString() ?? null}
+                registrationEnd={event.registrationEnd?.toString() ?? null}
+                eventDate={event.eventDate?.toString() ?? null}
+            />
 
             {/* ============ ABOUT / DESCRIPTION ============ */}
             <section className="section">
                 <div className="container">
                 <div className="about-grid" style={{ marginBottom: "60px" }}>
                     <div className="about-text">
-                        <span className="section-badge">About This Event</span>
+                        <span className="section-badge">About</span>
                         <h2>{event.title}</h2>
                         <p>{event.description}</p>
 
@@ -126,7 +118,7 @@ export default async function EventDetailsPage({params}:{params: Promise<{id:str
                     <div>
                     
                         {event.banner || event.logo ? 
-                            <img className="about-visual-img" src={event.banner ?? event.logo ?? ""} alt={event.title} /> : 
+                            <img className="about-visual-img" src={event.banner ?? ""} alt={event.title} loading="lazy" style={{ width: "100%", objectFit: "cover" }}/> : 
                             <div className="img-placeholder about-visual-img" data-desc={`${event.title} — event banner image pending upload`}>
                                 <span className="ph-icon">🎭</span>
                                 <span className="ph-txt">{event.title}</span>
@@ -210,9 +202,9 @@ export default async function EventDetailsPage({params}:{params: Promise<{id:str
                     >
                         <div className="img-placeholder c-img" data-desc={`Contestant #`}>
                         
-                            {c.photo ? (
+                            {c.potrait ? (
                                 <img
-                                    src={c.photo}
+                                    src={c.potrait}
                                     alt={c.name}
                                     className="w-full h-full object-cover"
                                 />

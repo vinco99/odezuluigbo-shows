@@ -17,7 +17,7 @@ model User {
   updatedAt             DateTime              @updatedAt
   image                 String?
   imagePublicId         String?
-  phone                 String?
+  phone                 String?               @unique
   emailVerified         DateTime?
   bio                   String?
   country               String?
@@ -206,7 +206,10 @@ model OrganizerApplication {
   id           String            @id @default(cuid())
   userId       String            @unique
   businessName String
+  photo        String?
+  photoId      String?
   phone        String
+  email        String
   experience   String?
   proposal     String
   status       ApplicationStatus @default(PENDING)

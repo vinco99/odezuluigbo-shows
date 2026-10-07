@@ -132,14 +132,18 @@ export default function OrganizerApplicationPage() {
                     <div className="form-section">
                         <div className="form-box">
                             <form id="organizerForm" onSubmit={submit}>
+                                <div className="form-group">
+                                    <label>Organizer / Company Name *</label>
+                                    <input name="businessName" type="text" placeholder="Business or organization name" required/>
+                                </div>
                                 <div className="form-row">
-                                    <div className="form-group">
-                                        <label>Organizer / Company Name *</label>
-                                        <input name="businessName" type="text" placeholder="Business or organization name" required/>
-                                    </div>
                                     <div className="form-group">
                                         <label>Contact Phone *</label>
                                         <input name="phone" type="tel" placeholder="+234 xxx xxxx xxx" required/>
+                                    </div>
+                                    <div className="form-group">
+                                        <label>Email</label>
+                                        <input name="email" type="email" placeholder="johndoe@example.com" required />
                                     </div>
                                 </div>
                                 <div className="form-group">

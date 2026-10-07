@@ -3,7 +3,7 @@ import { requireRole } from "@/lib/permissions";
 import { prisma } from "@/lib/prisma";
 
 export default async function OrganizerDashboard() {
-    const session = await requireRole(["ADMIN", "ORGANIZER"]);
+    const session = await requireRole(["ADMIN", "ORGANIZER"], "/organizer/apply");
 
     const events = await prisma.event.findMany(
         { 

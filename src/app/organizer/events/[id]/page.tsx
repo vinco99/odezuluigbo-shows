@@ -6,7 +6,7 @@ import EditEventForm from "./EditEventForm";
 import PeopleForm from "./PeopleForm";
 
 export default async function ManageEventPage({ params }: { params: Promise<{ id: string }> }) {
-    const session = await requireRole(["ADMIN", "ORGANIZER"]);
+    const session = await requireRole(["ADMIN", "ORGANIZER"], "/organizer/apply");
     const { id } = await params;
     const event = await prisma.event.findUnique(
         { 

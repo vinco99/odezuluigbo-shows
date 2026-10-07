@@ -2,6 +2,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { slugify } from "@/lib/validation";
 import { Prisma } from "@/generated/prisma/client";
+
 const CATEGORIES = [
     "CULTURE",
     "ENTERTAINMENT",
