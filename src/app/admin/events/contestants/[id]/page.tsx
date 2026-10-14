@@ -84,11 +84,11 @@ export default async function ContestantReviewPage({params}:{params: Promise<{id
 
     return (
         <main id="main" className="page active">
-            <div className="page-heading">
+            <div className="new-page-heading">
                 <div>
-                <div className="eyebrow"><span className="eyebrow-line"></span> APPLICATIONS <span className="eyebrow-slash">/</span> <span className="eyebrow-current">CANDIDATE REVIEW</span></div>
+                <div className="new-eyebrow"><span className="new-eyebrow-line"></span> APPLICATIONS <span className="new-eyebrow-slash">/</span> <span className="eyebrow-current">CANDIDATE REVIEW</span></div>
                 <h1>Review submission</h1>
-                <p className="page-subtitle">Take a moment to get to know this contestant.</p>
+                <p className="new-page-subtitle">Take a moment to get to know this contestant.</p>
                 </div>
             </div>
 

@@ -3,7 +3,6 @@
 export default function ReviewButtons({ id}: { id: string}) {
 
   async function review(status: "APPROVED" | "REJECTED") {
-
     await fetch(
       `/api/admin/organizers/${id}`, 
       { 

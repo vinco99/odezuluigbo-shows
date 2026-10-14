@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "Event" ADD COLUMN     "prize1st" DOUBLE PRECISION,
+ADD COLUMN     "prize2nd" DOUBLE PRECISION,
+ADD COLUMN     "prize3rd" DOUBLE PRECISION;

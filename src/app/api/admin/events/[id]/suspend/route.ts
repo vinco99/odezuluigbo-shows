@@ -10,8 +10,8 @@ export async function POST(request:Request, context:{params: Promise<{ id: strin
     const {id} = await context.params;
 
     await prisma.event.update({
-        where:  {id},
-        data:   {status:"SUSPENDED"}
+        where:  { id },
+        data:   { status:"SUSPENDED", isVotingOpen: false }
     });
 
 

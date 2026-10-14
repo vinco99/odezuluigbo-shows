@@ -202,7 +202,7 @@ export async function GET(request: Request) {
     }
 
     return Response.redirect(
-      new URL(`/events/${event.slug ?? event.id}?applied=1`, request.url)
+      new URL(`/events/${event.id}?applied=1`, request.url)
     );
   } catch (error) {
     console.error("contestant payment verification error:", error);

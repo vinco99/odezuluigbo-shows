@@ -44,7 +44,7 @@ export default function OrganizerApplicationPage() {
                     <div className="eligibility-grid" style={{marginBottom: "60px"}}>
                     <div className="elig-item">
                         <span className="elig-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: "0"}}>
                             <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
                             <line x1="16" y1="2" x2="16" y2="6"/>
                             <line x1="8" y1="2" x2="8" y2="6"/>
@@ -58,7 +58,7 @@ export default function OrganizerApplicationPage() {
                     </div>
                     <div className="elig-item">
                         <span className="elig-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: "0"}}>
                             <path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
                         </svg>
                         </span>
@@ -69,7 +69,7 @@ export default function OrganizerApplicationPage() {
                     </div>
                     <div className="elig-item">
                         <span className="elig-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: "0"}}>
                             <path d="M18 20V10M12 20V4M6 20v-6"/>
                         </svg>
                         </span>
@@ -80,7 +80,7 @@ export default function OrganizerApplicationPage() {
                     </div>
                     <div className="elig-item">
                         <span className="elig-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: "0"}}>
                             <circle cx="12" cy="12" r="10"/>
                             <path d="M12 6v6l4 2"/>
                         </svg>
@@ -153,6 +153,9 @@ export default function OrganizerApplicationPage() {
                                 <div className="form-group">
                                     <label>Proposal</label>
                                     <textarea name="proposal" rows={4} required minLength={20} placeholder="Describe the events you want to run" style={{resize: "vertical"}}/>
+                                </div>
+                                <div className="form-group">
+                                    
                                 </div>
                                 <button className="btn btn-gold btn-full" style={{marginTop: "8px"}}>Submit Application</button>
                                 {message && 

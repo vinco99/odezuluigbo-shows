@@ -3,7 +3,6 @@ import { requireRole } from "@/lib/permissions";
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import EditEventForm from "./EditEventForm";
-import PeopleForm from "./PeopleForm";
 
 export default async function ManageEventPage({ params }: { params: Promise<{ id: string }> }) {
     const session = await requireRole(["ADMIN", "ORGANIZER"], "/organizer/apply");
@@ -15,21 +14,29 @@ export default async function ManageEventPage({ params }: { params: Promise<{ id
                 contestants: true, 
                 judges: true, 
                 sponsors: true, 
-                payments: true, 
-                votePackages: { where: { active: true } } 
+                payments: true,
+                votes: true, 
             } 
         }
     );
-    if (!event || (session.user.role === "ORGANIZER" && event.organizerId !== session.user.id)) 
+    if (!event || (session.user.role === "ORGANIZER" && event.organizerId !== session.user.id)) {
         notFound();
-    const paidVotes = event.payments.filter(
-        (payment) => payment.status === "PAID" &&
-         payment.type === "VOTE").reduce((total, payment) => total + payment.amount, 0
-    );
-    const paidRegistrations = event.payments.filter(
-        (payment) => payment.status === "PAID" &&
-         payment.type === "CONTESTANT_REGISTRATION").reduce((total, payment) => total + payment.amount, 0
-    );
+    }
+
+    // Vote Revenue: money paid directly for votes (Paystack, ₦50/vote)
+    const paidVotes = event.payments
+        .filter((payment) => payment.status === "PAID" && payment.type === "VOTE")
+        .reduce((total, payment) => total + payment.amount, 0);
+
+    // Registration Revenue: money paid for contestant registration
+    const paidRegistrations = event.payments
+        .filter((payment) => payment.status === "PAID" && payment.type === "CONTESTANT_REGISTRATION")
+        .reduce((total, payment) => total + payment.amount, 0);
+
+    // Credit Votes: number of votes cast using wallet credits (no money moved)
+    const creditVotes = event.votes
+        .filter((vote) => vote.status === "PAID" && vote.creditsUsed > 0)
+        .reduce((total, vote) => total + vote.quantity, 0);
     
     return (
         <main className="page active">
@@ -59,6 +66,10 @@ export default async function ManageEventPage({ params }: { params: Promise<{ id
                             <small>Vote Revenue</small>
                         </div>
                         <div className="tv-stat">
+                            <span className="tv-val">{creditVotes.toLocaleString()} Credits</span>
+                            <small>Credit Votes</small>
+                        </div>
+                        <div className="tv-stat">
                             <span className="tv-val">{event.isVotingOpen ? "Open" : "Closed"}</span>
                             <small>Voting</small>
                         </div>
@@ -72,7 +83,6 @@ export default async function ManageEventPage({ params }: { params: Promise<{ id
                             }
                         } 
                     />
-                    <PeopleForm eventId={event.id} />
                 </div>
             </section>
 

@@ -1,7 +1,5 @@
 import Link from "next/link";
-import EventReviewButtons from "./ReviewEventButton";
-import GoLiveButton from "./GoLiveButton";
-import SuspendEventButton from "./SuspendEventButton";
+
 
 type EventRow = { 
     id: string; 
@@ -36,23 +34,7 @@ export function EventsTable({ events }: { events: EventRow[] }) {
                                     <span className={`status-badge ${event.status.toLowerCase()}`}>{event.status.toLocaleLowerCase()}</span>
                                 </td>
                                 <td style={{ padding: "10px" }}>
-                                    <Link href={`/organizer/events/${event.id}`} className="btn btn-outline btn-xs">View</Link>
-
-                                    <EventReviewButtons 
-                                        id={event.id}  
-                                        disabled={event.status !== "PENDING"} 
-                                    />
-
-                                    <GoLiveButton 
-                                        id={event.id} 
-                                        disabled={event.status !== "APPROVED"} 
-                                    />
-
-                                    <SuspendEventButton 
-                                        id={event.id} 
-                                        disabled={event.status !== "LIVE"} 
-                                    />
-                                    
+                                    <Link href={`/admin/events/${event.id}`} className="btn btn-outline btn-xs">Manage & Review Event</Link>
                                 </td>
                             </tr>
                         )}

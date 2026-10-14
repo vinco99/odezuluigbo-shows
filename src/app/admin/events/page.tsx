@@ -4,11 +4,20 @@ import {EventsTable} from "./_components/EventsTable";
 import {OrganizersTable} from "./_components/OrganizerSubmissionsTable";
 import Link from "next/link";
 import { ContestantTable } from "./_components/ContestantTable";
+import { auth } from "@/lib/auth";
+import { redirect } from "next/navigation";
 
+export const dynamic = "force-dynamic";
 
 export default async function AdminEventsPage(){
 
-    await requireRole(["ADMIN"]);
+    const session = await auth();
+
+    if(!session) {
+        redirect("/admin/login");
+    }
+
+    await requireRole(["ADMIN"], "/");
 
     const events = await prisma.event.findMany(
         { 

@@ -1,7 +1,45 @@
+"use client"
 
+import { useState } from "react";
 
-export async function TicketOrderForm (){
+type Props = {
+    eventName: string;
+    packageName: string;
+    price: number;
+    packageId: string;
+};
 
+export function TicketOrderForm ({ eventName, packageName, price, packageId }: Props) {
+    const [submitting, setSubmitting] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+
+    async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+        e.preventDefault();
+        setSubmitting(true);
+        setError(null);
+
+        const form = e.currentTarget;
+        const data = {
+            packageId,
+            name: (form.elements.namedItem("ticketName") as HTMLInputElement).value,
+            email: (form.elements.namedItem("ticketEmail") as HTMLInputElement).value,
+            phone: (form.elements.namedItem("ticketPhone") as HTMLInputElement).value,
+        };
+        
+        try {
+            const res = await fetch("/api/tickets/checkout", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data),
+            });
+            if (!res.ok) throw new Error("Checkout failed");
+            const { paymentUrl } = await res.json();
+            window.location.href = paymentUrl; // redirect to Paystack/Flutterwave/etc.
+        } catch (err) {
+            setError("Something went wrong. Please try again.");
+            setSubmitting(false);
+        }
+    }
     return(
         <div className="form-box">
             <div id="ticketOrderSummary" 
@@ -10,13 +48,13 @@ export async function TicketOrderForm (){
                 }}
             >
                 <p style={{fontSize: ".68rem", letterSpacing: ".1em", textTransform: "uppercase", color: "var(--w30)", margin: "0 0 6px"}}>Order Summary</p>
-                <p style={{color: "var(--white)", fontSize: ".95rem", margin: "0 0 2px"}}>currentTicketEvent.name</p>
-                <p style={{color: "var(--gold)", fontSize: ".85rem", margin: "0"}}>currentTicketPackage.name (1 ticket)</p>
+                <p style={{color: "var(--white)", fontSize: ".95rem", margin: "0 0 2px"}}>{eventName}</p>
+                <p style={{color: "var(--gold)", fontSize: ".85rem", margin: "0"}}>{packageName} (1 ticket)</p>
             </div>
             <p style={{color: "var(--w30)", fontSize: ".76rem", margin: "0 0 16px"}}>
                 Each order is for one ticket. Buying for someone else? Just enter their details below — their ticket and unique QR code will be sent straight to the email you provide.
             </p>
-            <form onSubmit={}>
+            <form onSubmit={handleSubmit}>
                 <div className="form-group">
                     <label>Ticket Holder's Full Name *</label>
                     <input type="text" id="ticketName" placeholder="Full name of the person attending" required />
@@ -36,9 +74,16 @@ export async function TicketOrderForm (){
                     }}>
 
                     <span style={{color: "var(--w70)", fontSize: ".9rem"}}>Total</span>
-                    <strong id="ticketTotalPrice" style={{color: "var(--gold)", fontSize: "1.3rem", fontFamily: "var(--fh)"}}>₦ (Price)</strong>
+                    <strong id="ticketTotalPrice" style={{color: "var(--gold)", fontSize: "1.3rem", fontFamily: "var(--fh)"}}>₦ {price}</strong>
                 </div>
-                <button type="submit" className="btn btn-gold btn-full">Proceed to Payment →</button>
+                {error && (
+                    <p style={{ color: "#ff6b6b", fontSize: ".8rem", marginBottom: "12px" }}>
+                        {error}
+                    </p>
+                )}
+                <button type="submit" className="btn btn-gold btn-full" disabled={submitting}>
+                    {submitting ? "Processing…" : "Proceed to Payment →"}
+                </button>
             </form>
         </div>
     )

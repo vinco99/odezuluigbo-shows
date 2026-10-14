@@ -1,68 +1,72 @@
-import Link from "next/link";
+import { prisma } from "@/lib/prisma";
+import { Prisma } from "@/generated/prisma/client";
 import Footer from "@/components/Footer";
+import Link from "next/link";
+import { VoteButton } from "@/components/vote/VoteButton";
+import { DEFAULT_VOTING_FEE_NAIRA, } from "@/lib/voting";
+import { VoteProvider } from "@/components/vote/VoteProvider";
+import { auth } from "@/lib/auth";
+import { EventVideoPlayer } from "@/components/events/EventVideoPlayer";
+import { getVoteContextForEvents } from "@/lib/voting-server";
+import { ShareButton } from "../vote/_components/ShareButton";
 
-const contestants = [
-    {
-        name: "Chukwudi",
-        state: "Enugu",
-        percentage: 68,
-        image: "https://oss-macaron-user.macaron.im/photo/5d40de06-352e-46c0-a2d2-1992d5b5e993.png",
+const REALITY_SELECT = {
+  id: true,
+  slug: true,
+  title: true,
+  description: true,
+  eventDate: true,
+  registrationStart: true,
+  registrationEnd: true,
+  registrationFee: true,
+  votingFee: true,
+  venue: true,
+  state: true,
+  country: true,
+  status: true,
+  isVotingOpen: true,
+  prize1st: true,
+  prize2nd: true,
+  prize3rd: true,
+  creditLimitPerSession: true,
+  contestants: {
+    where: { applicationStatus: "APPROVED" },
+    select: {
+      id: true,
+      name: true,
+      potrait: true,
+      state: true,
+      city: true,
+      votes: {
+        where: { status: "PAID" },
+        select: { quantity: true },
+      },
     },
-    {
-        name: "Adaeze",
-        state: "Anambra",
-        percentage: 82,
-        image: "https://oss-macaron-user.macaron.im/photo/a2d925f4-f143-424b-b149-d688d4423efc.jpeg",
-    },
-    {
-        name: "Emeka",
-        state: "Imo",
-        percentage: 54,
-        image: "https://oss-macaron-user.macaron.im/photo/aa93cb00-3a6a-4502-8fbb-e4a98441d4c0.png",
-    },
-    {
-        name: "Ngozi",
-        state: "Abia",
-        percentage: 45,
-        image: "https://oss-macaron-user.macaron.im/photo/62a97ba9-558b-4c98-bfec-f3508a8319bc.jpeg",
-    },
-    {
-        name: "Ikenna",
-        state: "Ebonyi",
-        percentage: 37,
-        image: "https://oss-macaron-user.macaron.im/photo/d77650f5-ba53-4ce8-bc9f-81d07c8576f1.png",
-    },
-    {
-        name: "Chioma",
-        state: "Diaspora",
-        percentage: 72,
-        image: "https://oss-macaron-user.macaron.im/photo/59ede876-e139-48df-a0a8-f15e1dab3977.png",
-    },
-    {
-        name: "Uchenna",
-        state: "Enugu",
-        percentage: 60,
-        image: "https://oss-macaron-user.macaron.im/photo/bc0d26e7-02b5-47ae-baf7-3f29f4f510ad.jpeg",
-    },
-    {
-        name: "Ifeoma",
-        state: "Imo",
-        percentage: 49,
-        image: "https://oss-macaron-user.macaron.im/photo/9993e375-a5f0-486e-bfd9-fefcce7ecd7d.png",
-    },
-    {
-        name: "Obinna",
-        state: "Anambra",
-        percentage: 55,
-        image: "https://oss-macaron-user.macaron.im/photo/75f91bb6-3a48-4127-8c38-b5db13be1b2c.jpeg",
-    },
-    {
-        name: "Amaka",
-        state: "Abia",
-        percentage: 76,
-        image: "https://oss-macaron-user.macaron.im/photo/220f8db2-f9ac-4c81-b6cc-725c6f9c0a0d.jpeg",
-    },
-];
+  },
+  videos: {
+    where: { active: true },
+    orderBy: [
+      { isPrimary: "desc" },
+      { sortOrder: "asc" },
+      { createdAt: "desc" },
+    ],
+    select: { id: true, youtubeId: true, title: true, description: true, kind: true },
+  },
+  judges: {
+    where: { active: true },
+    orderBy: [{ sortOrder: "asc" }, { createdAt: "asc" }],
+    select: { id: true, name: true, title: true, image: true },
+  },
+  sponsors: {
+    where: { active: true },
+    orderBy: [{ tier: "asc" }, { sortOrder: "asc" }],
+    select: { id: true, name: true, logo: true, website: true, tier: true },
+  },
+  voteSessions: {
+    orderBy: { startsAt: "asc" },
+  },
+} satisfies Prisma.EventSelect;
+
 
 function TrophyIcon({ size = 28}: { size?: number }) {
     return (
@@ -87,69 +91,60 @@ function TrophyIcon({ size = 28}: { size?: number }) {
     );
 }
 
-function ShareIcon(){
-    return (
-        <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="12"
-            height="12"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            aria-hidden="true"
-            >
-            <circle cx="18" cy="5" r="3" />
-            <circle cx="6" cy="12" r="3" />
-            <circle cx="18" cy="19" r="3" />
-            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
-            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
-        </svg>
-    );
-}
-
-function ContestantCard({
-    contestant,
-}: {
-    contestant: (typeof contestants)[number];
-}) {
-    return(
-        <div className="contestant-card">
-            <img
-                className="c-img"
-                src={contestant.image}
-                alt={`${contestant.name} — contestant photo`}
-                style={{width: "100%", height: "235px", objectFit: "cover", objectPosition: "top center",}}
-            />
-            <div className="c-info">
-                <h4>{contestant.name}</h4>
-                <span className="c-sub">{contestant.state}</span>
-                <div className="vote-bar">
-                    <div className="vote-fill" style={{width: `${contestant.percentage}%`}}></div>
-                </div>
-                <small>{contestant.percentage}%</small>
-                <button  className="btn btn-gold btn-xs">
-                    Vote
-                </button>
-                <button 
-                    className="btn btn-outline btn-xs share-btn"  
-                    title={`Share ${contestant.name}'s voting link`} 
-                    aria-label={`Share ${contestant.name}`}
-                >
-                    <ShareIcon />
-                </button>
-            </div>
-        </div>
-    );
-}
-
 
 // The Page component for the Reality TV Show page
-export default function RealityPage(){
+export const dynamic = "force-dynamic";
+
+export default async function RealityPage() {
+
+    const session = await auth();
+
+    const [liveReality, approvedReality] = await Promise.all([
+        prisma.event.findFirst({
+        where: { type: "REALITY_SHOW", status: "LIVE" },
+        orderBy: { createdAt: "asc" },
+        select: REALITY_SELECT,
+        }),
+        prisma.event.findFirst({
+        where: { type: "REALITY_SHOW", status: "APPROVED" },
+        orderBy: { createdAt: "asc" },
+        select: REALITY_SELECT,
+        }),
+    ]);
+
+    const eventOrNull = liveReality ?? approvedReality;
+
+    if (!eventOrNull) {
+        return (
+        <div className="page active" id="page-reality">
+            <div className="page-hero">
+            <div className="container">
+                <h1>Reality TV Show</h1>
+                <p>Our next show is being prepared. Check back soon.</p>
+            </div>
+            </div>
+            <Footer />
+        </div>
+        );
+    }
+
+    const event = eventOrNull;  
+
+    const { walletBalance, sessionInfoByEvent } = await getVoteContextForEvents(session?.user?.id, [event.id],);
+
+    const totalVotes = event.contestants.reduce(
+        (sum, c) => sum + c.votes.reduce((s, v) => s + v.quantity, 0),
+        0,
+    );
+
+    const totalPrizePool =
+    (event.prize1st ?? 0) + (event.prize2nd ?? 0) + (event.prize3rd ?? 0);
+
+    const contestantCount = event.contestants.length;
+    const sessionCount = event.voteSessions.length;
 
     return (
+        <VoteProvider walletBalance={walletBalance} sessionInfoByEvent={sessionInfoByEvent} isLoggedIn={!!session?.user.id} >
         <div className="page active" id="page-reality">
             <div className="page-hero" style={{background: "linear-gradient(135deg,#000510,#001020,#000510)"}}>
                 <div className="container">
@@ -176,11 +171,11 @@ export default function RealityPage(){
                     </p>
                     <div className="tv-show-stats">
                         <div className="tv-stat">
-                            <span className="tv-val">40</span>
+                            <span className="tv-val">{contestantCount}</span>
                             <small>Contestants</small>
                         </div>
                         <div className="tv-stat">
-                            <span className="tv-val">10</span>
+                            <span className="tv-val">{sessionCount || 10}</span>
                             <small>Weeks</small>
                         </div>
                         <div className="tv-stat">
@@ -188,34 +183,33 @@ export default function RealityPage(){
                             <small>Live</small>
                         </div>
                         <div className="tv-stat">
-                            <span className="tv-val">₦6M+</span>
+                            <span className="tv-val">
+                            {totalPrizePool > 0 ? `₦${(totalPrizePool / 1_000_000).toFixed(1).replace(/\.0$/, "")}M` : "—"}
+                            </span>
                             <small>Prizes</small>
                         </div>
                     </div>
                     <div style={{marginTop:"32px", display: "flex", gap: "14px", justifyContent: "center", flexWrap: "wrap"}}>
-                        <Link href="/vote" className="btn btn-gold">Vote for Favourite</Link>
-                        <Link href="/events" className="btn btn-outline">Apply as Contestant</Link>
+                        <Link href={`/events/${event.id}`} className="btn btn-gold">Vote for Favourite</Link>
+                        <Link href={`/events/${event.id}/apply`} className="btn btn-outline">Apply as Contestant</Link>
                     </div>
                 </div>
             </div>
 
-            <section className="section">
-                <div className="container">
+            {event.videos.length > 0 ? (
+                <section className="section">
+                    <div className="container">
                     <div className="section-header">
                         <span className="section-badge">Watch</span>
                         <h2 className="section-title">Promo Reel</h2>
                     </div>
-                    <div className="video-ph" 
-                        data-desc="VIDEO EMBED AREA: Odenigwe Reality TV Show promo trailer. Replace with YouTube embed. Thumbnail: Excited contestants in traditional attire on colourful TV stage set with 'ODENIGWE' title treatment in gold/red."
-                    >
-                        <div className="play-btn">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-                        </div>
-                        <h3>Watch the Promo</h3>
-                        <p>Odenigwe — Official Trailer</p>
+                    <EventVideoPlayer
+                        primary={event.videos[0]}
+                        others={event.videos.slice(1)}
+                    />
                     </div>
-                </div>
-            </section>
+                </section>
+            ) : null}
 
             <section className="section" style={{background: "var(--dark-2)", borderTop: "1px solid var(--w10)", borderBottom: "1px solid var(--w10)"}}>
                 <div className="container">
@@ -224,52 +218,31 @@ export default function RealityPage(){
                         <h2 className="section-title">Prizes & Awards</h2>
                     </div>
                     <div className="prizes-grid">
-                        <div className="prize-card" style={{borderColor: "var(--gold)"}}>
+                        {event.prize1st != null && (
+                            <div className="prize-card" style={{ borderColor: "var(--gold)" }}>
                             <div className="prize-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+                                <TrophyIcon size={28} />
                             </div>
-                            <h3>Grand Winner — ODENIGWE</h3>
-                            <div className="prize-amt">₦5,000,000</div>
-
-                            <p style={{color: "var(--w70)", fontSize: ".83rem", marginTop: "7px"}}>
-                                + Brand New Car + Endorsement Deals + Media Coverage
-                            </p>
-                        </div>
-                        <div className="prize-card">
-                            <div className="prize-icon">
-                                <svg 
-                                    xmlns="http://www.w3.org/2000/svg" 
-                                    width="28" 
-                                    height="28" 
-                                    viewBox="0 0 24 24" 
-                                    fill="none" 
-                                    stroke="currentColor" 
-                                    strokeWidth="2" 
-                                    strokeLinecap="round" 
-                                    strokeLinejoin="round"
-                                >
-                                    <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
-                                    <line x1="12" y1="18" x2="12.01" y2="18"/>
-                                </svg>
+                            <h3>Grand Prize</h3>
+                            <div className="prize-amt">₦{event.prize1st.toLocaleString()}</div>
                             </div>
-                            <h3>Social Media Winner — ODENIKUKU</h3>
-                            <div className="prize-amt">₦1,000,000</div>
+                        )}
 
-                            <p style={{color: "var(--w70)", fontSize: ".83rem", marginTop: "7px"}}>
-                                Voted entirely by fans on all social media 
-                            </p>
-                        </div>
-
-                        <div className="prize-card">
-                            <div className="prize-icon">
-                                <TrophyIcon />
+                        {event.prize2nd != null && (
+                            <div className="prize-card">
+                            <div className="prize-icon"><TrophyIcon size={28} /></div>
+                            <h3>Runner-Up</h3>
+                            <div className="prize-amt">₦{event.prize2nd.toLocaleString()}</div>
                             </div>
-                            <h3>1st Runner Up</h3>
-                            <div className="prize-amt">₦500,000</div>
-                            <p style={{color: "var(--w70)", fontSize: ".83rem", marginTop: "7px"}}>
-                                + Prizes and brand partnerships
-                            </p>
-                        </div>
+                        )}
+
+                        {event.prize3rd != null && (
+                            <div className="prize-card">
+                            <div className="prize-icon"><TrophyIcon size={28} /></div>
+                            <h3>Second Runner-Up</h3>
+                            <div className="prize-amt">₦{event.prize3rd.toLocaleString()}</div>
+                            </div>
+                        )}
                     </div>
                 </div>
             </section>
@@ -284,16 +257,50 @@ export default function RealityPage(){
                         </p>
                     </div>
 
-                    <div 
-                        id="tv-contestants" 
-                        style={{display: "flex", flexDirection: "column", gap: "20px"}}
-                    >
-                        {contestants.map((contestant) =>(
-                            <ContestantCard 
-                                key={contestant.name}
-                                contestant={contestant}
-                            />
-                        ))}
+                    
+                    <div id="tv-contestants" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 20 }}>
+
+                        {event.contestants.map((c) => {
+                            const votes = c.votes.reduce((s, v) => s + v.quantity, 0);
+                            const percent =
+                                totalVotes === 0 ? 0 : Math.round((votes / totalVotes) * 100);
+
+                            return (
+                                
+                                <div className="contestant-card" key={c.id}>
+                                <img
+                                    className="c-img"
+                                    src={c.potrait ?? "/placeholder.png"}
+                                    alt={c.name}
+                                    style={{ width: "100%", height: 235, objectFit: "cover", objectPosition: "top center" }}
+                                />
+                                <div className="c-info">
+                                    <h4>{c.name}</h4>
+                                    <span className="c-sub">{c.state ?? c.city ?? "Contestant"}</span>
+
+                                    <div className="vote-bar">
+                                    <div className="vote-fill" style={{ width: `${percent}%` }} />
+                                    </div>
+
+                                    <small>
+                                    {percent}% · {votes.toLocaleString()} votes
+                                    </small>
+
+                                    <VoteButton
+                                        contestantId={c.id}
+                                        contestantName={c.name}
+                                        eventId={event.id}
+                                        eventTitle={event.title}
+                                        isRealityShow
+                                        votingFee={event.votingFee > 0 ? event.votingFee : DEFAULT_VOTING_FEE_NAIRA}
+                                    />
+
+                                    <ShareButton contestantName={c.name} contestantId={c.id} />
+                                </div>
+                                </div>
+                                
+                            );
+                        })}
                     </div>
                     <div className="section-cta">
                         <p style={{color:"var(--w70)",marginBottom:"14px"}}>Showing 10 of 40 contestants</p>
@@ -366,5 +373,6 @@ export default function RealityPage(){
 
             <Footer />
         </div>
+        </VoteProvider>
     )
 }

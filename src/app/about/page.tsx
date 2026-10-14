@@ -23,10 +23,7 @@ export default function AboutPage() {
                             <p style={{marginTop: "14px", color: "var(--w70)"}}>We believe in the power of culture, the strength of community, and the brilliance of the Igbo spirit. Through world-className entertainment, we celebrate what makes Igbo people extraordinary.</p>
                         </div>
                         <div>
-                            <div className="img-placeholder about-visual-img" >
-                                <img className="about-visual-img" src="/images/Odezuluigbo-team.jpg" />
-                                <span className="ph-txt">Odezuluigbo team group portrait</span>
-                            </div>
+                            <img className="about-visual-img" src="https://oss-macaron-user.macaron.im/photo/6e6be563-ea55-4e69-ae7d-8caf6fb1eeb8.jpeg" alt="Igbo Cultural Celebration" style={{ width: '100%', borderRadius: 'var(--radius)', objectFit: 'cover' }} />
                         </div>
                     </div>
 
@@ -37,7 +34,7 @@ export default function AboutPage() {
                     <div className="values-grid" style={{marginBottom: "72px"}}>
                         <div className="value-card">
                             <span className="value-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: "0"}}>
                                 <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12c0 1.82.488 3.53 1.342 5C5.204 21.5 8.3 22 12 22z"/>
                                 <path d="M2 12h4"/>
                                 <path d="M8 8l4 4"/>
@@ -49,7 +46,7 @@ export default function AboutPage() {
                         </div>
                         <div className="value-card">
                             <span className="value-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: "0"}}>
                                 <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
                                 </svg>
                             </span>
@@ -58,7 +55,7 @@ export default function AboutPage() {
                         </div>
                         <div className="value-card">
                             <span className="value-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: "0"}}>
                                 <circle cx="12" cy="12" r="10"/>
                                 <line x1="2" y1="12" x2="22" y2="12"/>
                                 <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
@@ -69,7 +66,7 @@ export default function AboutPage() {
                         </div>
                         <div className="value-card">
                             <span className="value-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: "0"}}>
                                 <path d="M12 20h9"/>
                                 <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
                                 </svg>
@@ -79,7 +76,7 @@ export default function AboutPage() {
                             </div>
                         <div className="value-card">
                             <span className="value-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: "0"}}>
                                 <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
                                 <circle cx="9" cy="7" r="4"/>
                                 <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
@@ -91,7 +88,7 @@ export default function AboutPage() {
                         </div>
                         <div className="value-card">
                             <span className="value-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: "0"}}>
                                 <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/>
                                 <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/>
                                 <path d="M4 22h16"/>
@@ -112,52 +109,23 @@ export default function AboutPage() {
                     <div className="team-grid" style={{marginBottom: "72px"}}>
 
                         <div className="team-card">
-                            <div className="img-placeholder" style={{height: "340px"}}>
-                                <img src="/images/rev-fr.jpg" className="team-img" />
-                                <span className="ph-txt">Very Rev. Fr. Prof. Bonachristus Uchenna Umeogu</span>
-                            </div>
+                            <img className="team-img" src="https://oss-macaron-user.macaron.im/photo/5132fc42-aa91-4b07-9893-4b3e166a2390.jpeg" alt="Very Rev. Fr. Prof. Bonachristus Uchenna Umeogu" style={{width:"100%", height: "340px", objectFit: "cover", objectPosition:"top center"}} />
                             <div className="team-info">
                                 <h4>Very Rev. Fr. Prof. Bonachristus Uchenna Umeogu</h4>
                                 <span>Chairman & Chief Executive Officer (CEO)</span>
-                                <p style={{color: "rgba(255,255,255,0.7)", fontSize:".85rem", lineHeight: "1.6", marginTop: "12px"}}>
-                                    Distinguished philosopher, educator, entrepreneur, cultural revivalist, and strategic leader. 
-                                    As Chairman and Chief Executive Officer of Odezuluigbo Global Ltd, he provides corporate leadership, 
-                                    strategic direction, investment support, and institutional guidance for the realization of the company's vision of promoting Igbo excellence and delivering world-className products and services to humanity.
-                                </p>
+                                <p style={{color: "rgba(255,255,255,0.7)", fontSize: ".85rem", lineHeight: "1.6", marginTop: "12px;"}}>Distinguished philosopher, educator, entrepreneur, cultural revivalist, and strategic leader. As Chairman and Chief Executive Officer of Odezuluigbo Global Ltd, he provides corporate leadership, strategic direction, investment support, and institutional guidance for the realization of the company's vision of promoting Igbo excellence and delivering world-class products and services to humanity.</p>
                             </div>
                         </div>
-
                         <div className="team-card">
-                            <div className="img-placeholder" style={{height: "340px"}}>
-                                <img src="/image/st-chioma.jpg" className="team-img" />
-                                <span className="ph-txt">Chioma Favour Nwigwe (Goddess)</span>
-                            </div>
+                            <img className="team-img" src="https://oss-macaron-user.macaron.im/photo/89cba494-cfe2-497f-9ed9-6bb2d19dbd71.jpeg" alt="Chioma Favour Nwigwe (Goddess)" style={{width: "100%", height: "340px", objectFit: "cover", objectPosition: "top center"}} />
                             <div className="team-info">
                                 <h4>Chioma Favour Nwigwe (Goddess)</h4>
                                 <span>Chief Operating Officer (COO)</span>
-                                <p style={{color: "rgba(255,255,255,0.7)", fontSize:".85rem", lineHeight: "1.6", marginTop: "12px"}}>
-                                    Creative strategist, media executive, project coordinator, and operational leader. 
-                                    She oversees the day-to-day administration, brand development, project implementation, communications, digital platforms, event management, and execution of the company's cultural, entertainment, and commercial initiatives. 
-                                    She plays a central role in transforming vision into reality through innovation, coordination, and effective operational leadership.
-                                </p>
-                            </div>
-                        </div>
-                        <div className="team-card">
-                            <div className="img-placeholder team-img" data-desc="TEAM MEMBER PHOTO: Events Manager — professional woman in smart attire, smiling. Events & logistics management.">
-                                <span className="ph-icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                                    <circle cx="12" cy="7" r="4"/>
-                                    </svg>
-                                </span>
-                                <span className="ph-txt">Events Manager<br />Professional Portrait</span>
-                            </div>
-                            <div className="team-info">
-                                <h4>Events Manager</h4>
-                                <span>Head of Events</span>
+                                <p style={{color: "rgba(255,255,255,0.7)", fontSize: ".85rem", lineHeight: "1.6", marginTop: "12px;"}}>Creative strategist, media executive, project coordinator, and operational leader. She oversees the day-to-day administration, brand development, project implementation, communications, digital platforms, event management, and execution of the company's cultural, entertainment, and commercial initiatives. She plays a central role in transforming vision into reality through innovation, coordination, and effective operational leadership.</p>
                             </div>
                         </div>
                     </div>
+    
 
                     <div 
                         style={{

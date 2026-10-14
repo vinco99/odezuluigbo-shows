@@ -59,8 +59,21 @@ export async function GET(request: Request) {
         );
     }
 
-    await prisma.vote.upsert(
-        { 
+
+    await prisma.$transaction(async (tx) => {
+
+        const payment = await tx.payment.create({
+            data: {
+                reference,
+                amount: paidAmount,
+                status: "PAID",
+                userId: metadata.voterId,
+                eventId: metadata.eventId,
+                type: "VOTE",
+            },
+        });
+
+        await tx.vote.upsert({ 
             where: { reference }, 
             update: { status: "PAID", amount: paidAmount }, 
             create: { 
@@ -71,8 +84,10 @@ export async function GET(request: Request) {
                 amount: paidAmount, 
                 status: "PAID" 
             } 
-        }
-    );
+        });
+
+    });
+
     
     return Response.redirect(
         new URL(`/events/${metadata.eventId}`, request.url)

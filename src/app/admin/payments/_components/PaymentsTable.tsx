@@ -6,7 +6,7 @@ type PaymentRow = {
     status: string; 
     createdAt: Date; 
     user: { name: string; email: string }; 
-    event: { title: string } 
+    event: { title: string } | null
 };
 
 export function PaymentTable({ payments }: { payments: PaymentRow[] }) {
@@ -28,11 +28,17 @@ export function PaymentTable({ payments }: { payments: PaymentRow[] }) {
                     {payments.map((payment) => 
                         <tr key={payment.id} style={{ borderBottom: "1px solid var(--w10)" }}>
                             <td style={{ padding: "10px" }}>{payment.user.name || payment.user.email}</td>
-                            <td style={{ padding: "10px" }}>{payment.event.title}</td>
+                            <td style={{ padding: "10px", color: payment.event ? "inherit" : "var(--w30)" }}>
+                                {payment.event?.title ?? (
+                                    payment.type === "CREDIT_PURCHASE" ? "Credit purchase (wallet)" : "—"
+                                )}
+                            </td>
                             <td style={{ padding: "10px" }}>{payment.type.replaceAll("_", " ")}</td>
                             <td style={{ padding: "10px" }}>₦{payment.amount.toLocaleString()}</td>
                             <td style={{ padding: "10px", color: "var(--w30)" }}>{payment.reference}</td>
-                            <td style={{ padding: "10px" }}>{payment.status}</td>
+                            <td style={{ padding: "10px" }}>
+                                <span className="status-badge approved">{payment.status.toLocaleLowerCase()}</span>
+                            </td>
                         </tr>
                     )}
                 </tbody>

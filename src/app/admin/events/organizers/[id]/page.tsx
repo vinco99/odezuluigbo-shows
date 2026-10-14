@@ -38,7 +38,7 @@ const formatNigerianNumber = (phone: string) => {
 };
 
 export default async function OrganizerReviewPage({params}:{params: Promise<{id:string}>}) {
-    await requireRole(["ADMIN"]);
+    await requireRole(["ADMIN"], "/");
 
     const { id } = await params;
 
@@ -68,11 +68,11 @@ export default async function OrganizerReviewPage({params}:{params: Promise<{id:
     } = organizer;
 
     return (
-      <main id="main" className="page-shell">
-        <div className="page-heading">
+      <main id="main" className="page active">
+        <div className="new-page-heading">
           <div>
-            <div className="eyebrow"><span className="eyebrow-line">
-              </span> APPLICATIONS <span className="eyebrow-slash">/</span> 
+            <div className="new-eyebrow"><span className="new-eyebrow-line">
+              </span> APPLICATIONS <span className="new-eyebrow-slash">/</span> 
               <span className="eyebrow-current">ORGANIZER REVIEW</span>
             </div>
             <h1>Review organizer</h1>

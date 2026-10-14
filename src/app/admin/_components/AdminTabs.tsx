@@ -6,8 +6,9 @@ const TABS = [
     { href: "/admin/events",   label: "Events" },
     { href: "/admin/users",    label: "Users" },
     { href: "/admin/payments", label: "Payments & Votes" },
+    { href: "/admin/credit-packages", label: "Credits Packages"},
     { href: "/admin/contents",  label: "Contents" },
-    { href: "/admin/tasks",    label: "Tasks & Judges" },
+    { href: "/admin/tasks",    label: "Tasks" },
 ] as const;
 
 export function AdminTabs() {

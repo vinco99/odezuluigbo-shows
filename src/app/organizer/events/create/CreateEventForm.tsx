@@ -381,7 +381,7 @@ export default function CreateEventForm() {
                                     name="votingFee"
                                     type="number"
                                     min="0"
-                                    placeholder="e.g. 1000"
+                                    placeholder="e.g. 500"
                                 />
                             </div>
 

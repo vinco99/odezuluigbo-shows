@@ -1,6 +1,7 @@
 generator client {
   provider = "prisma-client"
   output   = "../src/generated/prisma"
+  runtime  = "nodejs"
 }
 
 datasource db {
@@ -13,8 +14,11 @@ model User {
   email                 String                @unique
   password              String?
   role                  Role                  @default(USER)
+  creditBalance         Int                   @default(0)
+  
   createdAt             DateTime              @default(now())
   updatedAt             DateTime              @updatedAt
+
   image                 String?
   imagePublicId         String?
   phone                 String?               @unique
@@ -23,17 +27,30 @@ model User {
   country               String?
   coverImage            String?
   username              String?               @unique
+
   accounts              Account[]
   blogs                 Blog[]
   comments              Comment[]
   contestants           Contestant[]
   events                Event[]
+
   notifications         Notification[]
   organizerApplications OrganizerApplication?
-  payments              Payment[]
   pendingApplication    PendingApplication[]
   sessions              Session[]
+
+  payments              Payment[]
+  tickets               Ticket[]
   voter                 Vote[]
+  creditTransactions    CreditTransaction[]
+  tasksCreated          Task[]                @relation("TasksCreated")
+  tasksReviewed         UserTaskCompletion[]  @relation("TasksReviewed")
+  taskCompletions       UserTaskCompletion[]
+
+  suspended             Boolean   @default(false)   
+  suspendedAt           DateTime?
+
+  @@index([suspended])
 }
 
 model Account {
@@ -71,43 +88,56 @@ model VerificationToken {
 }
 
 model Event {
-  id                 String               @id @default(cuid())
-  title              String
-  description        String
+  id                      String               @id @default(cuid())
+  title                   String
+  description             String
 
-  logo               String?
-  logoPublicId       String?
-  banner             String?
-  bannerPublicId     String?
+  logo                    String?
+  logoPublicId            String?
+  banner                  String?
+  bannerPublicId          String?
 
-  registrationFee    Float                @default(0)
-  votingFee          Float                @default(0)
-  status             EventStatus          @default(PENDING)
-  organizerId        String
+  registrationFee         Float                @default(0)
+  votingFee               Float                @default(0)
+  status                  EventStatus          @default(PENDING)
+  organizerId             String
 
-  createdAt          DateTime             @default(now())
-  updatedAt          DateTime             @updatedAt
+  createdAt               DateTime             @default(now())
+  updatedAt               DateTime             @updatedAt
   
-  eventDate          DateTime?
-  isVotingOpen       Boolean              @default(false)
-  maxContestants     Int?
-  registrationEnd    DateTime?
-  registrationStart  DateTime?
+  eventDate               DateTime?
+  isVotingOpen            Boolean              @default(false)
+  maxContestants          Int?
+  registrationEnd         DateTime?
+  registrationStart       DateTime?
 
-  slug               String               @unique
-  state              String?
-  country            String?
-  type               EventType
-  venue              String?
+  slug                    String               @unique
+  state                   String?
+  country                 String?
+  type                    EventType
+  venue                   String?
 
-  contestants        Contestant[]
-  organizer          User                 @relation(fields: [organizerId], references: [id])
-  galleries          Gallery[]
-  judges             Judge[]
-  payments           Payment[]
-  pendingApplication PendingApplication[]
-  sponsors           Sponsor[]
-  votePackages       VotePackage[]
+  prize1st                Float?   // Winner / Grand Prize
+  prize2nd                Float?   // 1st Runner-up
+  prize3rd                Float?   // 2nd Runner-up
+
+  videos                  EventVideo[]
+
+  contestants             Contestant[]
+  organizer               User                 @relation(fields: [organizerId], references: [id])
+  galleries               Gallery[]
+  judges                  Judge[]
+  pendingApplication      PendingApplication[]
+  sponsors                Sponsor[]
+
+  payments                Payment[]
+  ticketPackages          TicketPackage[]
+  tickets                 Ticket[]
+  tasks                   Task[]
+  creditLimitPerSession   Int?      
+  voteSessions            VoteSession[]
+  votes                   Vote[]
+  faq                     EventFaq[]
 }
 
 model Contestant {
@@ -159,11 +189,18 @@ model Contestant {
 }
 
 model Gallery {
-  id      String  @id @default(cuid())
-  image   String
-  caption String?
-  eventId String
-  event   Event   @relation(fields: [eventId], references: [id])
+  id             String   @id @default(cuid())
+  eventId        String
+  image          String
+  imagePublicId  String?                  // ⬅️ for Cloudinary deletion
+  caption        String?                  // already there
+  sortOrder      Int      @default(0)     // ⬅️ display order
+  active         Boolean  @default(true)  // ⬅️ hide without deleting
+  createdAt      DateTime @default(now()) // ⬅️ for stable ordering
+
+  event          Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@index([eventId, active, sortOrder])
 }
 
 model PendingApplication {
@@ -225,66 +262,145 @@ model OrganizerApplication {
 model Payment {
   id         String        @id @default(cuid())
   reference  String        @unique
-  amount     Float
+  amount     Decimal       @db.Decimal(10, 2)
   type       PaymentType
-  status     PaymentStatus @default(PENDING)
-  userId     String
+  status     PaymentStatus
+  userId     String?                                   // ← was required
+  eventId    String?
   createdAt  DateTime      @default(now())
-  eventId    String
-  contestant Contestant?
-  event      Event         @relation(fields: [eventId], references: [id])
-  user       User          @relation(fields: [userId], references: [id])
+
+  user       User?         @relation(fields: [userId], references: [id])
+  event      Event?         @relation(fields: [eventId], references: [id])
+  ticket     Ticket?
+  contestant Contestant? 
+
+  @@index([eventId, status])
+  @@index([userId])
 }
 
 model Judge {
-  id                String            @id @default(cuid())
-  name              String
-  image             String?
-  imagePublicId     String?
-  title             String?
-  eventId           String
-  createdAt         DateTime          @default(now())
-  status            ApplicationStatus @default(PENDING)
-  event             Event             @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  id            String   @id @default(cuid())
+  name          String
+  image         String?
+  imagePublicId String?
+  title         String?              // "Head Judge", "Creative Director"
+  bio           String?              // optional, for a richer card
+  eventId       String
+  sortOrder     Int      @default(0) // display order on the event page
+  active        Boolean  @default(true)
+  createdAt     DateTime @default(now())
+
+  event         Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@index([eventId, active, sortOrder])
 }
 
 model Sponsor {
-  id              String            @id @default(cuid())
-  name            String
-  logo            String?
-  logoPublicId    String?
-  website         String?
+  id            String      @id @default(cuid())
+  name          String
+  logo          String?
+  logoPublicId  String?
+  website       String?
+  tier          SponsorTier @default(PARTNER)
+  eventId       String
+  sortOrder     Int         @default(0)
+  active        Boolean     @default(true)
+  createdAt     DateTime    @default(now())
+  ads           Ad[]
 
-  eventId         String
-  createdAt       DateTime          @default(now())
-  status          ApplicationStatus @default(PENDING)
-  event           Event             @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  event         Event       @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@index([eventId, active, sortOrder])
 }
 
-model VotePackage {
-  id        String   @id @default(cuid())
-  eventId   String
-  name      String
-  votes     Int
-  amount    Float
-  active    Boolean  @default(true)
-  createdAt DateTime @default(now())
-  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+enum SponsorTier {
+  PLATINUM
+  GOLD
+  SILVER
+  BRONZE
+  PARTNER
+}
 
-  @@index([eventId, active])
+model CreditPackage {
+  id         String   @id @default(cuid())
+  name       String                          // "Bronze Pack"
+  credits    Int                             // how many credits the user receives
+  amount     Float                           // price in Naira
+  active     Boolean  @default(true)
+  featured   Boolean  @default(false)        // for the "Most Popular" badge
+  sortOrder  Int      @default(0)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([active, sortOrder])
+}
+
+model VoteSession {
+  id                 String   @id @default(cuid())
+  eventId            String
+  name               String                       // "Session 1 & 2", "Day 3", etc.
+  startsAt           DateTime
+  endsAt             DateTime
+  creditLimitPerUser Int?                         // overrides event default if set
+  createdAt          DateTime @default(now())
+
+  event              Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  votes              Vote[]
+
+  @@index([eventId, startsAt])
 }
 
 model Vote {
   id           String        @id @default(cuid())
   voterId      String
+  eventId      String
   contestantId String
   quantity     Int
   amount       Float
+  creditsUsed  Int           @default(0)
   reference    String        @unique
   status       PaymentStatus
   createdAt    DateTime      @default(now())
+
+  event        Event         @relation(fields: [eventId], references: [id], onDelete: Cascade)
   contestant   Contestant    @relation(fields: [contestantId], references: [id])
   voter        User          @relation(fields: [voterId], references: [id])
+
+  sessionId    String?                            // null for non-reality or votes without session
+  session      VoteSession? @relation(fields: [sessionId], references: [id], onDelete: SetNull)
+
+  @@index([voterId, sessionId])
+}
+
+model CreditTransaction {
+  id                String   @id @default(cuid())
+  userId            String
+  amount            Int                         // positive = credit added, negative = spent
+  type              CreditTxType                // PURCHASE, SPEND_VOTE, REFUND, BONUS, ADJUSTMENT
+  title             String
+  detail            String?
+  reference         String?                   // e.g. payment reference
+  status            CreditTxStatus            // COMPLETED, PENDING, FAILED
+  taskCompletion    UserTaskCompletion?
+  createdAt         DateTime @default(now())
+
+  user              User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+}
+
+enum CreditTxType {
+  PURCHASE
+  SPEND_VOTE
+  REFUND
+  BONUS
+  ADJUSTMENT
+}
+
+enum CreditTxStatus {
+  COMPLETED
+  PENDING
+  FAILED
 }
 
 model Blog {
@@ -313,6 +429,57 @@ model Comment {
   createdAt DateTime @default(now())
   blog      Blog     @relation(fields: [blogId], references: [id], onDelete: Cascade)
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model TicketPackage {
+  id          String   @id @default(cuid())
+  eventId     String
+  name        String              // "Regular", "VIP", "Table for 4"
+  description String?
+  price       Float
+  perks       String[]            // ["Front row", "Free drink"]
+  maxQuantity Int?                // null = unlimited
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  event       Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  tickets     Ticket[]
+
+  @@index([eventId, active])
+}
+
+model Ticket {
+  id           String        @id @default(cuid())
+  code         String        @unique          // the QR payload
+  holderName   String
+  holderEmail  String
+  holderPhone  String
+
+  packageId    String
+  eventId      String
+  paymentId    String        @unique
+  buyerId      String?
+
+  status       TicketStatus  @default(PENDING)
+  emailSentAt  DateTime?
+  checkedInAt  DateTime?
+  createdAt    DateTime      @default(now())
+
+  package      TicketPackage @relation(fields: [packageId], references: [id])
+  event        Event         @relation(fields: [eventId], references: [id])
+  payment      Payment       @relation(fields: [paymentId], references: [id])
+  buyer        User?         @relation(fields: [buyerId], references: [id])
+
+  @@index([eventId, status])
+  @@index([holderEmail])
+}
+
+enum TicketStatus {
+  PENDING      
+  VALID        
+  CHECKED_IN   // scanned at door
+  CANCELLED
+  REFUNDED
 }
 
 model Notification {
@@ -378,4 +545,187 @@ enum PaymentType {
   VOTE
   SPONSORSHIP
   EVENT_REGISTRATION
+  EVENT_TICKET
+  CREDIT_PURCHASE
+}
+
+enum TaskKind {
+  VIDEO       
+  SOCIAL      
+  SURVEY   
+  CUSTOM
+}
+
+enum TaskVerification {
+  AUTO        // credits granted on click
+  TIMED       // user must stay for minSeconds
+  MANUAL      // admin reviews proof before granting
+}
+
+enum TaskCompletionStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+
+model Task {
+  id             String            @id @default(cuid())
+  title          String
+  description    String?
+  reward         Int                               // credits granted on approval
+  kind           TaskKind          @default(CUSTOM)
+  verification   TaskVerification  @default(AUTO)
+  actionUrl      String?                           // where the user goes to do the task
+  minSeconds     Int?                              // for TIMED tasks (e.g. 60)
+  cooldownHours  Int?                              // null = one-time per user; N = once every N hours
+  maxCompletions Int?                              // null = unlimited per user (subject to cooldown)
+  eventId        String?                           // null = global task
+  active         Boolean           @default(true)
+  createdById    String
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+
+  event          Event?                @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  createdBy      User                  @relation("TasksCreated", fields: [createdById], references: [id])
+  completions    UserTaskCompletion[]
+
+  @@index([active, eventId])
+}
+
+model UserTaskCompletion {
+  id           String                @id @default(cuid())
+  userId       String
+  taskId       String
+  status       TaskCompletionStatus  @default(PENDING)
+  rewardAmount Int                   // snapshot — reward stays accurate if task is later edited
+  proof        String?               // URL or text for MANUAL verification
+  creditTxId   String?               @unique
+  startedAt    DateTime?
+  completedAt  DateTime?
+  reviewedAt   DateTime?
+  reviewedById String?
+  reviewNote   String?
+  createdAt    DateTime              @default(now())
+
+  user         User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  task         Task                @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  creditTx     CreditTransaction?  @relation(fields: [creditTxId], references: [id])
+  reviewedBy   User?               @relation("TasksReviewed", fields: [reviewedById], references: [id])
+
+  @@index([userId, taskId])
+  @@index([status])
+}
+
+model Song {
+  id             String   @id @default(cuid())
+  title          String
+  artist         String
+  streamingUrl   String
+  platform       String   @default("youtube-music")  // youtube-music | spotify | apple-music | audiomack | boomplay | other
+  coverImage     String?                              // URL; falls back to placeholder if null
+  coverPublicId  String?                              // for Cloudinary deletes, optional
+  active         Boolean  @default(true)
+  sortOrder      Int      @default(0)                 // optional manual override
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([active, createdAt])
+}
+
+model SiteStat {
+  id        String   @id @default(cuid())
+  key       String   @unique   // "weeks-live-tv", "prize-pool"
+  label     String              // "Weeks of Live TV"
+  value     String              // "10" or "₦6M"
+  suffix    String?             // "+", "K", "%" — rendered after the value
+  active    Boolean  @default(true)
+  sortOrder Int      @default(0)
+  updatedAt DateTime @updatedAt
+
+  @@index([active, sortOrder])
+}
+
+enum AdType {
+  IMAGE     // static image + link
+  HTML      // raw HTML snippet
+  ADSENSE   // AdSense code (basically HTML, kept separate for clarity)
+}
+
+model Ad {
+  id              String    @id @default(cuid())
+  placementKey    String                                // matches AD_PLACEMENTS[].key
+  title           String                                // "March Dangote Promo"
+  type            AdType    @default(IMAGE)
+
+  // IMAGE ads
+  imageUrl        String?
+  imagePublicId   String?
+  linkUrl         String?
+
+  // HTML / ADSENSE ads
+  htmlCode        String?   @db.Text
+
+  // Optional link to a Sponsor entity so finance can tie ads to deals
+  sponsorId       String?
+  sponsor         Sponsor?  @relation(fields: [sponsorId], references: [id], onDelete: SetNull)
+
+  // Scheduling
+  startAt         DateTime?
+  endAt           DateTime?
+
+  // Control
+  active          Boolean   @default(true)
+  sortOrder       Int       @default(0)                 // lower = higher priority if multiple overlap
+
+  // Analytics
+  impressions     Int       @default(0)
+  clicks          Int       @default(0)
+
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([placementKey, active, sortOrder])
+  @@index([placementKey, startAt, endAt])
+}
+
+enum EventVideoKind {
+  LIVE       // currently broadcasting
+  UPCOMING   // scheduled stream
+  REPLAY     // recorded version of a past show
+  HIGHLIGHT  // promo / teaser
+  OTHER
+}
+
+model EventVideo {
+  id          String         @id @default(cuid())
+  eventId     String
+  youtubeId   String                              // normalized video ID, not a URL
+  title       String
+  description String?
+  kind        EventVideoKind @default(OTHER)
+  isPrimary   Boolean        @default(true)      // the "hero" player at the top
+  active      Boolean        @default(true)
+  sortOrder   Int            @default(0)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  event       Event          @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@index([eventId, active, sortOrder])
+  @@index([eventId, isPrimary])
+}
+
+model EventFaq {
+  id        String   @id @default(cuid())
+  eventId   String
+  question  String
+  answer    String   @db.Text
+  sortOrder Int      @default(0)
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@index([eventId, active, sortOrder])
 }

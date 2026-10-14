@@ -3,7 +3,7 @@ import { requireRole } from "@/lib/permissions";
 import { prisma } from "@/lib/prisma";
 
 export default async function OrganizerEvents() {
-    const session = await requireRole(["ADMIN", "ORGANIZER"]);
+    const session = await requireRole(["ADMIN", "ORGANIZER"], "/organizer/apply");
 
     const events = await prisma.event.findMany(
         { 
@@ -25,6 +25,7 @@ export default async function OrganizerEvents() {
                 <div className="container">
                     <div className="flex justify-between items-center gap-4 flex-wrap mb-8">
                         <h2 className="section-title">Manage Events</h2>
+                        <p>Admin handles event Voting sessions for Reality Tv events, Judges, Sponsors and Event Videos, inform the Admin</p>
                         <Link href="/organizer/events/create" className="btn btn-gold">Create Event</Link>
                     </div>
                     <div className="all-events-grid" style={{marginTop: "20px"}}>

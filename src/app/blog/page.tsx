@@ -2,10 +2,13 @@ import Link from "next/link";
 import Footer from "@/components/Footer";
 import { prisma } from "@/lib/prisma";
 import { BlogCategory } from "@/generated/prisma/client";
+import { AdSlot } from "@/components/ads/AdSlot";
 
 type Counts = Partial<Record<BlogCategory, number>>;
 
 const CATEGORIES = Object.values(BlogCategory);
+
+export const dynamic = "force-dynamic";
 
 const formatLabel = (c: string) =>
   c.charAt(0) + c.slice(1).toLowerCase();
@@ -33,9 +36,8 @@ export default async function BlogPage() {
                 </div>
                 <section className="section">
                     <div className="container">
-                        <div className="ad-banner">
-                            <p>Advertisement</p>
-                            <div className="ad-img-ph" data-desc="AD BANNER: 728×90 leaderboard advertisement on blog page. Replace with Google AdSense code or sponsor banner image.">[ Advertisement Banner — 728×90 ]</div>
+                        <div className="container" style={{ margin: "32px auto" }}>
+                            <AdSlot placementKey="blog-banner" />
                         </div>
                         <div className="blog-main-grid">
                             <div>

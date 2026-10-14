@@ -1,4 +1,6 @@
 import crypto from "node:crypto";
+import { fulfillTicket } from "@/lib/tickets/fulfill";
+import { sendTicketEmail } from "@/lib/tickets/email";
 
 export async function POST(request: Request) {
     const rawBody = await request.text();
@@ -12,11 +14,7 @@ export async function POST(request: Request) {
         );
     }
 
-    const expected = crypto
-        .createHmac("sha512", secret)
-        .update(rawBody)
-        .digest("hex");
-
+    const expected = crypto.createHmac("sha512", secret).update(rawBody).digest("hex");
     const valid =
         signature.length === expected.length &&
         crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(expected));
@@ -28,7 +26,10 @@ export async function POST(request: Request) {
         );
     }
 
-    let payload: { event?: string; data?: { reference?: string; metadata?: { type?: string } } };
+    let payload: {
+        event?: string;
+        data?: { reference?: string; metadata?: { type?: string } };
+    };
     try {
         payload = JSON.parse(rawBody);
     } catch {
@@ -45,6 +46,31 @@ export async function POST(request: Request) {
         );
     }
 
+    const reference = payload.data.reference;
+    const type = payload.data.metadata?.type;
+
+    // ── Tickets: call the helper directly, no HTTP round-trip ──
+    if (type === "EVENT_TICKET") {
+        console.info("Webhook: fulfilling ticket", { reference });
+        try {
+            const ticket = await fulfillTicket(reference);
+            if (ticket) await sendTicketEmail(ticket.id);
+        } catch (err) {
+            console.error("Webhook: ticket fulfillment failed", { reference, err });
+            // Return 500 so Paystack retries — the fulfillment helper is idempotent.
+            return Response.json(
+                { error: "Ticket fulfillment failed" }, 
+                { status: 500 }
+            );
+        }
+
+        return Response.json(
+            { received: true }, 
+            { status: 200 }
+        );
+    }
+
+    // ── Votes / contestants: keep the existing HTTP dispatch ──
     const appUrl = process.env.NEXT_PUBLIC_APP_URL;
     if (!appUrl) {
         return Response.json(
@@ -53,8 +79,10 @@ export async function POST(request: Request) {
         );
     }
 
-    const type = payload.data.metadata?.type;
-    const endpoint = type === "VOTE" ? "/api/votes/verify": type === "CONTESTANT_REGISTRATION" ? "/api/contestants/verify" : null;
+    const endpoint =
+        type === "VOTE" ? "/api/votes/verify"
+        : type === "CONTESTANT_REGISTRATION" ? "/api/contestants/verify"
+        : null;
 
     if (!endpoint) {
         console.error("Webhook: unknown payment type", type);
@@ -67,7 +95,7 @@ export async function POST(request: Request) {
     let verification: Response;
     try {
         verification = await fetch(
-            `${appUrl}${endpoint}?reference=${encodeURIComponent(payload.data.reference)}`,
+            `${appUrl}${endpoint}?reference=${encodeURIComponent(reference)}`,
             { method: "GET", redirect: "manual", signal: AbortSignal.timeout(10_000) }
         );
     } catch (error) {
@@ -80,7 +108,7 @@ export async function POST(request: Request) {
 
     if (verification.status >= 500) {
         console.error("Webhook: verify endpoint returned server error", {
-            reference: payload.data.reference,
+            reference,
             status: verification.status,
         });
         return Response.json(
@@ -92,14 +120,11 @@ export async function POST(request: Request) {
     if (!verification.ok && verification.status !== 302 && verification.status !== 307) {
         const detail = await verification.text().catch(() => "");
         console.error("Webhook: verify endpoint rejected payment", {
-            reference: payload.data.reference,
+            reference,
             status: verification.status,
             detail,
         });
     }
 
-    return Response.json(
-        { received: true }, 
-        { status: 200 }
-    );
+    return Response.json({ received: true },{ status: 200 });
 }

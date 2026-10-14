@@ -1,7 +1,6 @@
 'use client'
 
 import Link from "next/link";
-import Image from "next/image";
 
 export default function Footer(){
     return(
@@ -52,12 +51,6 @@ export default function Footer(){
                             </li>
                             <li>
                                 <Link href="/organizer/apply">Become an Organizer</Link>
-                            </li>
-                            <li>
-                                <Link href="/dashboard">My Dashboard</Link>
-                            </li>
-                            <li>
-                                <Link href="/admin" style={{ opacity: 0.6 }}>Admin Login</Link>
                             </li>
                         </ul>
                     </div>

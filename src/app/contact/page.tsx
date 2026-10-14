@@ -1,6 +1,33 @@
+"use client";
+
+import { useState } from "react";
 import Footer from "@/components/Footer";
 
 export default function ContactPage() {
+  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setStatus("sending");
+
+    const form = e.currentTarget;
+    const data = Object.fromEntries(new FormData(form));
+
+    const res = await fetch("/api/contact", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+
+    if (res.ok) {
+      setStatus("sent");
+      form.reset();
+    } else {
+      setStatus("error");
+    }
+  }
+
+
     return (
         <div className="page active" id="page-contact">
             <div className="page-hero">
@@ -21,7 +48,7 @@ export default function ContactPage() {
                             <div className="contact-items">
                                 <div className="ci-item">
                                     <span className="ci-icon">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{verticalAlign: "middle", marginRight: "4px"}}>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{verticalAlign: "middle", marginRight: "4px", flexShrink: "0"}}>
                                         <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
                                         <circle cx="12" cy="10" r="3"/>
                                         </svg>
@@ -33,7 +60,7 @@ export default function ContactPage() {
                                 </div>
                                 <div className="ci-item">
                                     <span className="ci-icon">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: "0"}}>
                                         <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
                                         <polyline points="22,6 12,13 2,6"/>
                                         </svg>
@@ -45,7 +72,7 @@ export default function ContactPage() {
                                 </div>
                                 <div className="ci-item">
                                     <span className="ci-icon">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: "0"}}>
                                         <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
                                         </svg>
                                     </span>
@@ -56,7 +83,7 @@ export default function ContactPage() {
                                 </div>
                                 <div className="ci-item">
                                     <span className="ci-icon">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: "0"}}>
                                         <circle cx="12" cy="12" r="10"/>
                                         <line x1="2" y1="12" x2="22" y2="12"/>
                                         <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
@@ -125,7 +152,7 @@ export default function ContactPage() {
                         </div>
                         <div className="form-box">
                             <h3 style={{fontFamily: "var(--fh)", fontSize: "1.4rem", fontWeight: "700", marginBottom: "22px"}}>Send a Message</h3>
-                            <form id="contactForm">
+                            <form id="contactForm" onSubmit={handleSubmit}>
                                 <div className="form-row">
                                     <div className="form-group">
                                         <label>Full Name *</label>
@@ -156,7 +183,25 @@ export default function ContactPage() {
                                     <label>Message *</label>
                                     <textarea rows={5} placeholder="Tell us more about your enquiry..." required style={{resize: "vertical"}}></textarea>
                                 </div>
-                                <button type="submit" className="btn btn-gold btn-full">Send Message →</button>
+                                <button
+                                type="submit"
+                                className="btn btn-gold btn-full"
+                                disabled={status === "sending"}
+                                >
+                                {status === "sending" ? "Sending..." : "Send Message →"}
+                                </button>
+
+                                {status === "sent" && (
+                                <p style={{ color: "green", marginTop: "12px" }}>
+                                    ✅ Message sent. We'll get back to you soon.
+                                </p>
+                                )}
+
+                                {status === "error" && (
+                                <p style={{ color: "red", marginTop: "12px" }}>
+                                    ❌ Something went wrong. Please try again or email us directly.
+                                </p>
+                                )}
                             </form>
                         </div>
                     </div>

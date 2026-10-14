@@ -38,7 +38,7 @@ export function ContestantTable({ contestants }: { contestants: ContestantRow[] 
                         <td style={{ padding: "10px" }}>{contestant.applicationStatus}</td>
                         <td style={{ padding: "10px" }}>
                             {contestant.applicationStatus === "PENDING" &&
-                                <Link href={`admin/contestants/${contestant.id}`} className="btn btn-outline btn-xs">Review Application</Link>
+                                <Link href={`admin/events/contestants/${contestant.id}`} className="btn btn-outline btn-xs">Review Application</Link>
                             }
                         </td>
                     </tr>)}
