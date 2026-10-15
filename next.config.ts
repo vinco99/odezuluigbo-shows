@@ -1,21 +1,21 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
-
-  images:{
-    remotePatterns:[
+  serverExternalPackages: ['@prisma/adapter-pg', 'pg'],
+  images: {
+    unoptimized: true,
+    remotePatterns: [
       {
-        protocol:"https",
-        hostname: "oss-macaron-user.macaron.im"
+        protocol: "https",
+        hostname: "oss-macaron-user.macaron.im",
       },
       {
         protocol: "https",
         hostname: "res.cloudinary.com",
-        pathname: "/**"
-      }
-    ]
-  }
+        pathname: "/**",
+      },
+    ],
+  },
 };
 
 export default nextConfig;

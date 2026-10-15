@@ -6,7 +6,6 @@ import { TopUpTab } from "./TopUpTab";
 import { WalletTab } from "./WalletTab";
 import { ContestantsTab } from "./ContestantsTab";
 import { TasksTab } from "./TasksTab";
-import { AdSlot } from "@/components/ads/AdSlot";
 
 type TabKey = "topup" | "wallet" | "pageant" | "reality" | "tasks";
 
@@ -27,6 +26,7 @@ export function VoteTabs({
   tasks,
   transactions,
   completions,
+  bannerAd,
 }: {
   userId: string | null;
   walletBalance: number;
@@ -36,6 +36,7 @@ export function VoteTabs({
   tasks: any[];
   transactions: any[];
   completions: any[];
+  bannerAd: React.ReactNode;
 }) {
   const [active, setActive] = useState<TabKey>("topup");
 
@@ -50,7 +51,7 @@ export function VoteTabs({
     >
       <div className="container">
         <div className="container" style={{ margin: "32px auto" }}>
-          <AdSlot placementKey="vote-banner" />
+          {bannerAd}
         </div>
 
         <div className="vote-tabs" role="tablist">

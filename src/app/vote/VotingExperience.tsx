@@ -1,18 +1,18 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { VoteModal, type VoteTarget } from "@/components/vote/Votemodal";
 
 type EventWithRelations = {
   id: string;
   title: string;
   type: string;
+  votingFee: number;            // ← add this
   contestants: {
     id: string;
     name: string;
     state: string | null;
-    potrait: string | null;
+    portrait: string | null;
     votes: { quantity: number }[];
   }[];
 };
@@ -41,6 +41,7 @@ export function VotingExperience({
       eventId: event.id,
       eventTitle: event.title,
       isRealityShow: event.type === "REALITY_SHOW",
+      votingFee: event.votingFee, 
     });
   }
 

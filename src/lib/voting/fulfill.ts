@@ -151,7 +151,7 @@ export async function fulfillVotePayment(reference: string) {
 
     return await prisma.$transaction(async (db) => {
       // Amount check: credits × current unit price must equal paid amount.
-      const { VOTE_PRICE_NAIRA } = await import("@/lib/voting");
+      const { VOTE_PRICE_NAIRA } = await import("@/lib/voting-config");
       const expected = credits * VOTE_PRICE_NAIRA;
       if (Math.abs(paidAmount - expected) > 0.01) {
         throw new Error("AMOUNT_MISMATCH");

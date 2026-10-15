@@ -3,7 +3,7 @@ import Link from "next/link";
 import { auth } from "@/lib/auth";
 import { VoteProvider } from "./vote/VoteProvider";
 import { VoteButton } from "./vote/VoteButton";
-import { DEFAULT_VOTING_FEE_NAIRA } from "@/lib/voting";
+import { DEFAULT_VOTING_FEE_NAIRA } from "@/lib/voting-config";
 import { getVoteContextForEvents } from "@/lib/voting-server";
 import ScrollReveal from "./ScrollReveal";
 
@@ -18,7 +18,7 @@ export async function ContestantPreview() {
     select: {
       id: true,
       name: true,
-      potrait: true,
+      portrait: true,
       state: true,
       event: {
         select: {
@@ -99,7 +99,7 @@ export async function ContestantPreview() {
                 <div className="contestant-card">
                   <img
                     src={
-                      contestant.potrait ??
+                      contestant.portrait ??
                       "https://oss-macaron-user.macaron.im/photo/aa93cb00-3a6a-4502-8fbb-e4a98441d4c0.png"
                     }
                     alt={contestant.name}

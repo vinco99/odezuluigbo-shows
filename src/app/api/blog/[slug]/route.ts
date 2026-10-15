@@ -3,11 +3,11 @@ import { prisma } from "@/lib/prisma";
 
 export async function GET(
   _req: Request,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
-  const { id } = await params;
+  const { slug } = await params;
   const blog = await prisma.blog.findUnique({
-    where: { slug: id },
+    where: { slug: slug },
     include: { comments: { 
       orderBy: { createdAt: "desc" } 
     }},
@@ -21,14 +21,14 @@ export async function GET(
 
 export async function PATCH(
   request: Request,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   // admin-only
-  const { id } = await params;
+  const { slug } = await params;
   const body = await request.json();
 
   const blog = await prisma.blog.update({
-    where: { slug: id },
+    where: { slug: slug },
     data: {
       title: body.title,
       content: body.content,
@@ -43,11 +43,11 @@ export async function PATCH(
 
 export async function DELETE(
   _req: Request,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   // admin-only
-  const { id } = await params;
-  await prisma.blog.delete({ where: { slug: id } });
+  const { slug } = await params;
+  await prisma.blog.delete({ where: { slug: slug } });
   return new NextResponse(
     null, 
     { status: 204 }

@@ -68,7 +68,7 @@ export default async function OrganizerReviewPage({params}:{params: Promise<{id:
     } = organizer;
 
     return (
-      <main id="main" className="page active">
+      <main id="main" className="admin-tab-content active">
         <div className="new-page-heading">
           <div>
             <div className="new-eyebrow"><span className="new-eyebrow-line">

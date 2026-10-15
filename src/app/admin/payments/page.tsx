@@ -62,7 +62,7 @@ export default async function AdminPaymentPage() {
             </div>
             <div className="tv-show-stats" style={{ marginBottom: "28px" }}>
                 <div className="tv-stat">
-                    <span className="tv-val">₦{paid.reduce((total, payment) => total + payment.amount, 0).toLocaleString()}</span>
+                    <span className="tv-val">₦{paid.reduce((total, payment) => total + Number(payment.amount), 0).toLocaleString()}</span>
                     <small>Paid Revenue</small>
                 </div>
                 <div className="tv-stat">
@@ -77,7 +77,7 @@ export default async function AdminPaymentPage() {
                     <span className="tv-val">
                         ₦{paid
                         .filter((p) => p.type === "CREDIT_PURCHASE")
-                        .reduce((t, p) => t + p.amount, 0)
+                        .reduce((t, p) => t + Number(p.amount), 0)
                         .toLocaleString()}
                     </span>
                     <small>Vote Credit Sales</small>

@@ -1,4 +1,4 @@
-import Hero from "@/components/Hero";
+import Hero, { type HeroEvent } from "@/components/Hero";
 import motion from "framer-motion";
 import Footer from "@/components/Homefooter";
 import Link from "next/link";
@@ -10,15 +10,45 @@ import { StreamingPromo } from "@/components/StreamingPromo";
 import { SponsorsSection } from "@/components/SponsorsSection";
 import { AdSlot } from "@/components/ads/AdSlot";
 import { StatsSection } from "@/components/StatsSection";
+import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
 
+
 export default async function Home(){
+
+  const events = await prisma.event.findMany({
+    where: { status: { in: ["APPROVED", "LIVE"] } },
+    orderBy: { eventDate: "asc" },
+    select: {
+      id: true,
+      title: true,
+      eventDate: true,
+      registrationStart: true,
+      registrationEnd: true,
+      voteSessions: {
+        select: { id: true, name: true, endsAt: true },
+      },
+    },
+  });
+
+  const heroEvents: HeroEvent[] = events.map((e) => ({
+    id: e.id,
+    title: e.title,
+    eventDate: e.eventDate?.toISOString() ?? null,
+    registrationStart: e.registrationStart?.toISOString() ?? null,
+    registrationEnd: e.registrationEnd?.toISOString() ?? null,
+    voteSessions: e.voteSessions.map((s) => ({
+      id: s.id,
+      name: s.name,
+      endsAt: s.endsAt.toISOString(),
+    })),
+  }));
 
   return(
 
     <div  className="page active">
-      <Hero />
+      <Hero events={heroEvents} />
 
       {/* other sections later */}
 

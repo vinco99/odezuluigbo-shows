@@ -163,7 +163,6 @@ export async function fulfillTicket(reference: string) {
           paymentId: payment.id,
           buyerId,
           status: "VALID",
-          paidAt: new Date(),
         },
       });
     });

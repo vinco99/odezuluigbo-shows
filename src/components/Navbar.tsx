@@ -2,12 +2,13 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
+import { redirect, usePathname } from "next/navigation";
 import {motion} from "framer-motion";
 import { signOut } from "next-auth/react";
 import { dashboardPath } from "@/lib/dashboard";
+import { float } from "three/src/nodes/tsl/TSLCore.js";
 
-type NavbarSession = { name: string | null; role: string } | null;
+type NavbarSession = { name: string | null; role: string; creditBalance: number } | null;
 
 export default function Navbar({ session }: { session: NavbarSession }){
 
@@ -74,7 +75,7 @@ export default function Navbar({ session }: { session: NavbarSession }){
 
             <div className="nav-container">
                 {/* LOGO */}
-                <Link href="/" className="nav-logo">
+                <Link href="/" className="nav-logo" style={{ float: "right" }}>
                     <img src="/images/logo.webp" alt="Odezuluigbo" className="logo-mark" />
                     <div className="logo-text">
                         <span className="logo-main">ODEZULUIGBO</span>
@@ -107,20 +108,43 @@ export default function Navbar({ session }: { session: NavbarSession }){
                         </motion.li>
                     ))
                 }
-                    <li className="mobile-login nav-cta-mobile">
-                        {session ? <Link href={dashboardPath(session.role)}>{session.name ?? "Dashboard"}</Link> : " "}
+                    <li>
+                        {session ? "" :
+                        <>
+                            <Link className="nav-cta-mobile" href="/login" style={{
+                                display: "none", fontFamily: "var(--fd)", fontSize: ".72rem", 
+                                letterSpacing: ".15em", textTransform: "uppercase", color: "var(--black)", 
+                                background: "linear-gradient(135deg,var(--gold-dark),var(--gold-light))", 
+                                padding: "10px 20px", borderRadius: "4px", textAlign: "center", marginTop:"8px"
+                            }}>Sign In</Link>
+
+                            <Link className="nav-cta-mobile btn btn-outline btn-sm" href="register"  style={{
+                                display: "none", fontFamily: "var(--fd)", fontSize: ".72rem", 
+                                letterSpacing: ".15em", textTransform: "uppercase", color: "var(--black)", 
+                                background: "linear-gradient(135deg,var(--gold-dark),var(--gold-light))", 
+                                padding: "10px 20px", borderRadius: "4px", textAlign: "center", marginTop:"8px"
+                            }}>Register</Link>
+                        </>
+                        }
                     </li>
                 </ul>
 
+                {session ? 
+                    <div className="wallet-badge" onClick={()=> redirect("/dashboard")} style={{display: "flex", alignItems: "center", gap: "7px", background: "var(--g10)", border: "1px solid var(--g20)", borderRadius: "30px", padding: "8px 16px", cursor: "pointer", fontFamily: "var(--fd)", fontSize: ".72rem", letterSpacing: ".08em", color: "var(--gold)", whiteSpace: "nowrap", flexShrink: "1", minWidth: "0", maxWidth: "150px"}}>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{flexShrink: "0"}}><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>
+                        <span style={{overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", minWidth: "0"}}><span className="wallet-balance-display">{session.creditBalance}</span> Credits</span>
+                    </div> : " "
+                }
+
                 {/* LOGIN */}
                 {session ? (
-                    <div className="flex items-center gap-2">
-                        <Link href={dashboardPath(session.role)} className="nav-cta">Dashboard</Link>
-                        <button type="button" className="btn btn-ghost btn-xs" onClick={() => signOut({ callbackUrl: "/" })}>Sign Out</button>
+                    <div className="nav-logout">
+                        <button type="button" className="btn btn-ghost btn-sm" onClick={() => signOut({ callbackUrl: "/" })}>Sign Out</button>
                     </div>
                 ) : (
                     <Link href="/login" className="nav-cta">Sign In</Link>
                 )}
+
 
 
                 {/* HAMBURGER */}

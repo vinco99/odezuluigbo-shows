@@ -4,7 +4,6 @@ import { useState } from "react";
 import HistorySection from "./HistorySection";
 import Sidebar from "./Sidebar";
 import WalletCard from "./WalletCard";
-import LogoutButton from "@/components/auth/LogoutButton";
 import type { DashboardData } from "@/lib/dashboard-queries";
 
 type DashboardTab = "votes" | "transactions" | "tickets";
@@ -44,7 +43,7 @@ export default function Dashboard({
   }
 
   return (
-    <div className="app-shell" id="overview">
+    <div className="page active" id="overview">
       <Sidebar
         activeSection={activeSection}
         onNavigate={navigateTo}
@@ -58,7 +57,7 @@ export default function Dashboard({
                 <span className="eyebrow-line" /> DASHBOARD
               </div>
               <h1 id="page-title">
-                Your voice, <span>at a glance.</span>
+                Your choice, <span>at a glance.</span>
               </h1>
               <p className="welcome-copy">
                 A considered view of your credits and voting activity.
@@ -69,7 +68,6 @@ export default function Dashboard({
                 <span className="sample-badge-dot" />
                 {user.name}
               </div>
-              <LogoutButton />
             </div>
           </section>
 
@@ -85,14 +83,6 @@ export default function Dashboard({
             transactions={data.transactions}
             tickets={data.tickets}
           />
-
-          <footer className="footer">
-            <div className="container">
-              <div className="footer-bottom">
-                <p>© 2026 Odezuluigbo Global Ltd. All Rights Reserved.</p>
-              </div>
-            </div>
-          </footer>
         </div>
       </main>
     </div>

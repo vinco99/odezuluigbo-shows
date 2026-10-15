@@ -3,7 +3,7 @@ import { Prisma } from "@/generated/prisma/client";
 import Footer from "@/components/Footer";
 import Link from "next/link";
 import { VoteButton } from "@/components/vote/VoteButton";
-import { DEFAULT_VOTING_FEE_NAIRA, } from "@/lib/voting";
+import { DEFAULT_VOTING_FEE_NAIRA, } from "@/lib/voting-config";
 import { VoteProvider } from "@/components/vote/VoteProvider";
 import { auth } from "@/lib/auth";
 import { EventVideoPlayer } from "@/components/events/EventVideoPlayer";
@@ -34,7 +34,7 @@ const REALITY_SELECT = {
     select: {
       id: true,
       name: true,
-      potrait: true,
+      portrait: true,
       state: true,
       city: true,
       votes: {
@@ -270,7 +270,7 @@ export default async function RealityPage() {
                                 <div className="contestant-card" key={c.id}>
                                 <img
                                     className="c-img"
-                                    src={c.potrait ?? "/placeholder.png"}
+                                    src={c.portrait ?? "/placeholder.png"}
                                     alt={c.name}
                                     style={{ width: "100%", height: 235, objectFit: "cover", objectPosition: "top center" }}
                                 />

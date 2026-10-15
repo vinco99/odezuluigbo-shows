@@ -10,9 +10,9 @@ import {
   getActiveSession,
   getSessionCreditCap,
   getSessionCreditsSpent,
-  VOTE_PRICE_NAIRA,
-  DEFAULT_VOTING_FEE_NAIRA,
 } from "@/lib/voting";
+import { VOTE_PRICE_NAIRA,
+  DEFAULT_VOTING_FEE_NAIRA,} from "@/lib/voting-config";
 
 // ---------- Schemas ------------------------------------------------------
 

@@ -61,7 +61,7 @@ export async function POST(request: Request) {
       prisma.contestant.count({
         where: {
           eventId: event.id,
-          status: { not: "REJECTED" },   // ← typo fixed
+          applicationStatus: { not: "REJECTED" },   // ← typo fixed
         },
       }),
       prisma.pendingApplication.count({

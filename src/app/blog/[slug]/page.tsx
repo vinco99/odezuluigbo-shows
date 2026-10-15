@@ -3,10 +3,10 @@ import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import BlogComments from "@/components/BlogComments";
 
-export default async function BlogDetailPage({ params }: { params: Promise<{ id: string }> }) {
-    const { id } = await params;
+export default async function BlogDetailPage({ params }: { params: Promise<{ slug: string }> }) {
+    const { slug } = await params;
     const blog = await prisma.blog.findUnique({ 
-        where: { slug: id }, 
+        where: { slug: slug }, 
     });
     if (!blog) {
         notFound();

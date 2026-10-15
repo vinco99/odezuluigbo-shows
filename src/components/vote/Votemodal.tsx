@@ -2,7 +2,7 @@
 
 import { useState, useTransition, useEffect } from "react";
 import { castCreditVote, initMoneyVote } from "../../app/vote/_actions";
-import { VOTE_PRICE_NAIRA } from "@/lib/voting";
+import { VOTE_PRICE_NAIRA } from "@/lib/voting-config";
 
 export type VoteTarget = {
   contestantId: string;

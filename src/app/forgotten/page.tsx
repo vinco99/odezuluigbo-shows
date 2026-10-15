@@ -1,26 +1,36 @@
 "use client";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function ForgottenPage() {
+  const router = useRouter();
   const [method, setMethod] = useState("email"); // "email" | "phone"
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [loading, setLoading] = useState(false);
 
-  async function handleSubmit(e) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const contact = method === "email" ? email.trim() : phone.trim();
     if (!contact) return;
 
     setLoading(true);
     try {
-      // await fetch("/api/forgot-password", {
-      //   method: "POST",
-      //   headers: { "Content-Type": "application/json" },
-      //   body: JSON.stringify({ method, contact }),
-      // });
-      console.log("Send code via", method, "to", contact);
+      const res = await fetch("/api/send-otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ method, contact }),
+      });
+
+      if (!res.ok) throw new Error("Failed to send code");
+
+      router.push(
+        `/forgotten/otp?method=${encodeURIComponent(method)}&contact=${encodeURIComponent(contact)}`
+      );
+    } catch (err) {
+      // You might want to add an error state here
+      console.error(err);
     } finally {
       setLoading(false);
     }
@@ -30,7 +40,7 @@ export default function ForgottenPage() {
     <div id="fpStep1">
       <h2 className="auth-title">Reset Password</h2>
       <p className="auth-subtitle">
-        Choose how you'd like to receive your verification code
+        Choose how you&apos;d like to receive your verification code
       </p>
 
       <div style={{ display: "flex", gap: "10px", marginBottom: "18px" }}>
@@ -51,6 +61,7 @@ export default function ForgottenPage() {
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
+            style={{ flexShrink: 0 }}
           >
             <path d="M4 4h16v16H4z" />
             <path d="M22 6l-10 7L2 6" />
@@ -75,6 +86,7 @@ export default function ForgottenPage() {
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
+            style={{ flexShrink: 0 }}
           >
             <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
           </svg>

@@ -83,7 +83,7 @@ export default async function ContestantReviewPage({params}:{params: Promise<{id
 
 
     return (
-        <main id="main" className="page active">
+        <main id="main" className="admin-tab-content active">
             <div className="new-page-heading">
                 <div>
                 <div className="new-eyebrow"><span className="new-eyebrow-line"></span> APPLICATIONS <span className="new-eyebrow-slash">/</span> <span className="eyebrow-current">CANDIDATE REVIEW</span></div>

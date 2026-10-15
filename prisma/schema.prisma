@@ -46,6 +46,8 @@ model User {
   tasksCreated          Task[]                @relation("TasksCreated")
   tasksReviewed         UserTaskCompletion[]  @relation("TasksReviewed")
   taskCompletions       UserTaskCompletion[]
+  otps                  Otp[]
+  resetTokens           ResetToken[]
 
   suspended             Boolean   @default(false)   
   suspendedAt           DateTime?
@@ -117,9 +119,9 @@ model Event {
   type                    EventType
   venue                   String?
 
-  prize1st                Float?   // Winner / Grand Prize
-  prize2nd                Float?   // 1st Runner-up
-  prize3rd                Float?   // 2nd Runner-up
+  prize1st                Float?   
+  prize2nd                Float?   
+  prize3rd                Float?   
 
   videos                  EventVideo[]
 
@@ -144,8 +146,8 @@ model Contestant {
   id                String            @id @default(cuid())
   name              String
 
-  potrait             String?
-  potraitPublicId     String?
+  portrait          String?
+  portraitPublicId  String?
 
   fullPhoto         String?
   fullPhotoPublicId String?
@@ -153,7 +155,7 @@ model Contestant {
   bio               String?
   age               Int?
   birthday          DateTime?
-  height            Int?             // kept for legacy rows; new form doesn't collect it
+  height            Int?             
   phone             String?
   email             String?
   state             String?
@@ -192,11 +194,11 @@ model Gallery {
   id             String   @id @default(cuid())
   eventId        String
   image          String
-  imagePublicId  String?                  // ⬅️ for Cloudinary deletion
-  caption        String?                  // already there
-  sortOrder      Int      @default(0)     // ⬅️ display order
-  active         Boolean  @default(true)  // ⬅️ hide without deleting
-  createdAt      DateTime @default(now()) // ⬅️ for stable ordering
+  imagePublicId  String?                 
+  caption        String?                  
+  sortOrder      Int      @default(0)     
+  active         Boolean  @default(true)  
+  createdAt      DateTime @default(now()) 
 
   event          Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
 
@@ -265,7 +267,7 @@ model Payment {
   amount     Decimal       @db.Decimal(10, 2)
   type       PaymentType
   status     PaymentStatus
-  userId     String?                                   // ← was required
+  userId     String?                                  
   eventId    String?
   createdAt  DateTime      @default(now())
 
@@ -283,10 +285,10 @@ model Judge {
   name          String
   image         String?
   imagePublicId String?
-  title         String?              // "Head Judge", "Creative Director"
-  bio           String?              // optional, for a richer card
+  title         String?              
+  bio           String?              
   eventId       String
-  sortOrder     Int      @default(0) // display order on the event page
+  sortOrder     Int      @default(0)
   active        Boolean  @default(true)
   createdAt     DateTime @default(now())
 
@@ -323,11 +325,11 @@ enum SponsorTier {
 
 model CreditPackage {
   id         String   @id @default(cuid())
-  name       String                          // "Bronze Pack"
-  credits    Int                             // how many credits the user receives
-  amount     Float                           // price in Naira
+  name       String                        
+  credits    Int                            
+  amount     Float                           
   active     Boolean  @default(true)
-  featured   Boolean  @default(false)        // for the "Most Popular" badge
+  featured   Boolean  @default(false)        
   sortOrder  Int      @default(0)
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
@@ -338,10 +340,10 @@ model CreditPackage {
 model VoteSession {
   id                 String   @id @default(cuid())
   eventId            String
-  name               String                       // "Session 1 & 2", "Day 3", etc.
+  name               String                       
   startsAt           DateTime
   endsAt             DateTime
-  creditLimitPerUser Int?                         // overrides event default if set
+  creditLimitPerUser Int?                         
   createdAt          DateTime @default(now())
 
   event              Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
@@ -366,7 +368,7 @@ model Vote {
   contestant   Contestant    @relation(fields: [contestantId], references: [id])
   voter        User          @relation(fields: [voterId], references: [id])
 
-  sessionId    String?                            // null for non-reality or votes without session
+  sessionId    String?                            
   session      VoteSession? @relation(fields: [sessionId], references: [id], onDelete: SetNull)
 
   @@index([voterId, sessionId])
@@ -375,12 +377,12 @@ model Vote {
 model CreditTransaction {
   id                String   @id @default(cuid())
   userId            String
-  amount            Int                         // positive = credit added, negative = spent
-  type              CreditTxType                // PURCHASE, SPEND_VOTE, REFUND, BONUS, ADJUSTMENT
+  amount            Int                        
+  type              CreditTxType                
   title             String
   detail            String?
-  reference         String?                   // e.g. payment reference
-  status            CreditTxStatus            // COMPLETED, PENDING, FAILED
+  reference         String?                  
+  status            CreditTxStatus            
   taskCompletion    UserTaskCompletion?
   createdAt         DateTime @default(now())
 
@@ -434,11 +436,11 @@ model Comment {
 model TicketPackage {
   id          String   @id @default(cuid())
   eventId     String
-  name        String              // "Regular", "VIP", "Table for 4"
+  name        String              
   description String?
   price       Float
-  perks       String[]            // ["Front row", "Free drink"]
-  maxQuantity Int?                // null = unlimited
+  perks       String[]            
+  maxQuantity Int?                
   active      Boolean  @default(true)
   createdAt   DateTime @default(now())
 
@@ -450,7 +452,7 @@ model TicketPackage {
 
 model Ticket {
   id           String        @id @default(cuid())
-  code         String        @unique          // the QR payload
+  code         String        @unique          
   holderName   String
   holderEmail  String
   holderPhone  String
@@ -477,7 +479,7 @@ model Ticket {
 enum TicketStatus {
   PENDING      
   VALID        
-  CHECKED_IN   // scanned at door
+  CHECKED_IN   
   CANCELLED
   REFUNDED
 }
@@ -557,9 +559,9 @@ enum TaskKind {
 }
 
 enum TaskVerification {
-  AUTO        // credits granted on click
-  TIMED       // user must stay for minSeconds
-  MANUAL      // admin reviews proof before granting
+  AUTO        
+  TIMED       
+  MANUAL      
 }
 
 enum TaskCompletionStatus {
@@ -573,14 +575,14 @@ model Task {
   id             String            @id @default(cuid())
   title          String
   description    String?
-  reward         Int                               // credits granted on approval
+  reward         Int                              
   kind           TaskKind          @default(CUSTOM)
   verification   TaskVerification  @default(AUTO)
-  actionUrl      String?                           // where the user goes to do the task
-  minSeconds     Int?                              // for TIMED tasks (e.g. 60)
-  cooldownHours  Int?                              // null = one-time per user; N = once every N hours
-  maxCompletions Int?                              // null = unlimited per user (subject to cooldown)
-  eventId        String?                           // null = global task
+  actionUrl      String?                           
+  minSeconds     Int?                              
+  cooldownHours  Int?                              
+  maxCompletions Int?                              
+  eventId        String?                           
   active         Boolean           @default(true)
   createdById    String
   createdAt      DateTime          @default(now())
@@ -598,8 +600,8 @@ model UserTaskCompletion {
   userId       String
   taskId       String
   status       TaskCompletionStatus  @default(PENDING)
-  rewardAmount Int                   // snapshot — reward stays accurate if task is later edited
-  proof        String?               // URL or text for MANUAL verification
+  rewardAmount Int                  
+  proof        String?               
   creditTxId   String?               @unique
   startedAt    DateTime?
   completedAt  DateTime?
@@ -622,11 +624,11 @@ model Song {
   title          String
   artist         String
   streamingUrl   String
-  platform       String   @default("youtube-music")  // youtube-music | spotify | apple-music | audiomack | boomplay | other
-  coverImage     String?                              // URL; falls back to placeholder if null
-  coverPublicId  String?                              // for Cloudinary deletes, optional
+  platform       String   @default("youtube-music")
+  coverImage     String?                              
+  coverPublicId  String?                              
   active         Boolean  @default(true)
-  sortOrder      Int      @default(0)                 // optional manual override
+  sortOrder      Int      @default(0)                 
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 
@@ -635,10 +637,10 @@ model Song {
 
 model SiteStat {
   id        String   @id @default(cuid())
-  key       String   @unique   // "weeks-live-tv", "prize-pool"
-  label     String              // "Weeks of Live TV"
-  value     String              // "10" or "₦6M"
-  suffix    String?             // "+", "K", "%" — rendered after the value
+  key       String   @unique   
+  label     String            
+  value     String             
+  suffix    String?             
   active    Boolean  @default(true)
   sortOrder Int      @default(0)
   updatedAt DateTime @updatedAt
@@ -647,9 +649,9 @@ model SiteStat {
 }
 
 enum AdType {
-  IMAGE     // static image + link
-  HTML      // raw HTML snippet
-  ADSENSE   // AdSense code (basically HTML, kept separate for clarity)
+  IMAGE    
+  HTML    
+  ADSENSE   
 }
 
 model Ad {
@@ -676,7 +678,7 @@ model Ad {
 
   // Control
   active          Boolean   @default(true)
-  sortOrder       Int       @default(0)                 // lower = higher priority if multiple overlap
+  sortOrder       Int       @default(0)                 
 
   // Analytics
   impressions     Int       @default(0)
@@ -690,21 +692,21 @@ model Ad {
 }
 
 enum EventVideoKind {
-  LIVE       // currently broadcasting
-  UPCOMING   // scheduled stream
-  REPLAY     // recorded version of a past show
-  HIGHLIGHT  // promo / teaser
+  LIVE     
+  UPCOMING  
+  REPLAY     
+  HIGHLIGHT  
   OTHER
 }
 
 model EventVideo {
   id          String         @id @default(cuid())
   eventId     String
-  youtubeId   String                              // normalized video ID, not a URL
+  youtubeId   String                              
   title       String
   description String?
   kind        EventVideoKind @default(OTHER)
-  isPrimary   Boolean        @default(true)      // the "hero" player at the top
+  isPrimary   Boolean        @default(true)     
   active      Boolean        @default(true)
   sortOrder   Int            @default(0)
   createdAt   DateTime       @default(now())
@@ -728,4 +730,24 @@ model EventFaq {
   event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
 
   @@index([eventId, active, sortOrder])
+}
+
+model Otp {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  code      String
+  method    String
+  contact   String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
+model ResetToken {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
 }

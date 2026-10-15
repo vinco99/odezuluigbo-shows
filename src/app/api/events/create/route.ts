@@ -162,37 +162,6 @@ export async function POST(request: Request) {
 
         /*
         ----------------------------------------
-        CREATE VOTE PACKAGES
-        ----------------------------------------
-        */
-
-        if (votingFee > 0) {
-            await prisma.votePackage.createMany({
-                data: [
-                    {
-                        eventId: event.id,
-                        name: "Starter",
-                        votes: 10,
-                        amount: votingFee * 10,
-                    },
-                    {
-                        eventId: event.id,
-                        name: "Power",
-                        votes: 50,
-                        amount: votingFee * 50,
-                    },
-                    {
-                        eventId: event.id,
-                        name: "Champion",
-                        votes: 100,
-                        amount: votingFee * 100,
-                    },
-                ],
-            });
-        }
-
-        /*
-        ----------------------------------------
         RETURN EVENT
         ----------------------------------------
         */

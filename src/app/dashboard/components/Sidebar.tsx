@@ -25,28 +25,7 @@ export default function Sidebar({
           e.preventDefault();
           onNavigate("overview");
         }}
-        aria-label="VoteHub dashboard home"
       >
-        <span className="brand-mark" aria-hidden="true">
-          <svg viewBox="0 0 34 34" fill="none">
-            <path
-              d="M17 2.75 30.2 10v14L17 31.25 3.8 24V10L17 2.75Z"
-              stroke="currentColor"
-              strokeWidth="1.5"
-            />
-            <path
-              d="m10.6 17.2 4.1 4 8.7-9.2"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </span>
-        <span className="brand-name">
-          vote<span>hub</span>
-          <i>.</i>
-        </span>
       </a>
 
       <div className="nav-caption">WORKSPACE</div>

@@ -39,7 +39,7 @@ export default function WalletCard({
         </p>
 
         <div className="flex gap-3 mt-4 flex-wrap">
-          <Link href="/credits" className="wallet-link">
+          <Link href="/vote" className="wallet-link">
             <span>Buy vote credits</span>
             <Icon name="plus" size={16} />
           </Link>

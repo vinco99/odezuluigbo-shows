@@ -3,7 +3,7 @@ import { requireRole } from "@/lib/permissions";
 import { prisma } from "@/lib/prisma";
 
 export default async function ContestantPage() {
-    const session = await requireRole(["ADMIN", "CONTESTANT", "USER"]);
+    const session = await requireRole(["ADMIN", "CONTESTANT", "USER"], "/events");
     const contestants = await prisma.contestant.findMany(
         { 
             where: { userId: session.user.id }, 

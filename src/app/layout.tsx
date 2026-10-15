@@ -1,21 +1,11 @@
 import type { Metadata } from "next";
-import { Inter, Poppins } from "next/font/google";
 import "./globals.css";
+import "@fontsource-variable/inter";
+import "@fontsource/poppins";
 import Preloader from "@/components/Preloader";
 import Navbar from "@/components/Navbar";
 import { auth } from "@/lib/auth";
 
-const inter = Inter({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
-  variable: "--font-inter",
-});
-
-const poppins = Poppins({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
-  variable: "--font-poppins",
-});
 
 export const metadata: Metadata = {
   title: "Odezuluigbo Shows",
@@ -30,17 +20,14 @@ export default async function RootLayout({
   const session = await auth();
 
   return (
-    <html
-      lang="en"
-      className={`${inter.variable} ${poppins.variable}`}
-    >
+    <html lang="en">
       <body>
         <Preloader />
         <div id="toast"></div>
         <Navbar 
           session={
             session ? { name: session.user?.name ?? null, 
-            role: session.user?.role ?? "USER" } : null
+            role: session.user?.role ?? "USER", creditBalance: session.user?.creditBalance ?? 0 } : null
           } 
         />
           {children}

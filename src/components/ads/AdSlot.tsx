@@ -1,5 +1,5 @@
-import { getActiveAd } from "@/lib/ads";
-import { getPlacement } from "@/lib/ad-placements";
+import { getActiveAd } from "@/lib/ads";             
+import { getPlacement } from "@/lib/ad-placements";    
 import { AdImpressionTracker } from "./AdImpressionTracker";
 import { AdLink } from "./AdLink";
 import { AdsenseUnit } from "./AdsenseUnit";

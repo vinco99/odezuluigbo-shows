@@ -10,8 +10,7 @@ const CATEGORIES = Object.values(BlogCategory);
 
 export const dynamic = "force-dynamic";
 
-const formatLabel = (c: string) =>
-  c.charAt(0) + c.slice(1).toLowerCase();
+const formatLabel = (c: string) => c.charAt(0) + c.slice(1).toLowerCase();
 
 export default async function BlogPage() {
     const blogs = await prisma.blog.findMany({

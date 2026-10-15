@@ -15,8 +15,8 @@ export default async function OrganizerDashboard() {
     );
     
     const paidPayments = events.flatMap((event) => event.payments.filter((payment) => payment.status === "PAID"));
-    const registrationRevenue = paidPayments.filter((payment) => payment.type === "CONTESTANT_REGISTRATION").reduce((total, payment) => total + payment.amount, 0);
-    const voteRevenue = paidPayments.filter((payment) => payment.type === "VOTE").reduce((total, payment) => total + payment.amount, 0);
+    const registrationRevenue = paidPayments.filter((payment) => payment.type === "CONTESTANT_REGISTRATION").reduce((total, payment) => total + Number(payment.amount), 0);
+    const voteRevenue = paidPayments.filter((payment) => payment.type === "VOTE").reduce((total, payment) => total + Number(payment.amount), 0);
 
     return (
         <main className="page active">
@@ -85,7 +85,7 @@ export default async function OrganizerDashboard() {
                                         </td>
                                     </tr> :
                                     events.map((event) => {
-                                        const revenue = event.payments.filter((payment) => payment.status === "PAID").reduce((total, payment) => total + payment.amount, 0);
+                                        const revenue = event.payments.filter((payment) => payment.status === "PAID").reduce((total, payment) => total + Number(payment.amount), 0);
                                         return (
                                             <tr key={event.id} style={{borderBottom: "1px solid var(--w10)"}}>
                                                 <td style={{padding: "10px"}}>{event.title}</td>

@@ -1,14 +1,11 @@
-type PaymentRow = { 
-    id: string; 
-    amount: number; 
-    reference: string; 
-    type: string; 
-    status: string; 
-    createdAt: Date; 
-    user: { name: string; email: string }; 
-    event: { title: string } | null
-};
+import { Prisma } from "@/generated/prisma/client";
 
+type PaymentRow = Prisma.PaymentGetPayload<{
+  include: {
+    user: { select: { name: true; email: true } };
+    event: { select: { title: true } };
+  };
+}>;
 export function PaymentTable({ payments }: { payments: PaymentRow[] }) {
 
     return (
@@ -27,14 +24,14 @@ export function PaymentTable({ payments }: { payments: PaymentRow[] }) {
                 <tbody>
                     {payments.map((payment) => 
                         <tr key={payment.id} style={{ borderBottom: "1px solid var(--w10)" }}>
-                            <td style={{ padding: "10px" }}>{payment.user.name || payment.user.email}</td>
+                            <td style={{ padding: "10px" }}>{payment.user?.name || payment.user?.email || "—"}</td>
                             <td style={{ padding: "10px", color: payment.event ? "inherit" : "var(--w30)" }}>
                                 {payment.event?.title ?? (
                                     payment.type === "CREDIT_PURCHASE" ? "Credit purchase (wallet)" : "—"
                                 )}
                             </td>
                             <td style={{ padding: "10px" }}>{payment.type.replaceAll("_", " ")}</td>
-                            <td style={{ padding: "10px" }}>₦{payment.amount.toLocaleString()}</td>
+                            <td style={{ padding: "10px" }}>₦{payment.amount.toString()}</td>
                             <td style={{ padding: "10px", color: "var(--w30)" }}>{payment.reference}</td>
                             <td style={{ padding: "10px" }}>
                                 <span className="status-badge approved">{payment.status.toLocaleLowerCase()}</span>

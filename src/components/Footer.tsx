@@ -45,7 +45,7 @@ import Image from "next/image";
                         <ul>
                             <li>
                                 <a href="https://www.instagram.com/odezuluigbo_tv" target="_blank">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" style={{verticalAlign:"middle", marginRight: "6px"}}>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" style={{verticalAlign:"middle", marginRight: "6px", flexShrink: "0"}}>
                                 <rect x="2" y="2" width="20" height="20" rx="5" ry="5" stroke="url(#ig-grad-4)" strokeWidth="2"/>
                                 <circle cx="12" cy="12" r="5" stroke="url(#ig-grad-4)" strokeWidth="2"/><circle cx="17.5" cy="6.5" r="1.5" fill="url(#ig-grad-4)"/>
                                 <defs>
@@ -61,7 +61,7 @@ import Image from "next/image";
                             </li>
                             <li>
                                 <a href="https://youtube.com/@odezuluigbo__tv" target="_blank">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" style={{verticalAlign:"middle", marginRight: "6px"}}>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" style={{verticalAlign:"middle", marginRight: "6px", flexShrink: "0"}}>
                                 <path d="M23.498 6.186a2.955 2.955 0 0 0-2.074-2.09C19.542 3.5 12 3.5 12 3.5s-7.542 0-9.424.596A2.955 2.955 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a2.955 2.955 0 0 0 2.074 2.09C4.458 20.5 12 20.5 12 20.5s7.542 0 9.424-.596a2.955 2.955 0 0 0 2.074-2.09C24 15.93 24 12 24 12s0-3.93-.502-5.814z" fill="#FF0000"/>
                                 <polygon points="9.75,7.5 16.5,12 9.75,16.5" fill="#FFF"/>
                                 </svg>YouTube</a>

@@ -64,7 +64,7 @@ export default async function EventDetailsPage({params}:{params: Promise<{id:str
             select: {
                 id: true,
                 name: true,
-                potrait: true,
+                portrait: true,
                 state: true,
                 city: true,
                 bio: true,
@@ -282,9 +282,9 @@ export default async function EventDetailsPage({params}:{params: Promise<{id:str
                     >
                         <div className="img-placeholder c-img" data-desc={`Contestant #`}>
                         
-                            {c.potrait ? (
+                            {c.portrait ? (
                                 <img
-                                    src={c.potrait}
+                                    src={c.portrait}
                                     alt={c.name}
                                     className="w-full h-full object-cover"
                                 />
@@ -417,5 +417,6 @@ export default async function EventDetailsPage({params}:{params: Promise<{id:str
             </section>
         </div>
         </VoteProvider>
+        
     );
 }

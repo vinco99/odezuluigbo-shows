@@ -1,3 +1,5 @@
+"use server";
+
 import { prisma } from "@/lib/prisma";
 import { parseYouTubeId } from "@/lib/youtube";
 import { revalidatePath } from "next/cache";

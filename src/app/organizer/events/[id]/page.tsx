@@ -26,12 +26,12 @@ export default async function ManageEventPage({ params }: { params: Promise<{ id
     // Vote Revenue: money paid directly for votes (Paystack, ₦50/vote)
     const paidVotes = event.payments
         .filter((payment) => payment.status === "PAID" && payment.type === "VOTE")
-        .reduce((total, payment) => total + payment.amount, 0);
+        .reduce((total, payment) => total + Number(payment.amount), 0);
 
     // Registration Revenue: money paid for contestant registration
     const paidRegistrations = event.payments
         .filter((payment) => payment.status === "PAID" && payment.type === "CONTESTANT_REGISTRATION")
-        .reduce((total, payment) => total + payment.amount, 0);
+        .reduce((total, payment) => total + Number(payment.amount), 0);
 
     // Credit Votes: number of votes cast using wallet credits (no money moved)
     const creditVotes = event.votes
@@ -88,7 +88,7 @@ export default async function ManageEventPage({ params }: { params: Promise<{ id
 
             <footer className="footer">
             <div className="container">
-                <div className="footer-bottom"><p>© 2025 Odezuluigbo Global Ltd. All Rights Reserved.</p></div>
+                <div className="footer-bottom"><p>© 2026 Odezuluigbo Global Ltd. All Rights Reserved.</p></div>
             </div>
             </footer>
         </main>

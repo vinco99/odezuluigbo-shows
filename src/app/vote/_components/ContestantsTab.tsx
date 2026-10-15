@@ -2,7 +2,6 @@
 
 import { useVote } from "@/components/vote/useVote";
 import { ShareButton } from "./ShareButton";
-import { DEFAULT_VOTING_FEE_NAIRA } from "@/lib/voting";
 
 type EventWithContestants = {
   id: string;
@@ -13,7 +12,7 @@ type EventWithContestants = {
     id: string;
     name: string;
     state: string | null;
-    potrait: string | null;
+    portrait: string | null;
     votes: { quantity: number }[];
   }[];
 };
@@ -78,9 +77,9 @@ export function ContestantsTab({
                 return (
                   <article className="contestant-card" key={c.id}>
                     <div className="img-placeholder c-img">
-                      {c.potrait ? (
+                      {c.portrait ? (
                         <img
-                          src={c.potrait}
+                          src={c.portrait}
                           alt={c.name}
                           className="w-full h-full object-cover"
                         />

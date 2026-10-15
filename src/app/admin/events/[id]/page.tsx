@@ -89,7 +89,7 @@ export default async function AdminEventDetailPage({ params, }: { params: Promis
     const isRealityShow = event.type === "REALITY_SHOW";
 
     return (
-        <main className="page active">
+        <main className="admin-tab-content active">
         {/* Header */}
         <div className="section-header">
             <div style={{ display: "flex", gap: 12, alignItems: "center", flexWrap: "wrap" }}>
@@ -230,7 +230,7 @@ export default async function AdminEventDetailPage({ params, }: { params: Promis
         {/* Stats */}
         <EventStats
             votes={totalVotes._sum.quantity ?? 0}
-            revenue={revenue._sum.amount ?? 0}
+            revenue={Number(revenue._sum.amount ?? 0)}
             contestants={event._count.contestants}
         />
 

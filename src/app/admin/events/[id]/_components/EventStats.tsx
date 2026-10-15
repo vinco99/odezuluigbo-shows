@@ -1,10 +1,12 @@
+import { Prisma } from "@/generated/prisma/client"; 
+
 export function EventStats({
   votes,
   revenue,
   contestants,
 }: {
   votes: number;
-  revenue: number;
+  revenue: Prisma.Decimal | number;
   contestants: number;
 }) {
   return (

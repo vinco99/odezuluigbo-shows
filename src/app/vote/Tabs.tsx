@@ -7,13 +7,12 @@ export default async function Tabs() {
   const session = await auth();
 
   const events = await prisma.event.findMany({
-    where: { status: "APPROVED", isVotingOpen: true },
+    where: { status: "APPROVED", isVotingOpen: true,},
     include: {
       contestants: {
         where: { applicationStatus: "APPROVED" },
         include: { votes: { where: { status: "PAID" } } },
-      },
-      votePackages: { where: { active: true }, orderBy: { amount: "asc" } },
+      }, 
     },
     orderBy: { eventDate: "asc" },
   });

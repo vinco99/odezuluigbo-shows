@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { CreditPurchaseButton } from "./CreditPurchaseButton";
-import { VOTE_PRICE_NAIRA } from "@/lib/voting";
+import { VOTE_PRICE_NAIRA } from "@/lib/voting-config";
 
 export function TopUpTab({
   packages,

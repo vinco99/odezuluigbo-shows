@@ -127,11 +127,7 @@ export function TasksTab({
                       alert(res.error);
                       return;
                     }
-                    if ("authorizationUrl" in res && res.authorizationUrl) {
-                      window.location.href = res.authorizationUrl;
-                    } else {
-                      window.location.reload();
-                    }
+                    window.location.reload();
                   }}
                 >
                   {buttonLabel}

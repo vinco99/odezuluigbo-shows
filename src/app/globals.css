@@ -1,5 +1,6 @@
 @import "tailwindcss";
 
+
 :root {
   --gold:#C9A84C; --gold-light:#E8C96E; --gold-dark:#9A7A2E;
   --black:#080808; --dark:#0D0D0D; --dark-2:#141414; --dark-3:#1C1C1C;
@@ -146,6 +147,7 @@ input,textarea,select{font-family:var(--fb)}
 .nav-links a::after{content:'';position:absolute;bottom:4px;left:50%;width:0;height:1px;background:var(--gold);transform:translateX(-50%);transition:var(--tr)}
 .nav-links a:hover,.nav-links a.active{color:var(--gold)}
 .nav-links a:hover::after,.nav-links a.active::after{width:60%}
+.nav-logout{font-family:var(--fd)}
 .nav-cta{font-family:var(--fd);font-size:.68rem;letter-spacing:.15em;text-transform:uppercase;color:var(--black);background:linear-gradient(135deg,var(--gold-dark),var(--gold-light));padding:10px 20px;border-radius:4px;transition:var(--tr);white-space:nowrap;flex-shrink:0;cursor:pointer}
 .nav-cta:hover{transform:translateY(-2px);box-shadow:var(--sg)}
 .hamburger{display:none;flex-direction:column;gap:5px;padding:8px;margin-left:auto}
@@ -649,6 +651,7 @@ input,textarea,select{font-family:var(--fb)}
   .nav-links.open{display:flex}
   .nav-links a{padding:12px 14px;font-size:.83rem}
   .nav-cta{display:none}
+  .nav-logout{display:none}
   .nav-cta-mobile{display:block!important;margin-top:10px}
   .hamburger{display:flex}
   .events-grid,.blog-grid,.testimonials-grid,.prizes-grid,.all-events-grid{grid-template-columns:1fr}

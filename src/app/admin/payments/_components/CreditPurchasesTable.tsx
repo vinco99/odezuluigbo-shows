@@ -1,3 +1,5 @@
+import { Prisma } from "@/generated/prisma/client";
+
 type CreditLedgerRow = {
   user: { 
     id: string; 

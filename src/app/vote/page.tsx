@@ -3,6 +3,8 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { getVoteContextForEvents } from "@/lib/voting-server";
 import { VoteTabs } from "./_components/VoteTabs";
+import { AdSlot } from "@/components/ads/AdSlot";
+
 
 export const dynamic = "force-dynamic";
 
@@ -78,6 +80,7 @@ export default async function VotePage() {
           tasks={tasks}
           transactions={transactions}
           completions={completions}
+          bannerAd={<AdSlot placementKey="vote-banner" />}
         />
       </section>
 
