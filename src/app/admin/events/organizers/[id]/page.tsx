@@ -68,7 +68,7 @@ export default async function OrganizerReviewPage({params}:{params: Promise<{id:
     } = organizer;
 
     return (
-      <main id="main" className="admin-tab-content active">
+      <main id="main" className="app-shell" style={{ padding: "60px"}}>
         <div className="new-page-heading">
           <div>
             <div className="new-eyebrow"><span className="new-eyebrow-line">
@@ -76,7 +76,7 @@ export default async function OrganizerReviewPage({params}:{params: Promise<{id:
               <span className="eyebrow-current">ORGANIZER REVIEW</span>
             </div>
             <h1>Review organizer</h1>
-            <p className="page-subtitle">Assess the applicant’s experience and event proposal.</p>
+            <p className="new-page-subtitle">Assess the applicant’s experience and event proposal.</p>
           </div>
         </div>
 
@@ -115,9 +115,9 @@ export default async function OrganizerReviewPage({params}:{params: Promise<{id:
 
             <section className="details-section" aria-labelledby="contact-heading">
               <div className="section-label"><span className="section-index">01</span><h3 id="contact-heading">Contact details</h3><span className="label-rule"></span></div>
-              <dl className="detail-grid contact-grid">
-                <div className="detail-item"><dt>Phone</dt><dd><a className="contact-link" href={`tel:+${formatNigerianNumber(phone)}`}>{formatNigerianNumber(phone)}</a></dd></div>
-                <div className="detail-item"><dt>Email</dt><dd><a className="contact-link" href={`mailto:${email}`}>{email}</a></dd></div>
+              <dl className="new-detail-grid new-contact-grid">
+                <div className="new-detail-item"><dt>Phone</dt><dd><a className="contact-link" href={`tel:+${formatNigerianNumber(phone)}`}>{formatNigerianNumber(phone)}</a></dd></div>
+                <div className="new-detail-item"><dt>Email</dt><dd><a className="contact-link" href={`mailto:${email}`}>{email}</a></dd></div>
               </dl>
             </section>
 

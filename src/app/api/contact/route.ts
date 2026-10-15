@@ -17,7 +17,7 @@ export async function POST(request: Request) {
 
     const { data, error } = await resend.emails.send({
       // IMPORTANT: Replace with your verified domain email, e.g., 'Contact Form <contact@updates.odezuluigbo.com>'
-      from: "Contact Form <onboarding@resend.dev>",
+      from: "Contact Form <resend@notifications.odezuluigbo.com>",
       // Replace with the admin email address you want to receive messages at
       to: ["admin@odezuluigbo.com"],
       replyTo: email,

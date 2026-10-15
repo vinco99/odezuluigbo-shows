@@ -25,10 +25,11 @@ export default function Sidebar({
           e.preventDefault();
           onNavigate("overview");
         }}
+        aria-label="VoteHub dashboard home"
       >
       </a>
 
-      <div className="nav-caption">WORKSPACE</div>
+      <div className="nav-caption" >WORKSPACE</div>
       <nav className="nav-menu">
         <button
           className={`nav-item ${activeSection === "overview" ? "is-active" : ""}`}

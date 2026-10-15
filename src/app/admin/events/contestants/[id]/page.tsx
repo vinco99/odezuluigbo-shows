@@ -83,7 +83,7 @@ export default async function ContestantReviewPage({params}:{params: Promise<{id
 
 
     return (
-        <main id="main" className="admin-tab-content active">
+        <main id="main" className="app-shell" style={{ paddingTop: "60px"}}>
             <div className="new-page-heading">
                 <div>
                 <div className="new-eyebrow"><span className="new-eyebrow-line"></span> APPLICATIONS <span className="new-eyebrow-slash">/</span> <span className="eyebrow-current">CANDIDATE REVIEW</span></div>
@@ -139,26 +139,26 @@ export default async function ContestantReviewPage({params}:{params: Promise<{id
 
                 <section className="details-section" aria-labelledby="personal-heading">
                     <div className="section-label"><span className="section-index">01</span><h3 id="personal-heading">Personal details</h3><span className="label-rule"></span></div>
-                    <dl className="detail-grid personal-grid">
-                    <div className="detail-item"><dt>Age</dt><dd>{age} <span className="detail-unit">years</span></dd></div>
-                    <div className="detail-item"><dt>City / town</dt><dd>{city}</dd></div>
-                    <div className="detail-item"><dt>State of origin</dt><dd>{state}</dd></div>
+                    <dl className="new-detail-grid personal-grid">
+                    <div className="new-detail-item"><dt>Age</dt><dd>{age} <span className="detail-unit">years</span></dd></div>
+                    <div className="new-detail-item"><dt>City / town</dt><dd>{city}</dd></div>
+                    <div className="new-detail-item"><dt>State of origin</dt><dd>{state}</dd></div>
                     </dl>
                 </section>
 
                 <section className="details-section" aria-labelledby="contact-heading">
                     <div className="section-label"><span className="section-index">02</span><h3 id="contact-heading">Contact details</h3><span className="label-rule"></span></div>
-                    <dl className="detail-grid contact-grid">
-                    <div className="detail-item"><dt>Email</dt><dd><a className="contact-link" href={`mailto:${email}`}>{email}</a></dd></div>
-                    <div className="detail-item"><dt>Phone</dt><dd><a className="contact-link" href={`https://wa.me/${formatNigerianNumber(phone || "")}`}>+{formatNigerianNumber(phone || "")}</a></dd></div>
+                    <dl className="new-detail-grid new-contact-grid">
+                    <div className="new-detail-item"><dt>Email</dt><dd><a className="contact-link" href={`mailto:${email}`}>{email}</a></dd></div>
+                    <div className="newdetail-item"><dt>Phone</dt><dd><a className="contact-link" href={`https://wa.me/${formatNigerianNumber(phone || "")}`}>+{formatNigerianNumber(phone || "")}</a></dd></div>
                     </dl>
                 </section>
 
                 <section className="details-section" aria-labelledby="education-heading">
                     <div className="section-label"><span className="section-index">03</span><h3 id="education-heading">Education</h3><span className="label-rule"></span></div>
-                    <dl className="detail-grid education-grid">
-                    <div className="detail-item detail-item-wide"><dt>Institution</dt><dd>{institution}</dd></div>
-                    <div className="detail-item"><dt>Course</dt><dd>{course}</dd></div>
+                    <dl className="new-detail-grid education-grid">
+                    <div className="new-detail-item detail-item-wide"><dt>Institution</dt><dd>{institution}</dd></div>
+                    <div className="new-detail-item"><dt>Course</dt><dd>{course}</dd></div>
                     </dl>
                 </section>
 
@@ -177,10 +177,10 @@ export default async function ContestantReviewPage({params}:{params: Promise<{id
                 {Number(age) < 18 && guardianName && guardianRelation && guardianPhone && (
                 <section className="details-section guardian-section" aria-labelledby="guardian-heading">
                     <div className="section-label"><span className="section-index">06</span><h3 id="guardian-heading">Parent / guardian</h3><span className="label-rule"></span></div>
-                    <dl className="detail-grid guardian-grid">
-                        <div className="detail-item"><dt>Full name</dt><dd>{guardianName}</dd></div>
-                        <div className="detail-item"><dt>Relationship</dt><dd>{guardianRelation}</dd></div>
-                        <div className="detail-item"><dt>Phone</dt><dd><a className="contact-link" href={`https://wa.me/${formatNigerianNumber(guardianPhone || "")}`}>+{formatNigerianNumber(guardianPhone || "")}</a></dd></div>
+                    <dl className="new-detail-grid guardian-grid">
+                        <div className="new-detail-item"><dt>Full name</dt><dd>{guardianName}</dd></div>
+                        <div className="new-detail-item"><dt>Relationship</dt><dd>{guardianRelation}</dd></div>
+                        <div className="new-detail-item"><dt>Phone</dt><dd><a className="contact-link" href={`https://wa.me/${formatNigerianNumber(guardianPhone || "")}`}>+{formatNigerianNumber(guardianPhone || "")}</a></dd></div>
                     </dl>
                 </section>
                 )}

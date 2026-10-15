@@ -43,7 +43,7 @@ export default function Dashboard({
   }
 
   return (
-    <div className="page active" id="overview">
+    <div className="app-shell" id="overview" style={{ paddingTop: "70px"}}>
       <Sidebar
         activeSection={activeSection}
         onNavigate={navigateTo}

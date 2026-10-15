@@ -38,10 +38,12 @@ export async function POST(req: Request) {
       },
     });
 
+    const sender_email = process.env.FROM_RES;
+
     // 4. Send the OTP
     if (method === "email") {
       await resend.emails.send({
-        from: `${process.env.FROM_RES}`, // Use your verified domain
+        from: `Odezuluigbo ${sender_email}`, // Use your verified domain
         to: contact,
         subject: "Your Password Reset Code",
         html: `
