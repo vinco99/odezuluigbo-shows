@@ -109,7 +109,13 @@ export default function Navbar({ session }: { session: NavbarSession }){
                     ))
                 }
                     <li>
-                        {session ? "" :
+                        {session ? 
+                            <button className="nav-cta-mobile" onClick={() => signOut({ callbackUrl: "/" })} style={{
+                                display: "none", fontFamily: "var(--fd)", fontSize: ".72rem", 
+                                letterSpacing: ".15em", textTransform: "uppercase", color: "var(--black)", 
+                                background: "linear-gradient(135deg,var(--gold-dark),var(--gold-light))", 
+                                padding: "10px 20px", borderRadius: "4px", textAlign: "center", marginTop:"8px"
+                            }}>Sign Out</button> :
                         <>
                             <Link className="nav-cta-mobile" href="/login" style={{
                                 display: "none", fontFamily: "var(--fd)", fontSize: ".72rem", 
@@ -118,12 +124,9 @@ export default function Navbar({ session }: { session: NavbarSession }){
                                 padding: "10px 20px", borderRadius: "4px", textAlign: "center", marginTop:"8px"
                             }}>Sign In</Link>
 
-                            <Link className="nav-cta-mobile btn btn-outline btn-sm" href="register"  style={{
-                                display: "none", fontFamily: "var(--fd)", fontSize: ".72rem", 
-                                letterSpacing: ".15em", textTransform: "uppercase", color: "var(--black)", 
-                                background: "linear-gradient(135deg,var(--gold-dark),var(--gold-light))", 
-                                padding: "10px 20px", borderRadius: "4px", textAlign: "center", marginTop:"8px"
-                            }}>Register</Link>
+                            <div className="nav-register-moblie" style={{ display: "none"}}>
+                                <Link href="/register" className="btn btn-outline btn-xs" style={{ textTransform: "uppercase"}}>Register</Link>
+                            </div>
                         </>
                         }
                     </li>
@@ -142,7 +145,12 @@ export default function Navbar({ session }: { session: NavbarSession }){
                         <button type="button" className="btn btn-ghost btn-sm" onClick={() => signOut({ callbackUrl: "/" })}>Sign Out</button>
                     </div>
                 ) : (
-                    <Link href="/login" className="nav-cta">Sign In</Link>
+                    <>
+                        <Link href="/login" className="nav-cta">Sign In</Link>
+                        <div className="nav-logout">
+                            <Link href="/register" className="btn btn-ghost btn-sm" style={{ textTransform: "uppercase"}}>Register</Link>
+                        </div>
+                    </>
                 )}
 
 

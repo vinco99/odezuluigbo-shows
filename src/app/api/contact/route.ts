@@ -19,7 +19,7 @@ export async function POST(request: Request) {
       // IMPORTANT: Replace with your verified domain email, e.g., 'Contact Form <contact@updates.odezuluigbo.com>'
       from: "Contact Form <resend@notifications.odezuluigbo.com>",
       // Replace with the admin email address you want to receive messages at
-      to: ["admin@odezuluigbo.com"],
+      to: ["Odezuluigboglobal@gmail.com"],
       replyTo: email,
       subject: `[Contact] ${subject} — ${fullName}`,
       html: `

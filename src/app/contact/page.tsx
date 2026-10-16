@@ -67,7 +67,7 @@ export default function ContactPage() {
                                     </span>
                                     <div className="ci-text">
                                         <strong>Email</strong>
-                                        <span>info@odezuluigbo.com</span>
+                                        <span>Odezuluigboglobal@gmail.com</span>
                                     </div>
                                 </div>
                                 <div className="ci-item">
@@ -78,7 +78,7 @@ export default function ContactPage() {
                                     </span>
                                     <div className="ci-text">
                                         <strong>Phone</strong>
-                                        <span>+234 xxx xxxx xxx</span>
+                                        <span>+23481 0931 9627</span>
                                     </div>
                                 </div>
                                 <div className="ci-item">
@@ -90,7 +90,7 @@ export default function ContactPage() {
                                         </svg>
                                     </span>
                                     <div className="ci-text">
-                                        <strong>Website</strong><span>www.odezuluigbo.com</span>
+                                        <strong>Website</strong><a href="https://odezuluigbo.com" style={{textDecoration: "none"}}>www.odezuluigbo.com</a>
                                     </div>
                                 </div>
                             </div>
@@ -193,13 +193,13 @@ export default function ContactPage() {
 
                                 {status === "sent" && (
                                 <p style={{ color: "green", marginTop: "12px" }}>
-                                    ✅ Message sent. We'll get back to you soon.
+                                    Message sent. We'll get back to you soon.
                                 </p>
                                 )}
 
                                 {status === "error" && (
                                 <p style={{ color: "red", marginTop: "12px" }}>
-                                    ❌ Something went wrong. Please try again or email us directly.
+                                    Something went wrong. Please try again or email us directly.
                                 </p>
                                 )}
                             </form>

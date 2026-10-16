@@ -1,148 +1,71 @@
+// lib/auth.ts
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import Google from "next-auth/providers/google";
-import Facebook from "next-auth/providers/facebook";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
-
+import authConfig from "./auth.config";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
+  adapter: PrismaAdapter(prisma as unknown as Parameters<typeof PrismaAdapter>[0]),
 
-    adapter: PrismaAdapter(
-        prisma as unknown as Parameters<typeof PrismaAdapter>[0]
-    ),
+  secret: process.env.AUTH_SECRET,
+  session: { strategy: "jwt" },
+  ...authConfig,
 
-    secret: process.env.AUTH_SECRET,
+  providers: [
 
-    providers:[
+    ...authConfig.providers,
 
-        Credentials({
+    Credentials({
+      credentials: { email: {}, password: {} },
+      async authorize(credentials) {
+        
+        if (!credentials?.email || !credentials?.password) return null;
 
-            credentials:{
-                email:{},
-                password:{}
-            },
+        const user = await prisma.user.findUnique({ where: { email: credentials.email as string } });
 
+        if (!user || !user.password) return null;
 
-            async authorize(credentials){
+        const validPassword = await bcrypt.compare(credentials.password as string, user.password);
 
-                if(
-                    !credentials?.email || !credentials?.password
-                ){
-                    return null;
-                }
+        if (!validPassword) return null;
 
+        return { id: user.id, name: user.name, email: user.email, role: user.role, creditBalance: user.creditBalance };
+      }
+    })
+  ],
 
-                const user =
-                await prisma.user.findUnique({
+  callbacks: {
+    
+    async jwt({ token, user }) {
+        
+      if (user) {
+        token.id = user.id;
+        const dbUser = await prisma.user.findUnique({ 
+            where: { id: user.id }, 
+            select: { role: true, creditBalance: true } 
+        });
+        token.creditBalance = dbUser?.creditBalance ?? 0;
+        token.role = dbUser?.role ?? "USER";
 
-                    where:{
-                        email:
-                        credentials.email as string
-                    }
-
-                });
-
-
-                if(!user){
-                    return null;
-                }
-
-
-                if (!user.password) return null;
-                const validPassword =
-                await bcrypt.compare(
-                    credentials.password as string,
-                    user.password
-
-                );
-
-
-                if(!validPassword){
-                    return null;
-                }
-
-
-                return {
-                    id:user.id,
-                    name:user.name,
-                    email:user.email,
-                    role:user.role,
-                    creditBalance:user.creditBalance
-                };
-
-
-            }
-
-        }),
-
-
-        Google({
-            clientId:
-            process.env.GOOGLE_CLIENT_ID!,
-
-            clientSecret:
-            process.env.GOOGLE_CLIENT_SECRET!,
-
-            allowDangerousEmailAccountLinking: true,
-        }),
-
-
-        Facebook({
-            clientId:
-            process.env.FACEBOOK_CLIENT_ID!,
-
-            clientSecret:
-            process.env.FACEBOOK_CLIENT_SECRET!,
-
-            allowDangerousEmailAccountLinking:true
-        })
-
-    ],
-
-
-    session:{ strategy:"jwt" },
-
-    pages:{ signIn:"/login" },
-
-    callbacks:{
-
-        async jwt({ token, user }) {
-
-            if (user) {
-                token.id = user.id;
-                
-                const dbUser = await prisma.user.findUnique({
-                    where: { id: user.id},
-                    select: { role: true, creditBalance: true }
-                });
-                token.creditBalance = dbUser?.creditBalance ?? 0;
-                token.role = dbUser?.role ?? "USER";
-
-            } else if (token.id) {
-                const dbUser = await prisma.user.findUnique({ 
-                    where: { id: token.id as string }, 
-                    select: { role: true, creditBalance: true } 
-                });
-                token.role = dbUser?.role ?? "USER";
-                token.creditBalance = dbUser?.creditBalance ?? 0;
-            }
-            return token;
-        },
-
-
-        async session({ session, token }) {
-
-            if (session.user) {
-                session.user.id = token.id as string;
-                session.user.role = token.role as string;
-                session.user.creditBalance = token.creditBalance as number;
-            }
-            return session;
-        }
-
+      } else if (token.id) {
+        const dbUser = await prisma.user.findUnique({ 
+            where: { id: token.id as string }, 
+            select: { role: true, creditBalance: true } 
+        });
+        token.role = dbUser?.role ?? "USER";
+        token.creditBalance = dbUser?.creditBalance ?? 0;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      if (session.user) {
+        session.user.id = token.id as string;
+        session.user.role = token.role as string;
+        session.user.creditBalance = token.creditBalance as number;
+      }
+      return session;
     }
-
-
+  }
 });

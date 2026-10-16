@@ -4,13 +4,20 @@ import { prisma } from "@/lib/prisma";
 import { getVoteContextForEvents } from "@/lib/voting-server";
 import { VoteTabs } from "./_components/VoteTabs";
 import { AdSlot } from "@/components/ads/AdSlot";
+import { ToastTrigger } from "./_components/ToastTrigger";
 
 
 export const dynamic = "force-dynamic";
 
-export default async function VotePage() {
+interface VotePageProps {
+  searchParams: Promise<{ cast?: string }>;
+}
+
+export default async function VotePage({ searchParams }: VotePageProps) {
   const session = await auth();
   const userId = session?.user?.id ?? null;
+
+  const { cast } = await searchParams;
 
   // Live events with their approved contestants
   const events = await prisma.event.findMany({
@@ -69,7 +76,7 @@ export default async function VotePage() {
           <p>Support your favourite contestants</p>
         </div>
       </div>
-
+      {cast === "1" && <ToastTrigger message="🎉 Success! Your vote has been cast successfully." />}
       <section className="section">
         <VoteTabs
           userId={userId}
