@@ -401,6 +401,23 @@ export default function CreateEventForm() {
                             />
                         </div>
 
+                        <div className="form-group">
+                            <label><strong>Winner Prize *</strong></label>
+                            <input type="number" min="0" name="prize1st" placeholder="500000"/>
+                        </div>
+
+                        <div className="form-row">
+                            <div className="form-group">
+                                <label><strong>2nd Prize *</strong></label>
+                                <input type="number" min="0" name="prize2nd" placeholder="300000"/>
+                            </div>
+
+                            <div className="form-group">
+                                <label><strong>3rd Prize *</strong></label>
+                                <input type="number" min="0" name="prize3rd" placeholder="200000"/>
+                            </div>
+                        </div>
+
                         {error && (
                             <p style={{ color: "#ff6b6b", marginBottom: "20px", }}>
                                 {error}

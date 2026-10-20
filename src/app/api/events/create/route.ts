@@ -2,6 +2,12 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { slugify } from "@/lib/validation";
 
+function toNumber(v: unknown): number | null {
+  if (typeof v === "number") {
+    return Number.isFinite(v) ? v : null;
+  }
+  return null;
+}
 export async function POST(request: Request) {
     try {
         const session = await auth();
@@ -49,6 +55,10 @@ export async function POST(request: Request) {
         const type = String( body.type || "PAGEANT" );
         const country = String( body.country || "Nigeria" );
         const state = String( body.state || "Anambra" );
+
+        const prize1st = toNumber(body.prize1st);
+        const prize2nd = toNumber(body.prize2nd);
+        const prize3rd = toNumber(body.prize3rd);
 
         const allowedTypes = [
             "PAGEANT",
@@ -153,6 +163,10 @@ export async function POST(request: Request) {
                 registrationStart,
                 registrationEnd,
                 eventDate,
+                
+                prize1st: prize1st || null,
+                prize2nd: prize2nd || null,
+                prize3rd: prize3rd || null,
 
                 organizerId: session.user.id,
 

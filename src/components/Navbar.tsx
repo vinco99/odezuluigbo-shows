@@ -5,8 +5,6 @@ import { useEffect, useState } from "react";
 import { redirect, usePathname } from "next/navigation";
 import {motion} from "framer-motion";
 import { signOut } from "next-auth/react";
-import { dashboardPath } from "@/lib/dashboard";
-import { float } from "three/src/nodes/tsl/TSLCore.js";
 
 type NavbarSession = { name: string | null; role: string; creditBalance: number } | null;
 

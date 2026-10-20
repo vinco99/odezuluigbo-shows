@@ -94,7 +94,7 @@ export function TopUpTab({
             type="number"
             min={1}
             value={adhocQty}
-            onChange={(e) => setAdhocQty(Math.max(1, Number(e.target.value) || 1))}
+            onChange={(e) => setAdhocQty(Math.max(1, Number(e.target.value) || 10))}
             style={{
               background: "var(--w10)",
               border: "1px solid var(--w10)",
