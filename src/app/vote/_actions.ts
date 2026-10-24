@@ -386,6 +386,106 @@ export async function initCreditPurchase(
   return { ok: true, authorizationUrl: payload.data.authorization_url };
 }
 
+export async function initCreditPackagePurchase(
+  form: FormData,
+): Promise<ActionResult<{ authorizationUrl: string }>> {
+  const session = await auth();
+  if (!session?.user?.id || !session.user.email) {
+    return { ok: false, error: "Please sign in." };
+  }
+
+  const packageId = form.get("packageId");
+
+  if (typeof packageId !== "string" || !packageId.trim()) {
+    return { ok: false, error: "Please select a valid credit package." };
+  }
+
+  if (!process.env.PAYSTACK_SECRET_KEY) {
+    return { ok: false, error: "Payment service is not configured." };
+  }
+
+  // Always retrieve the authoritative price and credit quantity from the database.
+  const creditPackage = await prisma.creditPackage.findFirst({
+    where: {
+      id: packageId,
+      active: true,
+    },
+    select: {
+      id: true,
+      name: true,
+      credits: true,
+      amount: true,
+      active: true,
+    },
+  });
+
+  if (!creditPackage) {
+    return { ok: false, error: "This credit package is unavailable." };
+  }
+
+  const { credits, amount } = creditPackage;
+
+  if ( !Number.isSafeInteger(credits) || credits < 1 || !Number.isSafeInteger(amount) || amount < 1 ) {
+    return { ok: false, error: "This credit package has invalid pricing." };
+  }
+
+  const reference = `CRED-${nanoid(12)}`;
+
+  await prisma.payment.create({
+    data: {
+      reference,
+      amount,
+      type: "CREDIT_PURCHASE",
+      status: "PENDING",
+      userId: session.user.id,
+    },
+  });
+
+  let payload: any = null;
+
+  try {
+    const res = await fetch("https://api.paystack.co/transaction/initialize", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: session.user.email,
+        amount: amount * 100,
+        reference,
+        callback_url: `${process.env.NEXT_PUBLIC_APP_URL}/vote/callback`,
+        metadata: {
+          kind: "credit_package_purchase",
+          packageId,
+          credits,
+          userId: session.user.id,
+        },
+      }),
+    });
+
+    payload = await res.json();
+
+  } catch (err) {
+    console.error("initCreditPackagePurchase: Paystack request failed", err);
+  }
+
+  if (!payload?.status) {
+    await prisma.payment
+      .deleteMany({ where: { reference, status: "PENDING" } })
+      .catch((cleanupErr) =>
+        console.error("initCreditPackagePurchase: cleanup failed", {
+          reference,
+          cleanupErr,
+        }),
+      );
+
+    return { ok: false, error: payload?.message ?? "Payment init failed." };
+  }
+
+  return { ok: true, authorizationUrl: payload.data.authorization_url };
+}
+
 // ---------- claimTask ---------------------------------------------------
 
 export async function claimTask(form: FormData): Promise<ActionResult> {

@@ -1,0 +1,140 @@
+/* Core Responsive Grid Layout */
+    .contestant-grid {
+      display: grid;
+      width: 100%;
+      max-width: 1200px;
+      gap: 24px;
+      grid-template-columns: repeat(2, 1fr); /* Mobile View (2 Columns) */
+    }
+
+    /* Desktop View (4 Columns) */
+    @media (min-width: 1024px) {
+      .contestant-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    /* Card Layout - Flex direction keeps sizing uniform */
+    .contestant-card {
+      background-color: var(--dark-2);
+      border: 1px solid var(--w10);
+      border-radius: var(--radius-lg);
+      overflow: hidden; 
+      box-shadow: var(--sd);
+      transition: var(--tr);
+      display: flex;
+      flex-direction: column;
+      height: 100%; /* Ensures cards stretch to match the tallest sibling in the grid row */
+    }
+
+    .contestant-card:hover {
+      transform: translateY(-8px);
+      border-color: var(--gold);
+      box-shadow: var(--sg);
+    }
+
+    /* Portrait Styling - 4:5 Aspect Ratio Box */
+    .portrait-wrapper {
+      position: relative;
+      width: 100%;
+      padding-top: 125px; /* Creates the standard vertical portrait space */
+      background-color: var(--dark-3);
+    }
+
+    .portrait-image {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover; /* Prevents stretching by auto-cropping unproportional images */
+    }
+
+    /* Card Body Content */
+    .card-content {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1; /* Drives internal components to fill up empty vertical space */
+    }
+
+    .event-title {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 6px;
+    }
+
+    .contestant-name {
+      font-family: var(--fh);
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 2px;
+    }
+
+    .contestant-state {
+      font-size: 0.85rem;
+      color: var(--w70);
+      margin-bottom: 20px;
+    }
+
+    /* Voting Metrics & Progress Bar */
+    .vote-metrics {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 8px;
+    }
+
+    .vote-percentage {
+      font-family: var(--fh);
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--gold-light);
+    }
+
+    .vote-count {
+      font-size: 0.85rem;
+      color: var(--w70);
+    }
+
+    .vote-bar-container {
+      background-color: var(--dark-3);
+      border-radius: var(--radius);
+      height: 8px;
+      width: 100%;
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+
+    .vote-bar-fill {
+      background: linear-gradient(90deg, var(--gold-dark), var(--gold-light));
+      height: 100%;
+      border-radius: var(--radius);
+      transition: width var(--tr);
+    }
+
+    /* Vote Action Button */
+    .vote-button {
+      background-color: transparent;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      font-family: var(--fh);
+      font-size: 0.95rem;
+      font-weight: 600;
+      padding: 12px 0;
+      border-radius: var(--radius);
+      cursor: pointer;
+      width: 100%;
+      margin-top: auto; /* Anchors the button precisely at the bottom edge of every card */
+      transition: var(--tr);
+    }
+
+    .vote-button:hover {
+      background-color: var(--gold);
+      color: var(--black);
+      box-shadow: 0 4px 15px var(--g20);
+    }

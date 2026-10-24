@@ -10,17 +10,47 @@ export async function POST(request: Request) {
   }
 
   // ---- 1. Parse JSON (images are URLs now, not files) ----
-  const body = await request.json().catch(() => null);
+  let formData: FormData;
 
-  const parsed = contestantApplicationSchema.safeParse(body);
-  if (!parsed.success) {
+  try {
+    formData = await request.formData();
+  } catch{
     return Response.json(
-      { error: "Invalid input", issues: parsed.error.flatten() },
+      { error: "Invalid form submission. Please try again." },
+      { status: 400 }
+    );
+  }
+
+  const body = Object.fromEntries(formData.entries());
+
+  const inputBody = {
+    ...body,
+    age: Number(body.age),
+    guardianConsent: body.guardianConsent === "on",
+    infoCorrect: body.infoCorrect === "on",
+    agreeTerms: body.agreeTerms === "on",
+  };
+
+  const parsed = contestantApplicationSchema.safeParse(inputBody);
+
+  if (!parsed.success) {
+
+    console.error(
+      "Contestant application validation errors:",
+      parsed.error.flatten()
+    );
+
+    return Response.json(
+      { 
+        error: "Invalid input", 
+        issues: parsed.error.flatten() 
+      },
       { status: 400 }
     );
   }
 
   const input = parsed.data;
+
 
   // ---- 2. Payment config check ----
   const appUrl = process.env.NEXT_PUBLIC_APP_URL;

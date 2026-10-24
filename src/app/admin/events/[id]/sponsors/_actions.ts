@@ -69,7 +69,7 @@ export async function deleteSponsor(id: string, eventId: string): Promise<Result
 export async function toggleSponsorActive(id: string, active: boolean, eventId: string): Promise<Result> {
   await requireRole(["ADMIN"], "/");
 
-  await prisma.judge.update({ where: { id }, data: { active } });
+  await prisma.sponsor.update({ where: { id }, data: { active } });
 
   revalidatePath(`/admin/events/${eventId}/judges`);
   revalidatePath(`/events/${eventId}`);

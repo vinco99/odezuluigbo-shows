@@ -30,6 +30,14 @@ export const contestantApplicationSchema = z
     fullPhoto: z.string().url(),
     fullPhotoPublicId: z.string().min(1),
 
+    guardianConsent: z.boolean().optional(),
+    infoCorrect: z.boolean().refine((value) => value === true, {
+      message: "You must confirm that your information is correct",
+    }),
+    agreeTerms: z.boolean().refine((value) => value === true, {
+      message: "You must agree to the terms and conditions",
+    }),
+
     guardianName: z.string().optional(),
     guardianRelation: z.string().optional(),
     guardianPhone: z.string().optional(),

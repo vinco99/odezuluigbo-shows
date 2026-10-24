@@ -40,7 +40,7 @@ export function VoteTabs({
 }) {
   const [active, setActive] = useState<TabKey>("topup");
 
-  const pageantEvents = events.filter((e) => e.type !== "REALITY_SHOW");
+  const pageantEvents = events.filter((e) => e.type === "PAGEANT");
   const realityEvents = events.filter((e) => e.type === "REALITY_SHOW");
 
   return (
@@ -81,13 +81,12 @@ export function VoteTabs({
           <WalletTab
             balance={walletBalance}
             transactions={transactions}
-            onTopUp={() => setActive("topup")}
           />
         )}
 
         {active === "pageant" && (
           <ContestantsTab
-            title="AdaomaIgbonile Contestants"
+            title="Pageant Contestants"
             badge="Pageant"
             events={pageantEvents}
             sessionInfoByEvent={sessionInfoByEvent}
@@ -96,7 +95,7 @@ export function VoteTabs({
 
         {active === "reality" && (
           <ContestantsTab
-            title="Odenigwe Contestants"
+            title="Reality Tv Contestants"
             badge="Reality TV"
             events={realityEvents}
             sessionInfoByEvent={sessionInfoByEvent}

@@ -2,6 +2,7 @@
 
 import { useVote } from "@/components/vote/useVote";
 import { ShareButton } from "./ShareButton";
+import "./new-contestant-grid.css";
 
 type EventWithContestants = {
   id: string;
@@ -68,35 +69,38 @@ export function ContestantsTab({
               )}
             </div>
 
-            <div className="contestants-grid">
+            <div className="contestants-grid active">
               {event.contestants.map((c) => {
                 const votes = c.votes.reduce((s, v) => s + v.quantity, 0);
                 const percent =
                   totalVotesInEvent > 0 ? Math.round((votes / totalVotesInEvent) * 100) : 0;
 
                 return (
-                  <article className="contestant-card" key={c.id}>
-                    <div className="img-placeholder c-img">
+                  <div className="contestant-card" key={c.id}>
                       {c.portrait ? (
-                        <img
-                          src={c.portrait}
-                          alt={c.name}
-                          className="w-full h-full object-cover"
+                        <img src={c.portrait} alt={c.name} className="c-img" 
+                          style={{
+                          width: "100%",
+                          height: "235px",
+                          objectFit: "cover",
+                          objectPosition: "top center",
+                          }} 
                         />
                       ) : (
                         <span className="ph-txt">{c.name}</span>
                       )}
-                    </div>
-                    <div className="c-info">
-                      <h4>{c.name}</h4>
-                      <span className="c-sub">{c.state ?? "Contestant"}</span>
-                      <div className="vote-bar">
-                        <div className="vote-fill" style={{ width: `${percent}%` }} />
-                      </div>
-                      <small>
-                        {percent}% · {votes.toLocaleString()} votes
-                      </small>
+                    <div className="card-content">
+                      <span className="event-title">{event.title}</span>
+                      <h3 className="contestant-name">{c.name}</h3>
+                      <p className="contestant-state">{c.state}</p>
 
+                      <div className="vote-metrics">
+                        <span className="vote-percentage">{percent}%</span>
+                        <span className="vote-coun">{votes.toLocaleString()} votes</span>
+                      </div>
+                      <div className="vote-bar-container">
+                        <div className="vote-bar-fill" style={{ width: `${percent}%` }} />
+                      </div>
                       <div
                         style={{
                           display: "flex",
@@ -107,24 +111,24 @@ export function ContestantsTab({
                       >
                         <button
                           type="button"
-                          className="btn btn-gold btn-xs"
-                          onClick={() =>
+                          className="btn btn-gold"
+                          onClick={() => {
+                            console.log("Vote button clicked");
                             open({
                               contestantId: c.id,
                               contestantName: c.name,
                               eventId: event.id,
                               eventTitle: event.title,
                               isRealityShow: event.type === "REALITY_SHOW",
-                              votingFee: event.votingFee
-                            })
-                          }
+                              votingFee: event.votingFee,
+                            });
+                          }}
                         >
                           Vote
                         </button>
-                        <ShareButton contestantName={c.name} contestantId={c.id} />
                       </div>
                     </div>
-                  </article>
+                  </div>
                 );
               })}
             </div>

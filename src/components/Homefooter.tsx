@@ -23,14 +23,21 @@ export default function Footer(){
                         <h4>Events</h4>
                         <ul>
                             <li>
-                                <Link href="/pageant">AdaomaIgbonile Pageant</Link>
+                                <Link href="/pageant">Pageant</Link>
                             </li>
                             <li>
-                                <Link href="/reality-tv">Odenigwe Reality TV</Link>
+                                <Link href="/reality-tv">Reality TV</Link>
+                            </li>
+                            <li>
+                                <Link href="https://odezuluigbo.com/events/cmvgp0ag50000mpy2nthdxmvw">Gloria! 2026</Link>
+                            </li>
+                            <li>
+                                <Link href="https://odezuluigbo.com/events/cmvgp6e8r0001mpy237814si6">Angel at Christmas 2026</Link>
                             </li>
                             <li>
                                 <Link href="/events">All Events</Link>
                             </li>
+                            
                         </ul>
                     </div>
 

@@ -14,7 +14,7 @@ export async function SponsorsSection() {
   const display = sponsors.slice(0, 8);
 
   return (
-    <section className="sponsors-section">
+    <section className="sponsors-section new_sponsors" id="sponsors">
       <div className="container">
         <div className="section-header">
           <span className="section-badge">Partners</span>
@@ -29,42 +29,35 @@ export async function SponsorsSection() {
             We're still assembling our partner lineup. Interested?
           </p>
         ) : (
-          <div className="sponsors-flex">
-            {display.map((s) => {
-              const tile = (
-                <div className="sponsor-logo">
-                  {s.logo ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={s.logo}
-                      alt={s.name}
-                      className="sponsor-img"
-                      style={{ objectFit: "contain" }}
-                      loading="lazy"
-                    />
-                  ) : (
-                    <div className="img-placeholder sponsor-img">
-                      <span className="ph-txt">{s.name}</span>
-                    </div>
-                  )}
-                </div>
-              );
+          <div className="sponsors__grid">
+            {display.map((s) => (
+              
+            <a
+              key={s.id}
+              className="new_sponsor"
+              href={s.website || "#sponsors"}
+              target={s.website ? "_blank" : undefined}
+              rel={s.website ? "noopener noreferrer" : undefined}
+              aria-label={s.name}
+            >
+              <div className="sponsor__logo">
+                {s.logo ? (
+                  <img
+                    src={s.logo}
+                    alt={s.name}
+                    loading="lazy"
+                  />
+                ) : (
+                  <div className="img-placeholder sponsor-img">
+                    <span className="ph-txt">{s.name}</span>
+                  </div>
+                )}
+              </div>
 
-              return s.website ? (
-                <a
-                  key={s.id}
-                  href={s.website}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={s.name}
-                  style={{ textDecoration: "none" }}
-                >
-                  {tile}
-                </a>
-              ) : (
-                <div key={s.id}>{tile}</div>
-              );
-            })}
+              <span className="sponsor__name">{s.name}</span>
+            </a>
+
+            ))}
           </div>
         )}
 

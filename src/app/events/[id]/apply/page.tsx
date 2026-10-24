@@ -57,35 +57,68 @@ export default function ApplyForm() {
 
   async function submit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (!event) return;
+
+    if (!event) {
+      setMessage("Event details are not available. Please refresh.");
+      return;
+    }
+
+    if (!portrait || !fullPhoto) {
+      setMessage("Please upload both your portrait and full-length photo.");
+      return;
+    }
+
+    const form = new FormData(e.currentTarget);
+
+    if (isMinor) {
+      if (
+        !form.get("guardianName") ||
+        !form.get("guardianRelation") ||
+        !form.get("guardianPhone") ||
+        form.get("guardianConsent") !== "on"
+      ) {
+        setMessage("Please complete the parent/guardian consent section.");
+        return;
+      }
+    }
 
     setBusy(true);
     setMessage("");
 
-    const form = new FormData(e.currentTarget);
-    form.set("eventId", params.id);
-    form.set("portrait", portrait ?? "");
-    form.set("portraitPublicId", portraitPublicId ?? "");
-    form.set("fullPhoto", fullPhoto ?? "");
-    form.set("fullPhotoPublicId", fullPhotoPublicId ?? "");
-
+    
     try {
+
+      form.set("eventId", params.id);
+      form.set("portrait", portrait ?? "");
+      form.set("portraitPublicId", portraitPublicId ?? "");
+      form.set("fullPhoto", fullPhoto ?? "");
+      form.set("fullPhotoPublicId", fullPhotoPublicId ?? "");
+
       const response = await fetch("/api/contestants/apply", {
         method: "POST",
         body: form,
       });
-      const data = await response.json();
 
-      if (!response.ok || !data.authorization_url) {
-        setMessage(data.error ?? "Unable to initialize payment");
-        setBusy(false);
+      const data = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        console.error("Application validation errors:", data.issues);
+        setMessage(data.error ?? "Unable to submit application");
+        return;
+      }
+
+      if (!data.authorization_url) {
+        setMessage("Payment initialization failed. Please try again.");
         return;
       }
 
       window.location.href = data.authorization_url;
-    } catch {
-      setMessage("Something went wrong. Please try again.");
-      setBusy(false);
+
+    } catch (error) {
+      console.error("Application submission failed:", error);
+      setMessage("A network error occurred. Please try again.");
+    } finally {
+      setBusy(false)
     }
   }
 
@@ -327,14 +360,14 @@ export default function ApplyForm() {
                 {/* ---------- DECLARATION ---------- */}
                 <h2><strong>DECLARATION</strong></h2>
 
-                <div className="form-group">
+                <div>
                   <label style={{ display: "flex", gap: 8 }}>
                     <input type="checkbox" name="infoCorrect" required />
                     <span>I confirm that the information provided in this registration form is correct.</span>
                   </label>
                 </div>
 
-                <div className="form-group">
+                <div>
                   <label style={{ display: "flex", gap: 8 }}>
                     <input type="checkbox" name="agreeTerms" required />
                     <span>I agree to the {event.title} Terms &amp; Conditions and Privacy Notice.</span>

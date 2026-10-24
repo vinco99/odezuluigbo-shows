@@ -13,7 +13,7 @@ type ContestantRow = {
 };
 export function ContestantTable({ contestants }: { contestants: ContestantRow[] }) {
     return (
-        <div className="form-box" style={{ overflowX: "auto", marginBottom: "24px" }}>
+        <div className="form-box" style={{ overflowX: "auto", marginBottom: "24px", paddingTop: "30px" }}>
             <table style={{ width: "100%", borderCollapse: "collapse", fontSize: ".85rem", minWidth: "640px" }}>
                 <thead>
                     <tr style={{ borderBottom: "1px solid var(--w10)", textAlign: "left", color: "var(--gold)" }}>
@@ -38,7 +38,7 @@ export function ContestantTable({ contestants }: { contestants: ContestantRow[] 
                         <td style={{ padding: "10px" }}>{contestant.applicationStatus}</td>
                         <td style={{ padding: "10px" }}>
                             {contestant.applicationStatus === "PENDING" &&
-                                <Link href={`admin/events/contestants/${contestant.id}`} className="btn btn-outline btn-xs">Review Application</Link>
+                                <Link href={`/admin/events/contestants/${contestant.id}`} className="btn btn-outline btn-xs">Review Application</Link>
                             }
                         </td>
                     </tr>)}

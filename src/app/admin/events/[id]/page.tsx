@@ -9,6 +9,7 @@ import { SponsorsPanel } from "./_components/SponsorsPanel";
 import { EventActions } from "./_components/EventActions";
 import { PrizePoolPanel } from "./_components/PrizePoolPanel";
 import { VideosPanel } from "./_components/VideosPanel";
+import { TicktesPanel } from "./_components/TicketsPanel";
 
 export const dynamic = "force-dynamic";
 
@@ -63,6 +64,9 @@ export default async function AdminEventDetailPage({ params, }: { params: Promis
                 take: 6,
                 select: { id: true, image: true, caption: true },
             },
+            ticketPackages: {
+                orderBy: { createdAt: "asc"}
+            }
         },
     });
 
@@ -143,6 +147,9 @@ export default async function AdminEventDetailPage({ params, }: { params: Promis
                 <Link href={`/events/${event.slug}`} className="btn btn-outline btn-sm">
                     View Public Page
                 </Link>
+                <Link href={`/admin/events/${event.id}/tickets`} className="btn btn-gold btn-sm">
+                    Manage Tickets
+                </Link>
                 <Link href={`/admin/events/${event.id}/judges`} className="btn btn-outline btn-sm">
                     Manage Judges
                 </Link>
@@ -152,7 +159,7 @@ export default async function AdminEventDetailPage({ params, }: { params: Promis
                 <Link href={`/admin/events/${event.id}/galleries`} className="btn btn-outline btn-sm">
                     Manage Gallery
                 </Link>
-                <Link href={`/admin/events/${event.id}/videos`}>
+                <Link href={`/admin/events/${event.id}/videos`} className="btn btn-outline btn-sm">
                     Upload Event Video Link
                 </Link>
                 {isRealityShow && (
@@ -240,6 +247,8 @@ export default async function AdminEventDetailPage({ params, }: { params: Promis
             prize2nd={event.prize2nd} 
             prize3rd={event.prize3rd} 
         />
+        
+        <TicktesPanel ticketPackages={event.ticketPackages}  />
 
         <VideosPanel eventId={event.id} videos={event.videos} />
 

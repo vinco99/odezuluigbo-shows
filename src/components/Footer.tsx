@@ -22,10 +22,10 @@ import Image from "next/image";
                         <h4>Events</h4>
                         <ul>
                             <li>
-                                <Link href="/events">AdaomaIgbonile</Link>
+                                <Link href="https://odezuluigbo.com/events/cmvgp0ag50000mpy2nthdxmvw">Gloria! 2026</Link>
                             </li>
                             <li>
-                                <Link href="/events">Odenigwe</Link>
+                                <Link href="https://odezuluigbo.com/events/cmvgp6e8r0001mpy237814si6">Angel at Christmas 2026</Link>
                             </li>
                         </ul>
                     </div>

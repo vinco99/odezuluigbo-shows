@@ -16,9 +16,9 @@ export default async function EventLayout({ children }: { children: React.ReactN
             <section className="section">
                 <div className="container">
                     <EventsTabs />
-                    <div className="all-events-grid">
+                    <>
                         {children}
-                    </div>
+                    </>
 
                     <div style={{ 
                         marginTop: "56px", background: "linear-gradient(135deg,var(--dark-2),var(--dark-3))", 

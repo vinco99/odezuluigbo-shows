@@ -6,6 +6,7 @@ import { VoteButton } from "./vote/VoteButton";
 import { DEFAULT_VOTING_FEE_NAIRA } from "@/lib/voting-config";
 import { getVoteContextForEvents } from "@/lib/voting-server";
 import ScrollReveal from "./ScrollReveal";
+import "./new-contestant-grid.css";
 
 export async function ContestantPreview() {
   const session = await auth();
@@ -13,7 +14,11 @@ export async function ContestantPreview() {
   const contestants = await prisma.contestant.findMany({
     where: {
       applicationStatus: "APPROVED",
-      event: { status: "LIVE" },
+      event: {
+        status: {
+          in: ["APPROVED", "LIVE", "COMPLETED"],
+        },
+      },
     },
     select: {
       id: true,
@@ -29,6 +34,7 @@ export async function ContestantPreview() {
           votingFee: true,
           status: true,
           isVotingOpen: true,
+          eventDate: true,
         },
       },
       votes: {
@@ -36,9 +42,24 @@ export async function ContestantPreview() {
         select: { quantity: true },
       },
     },
-    orderBy: { createdAt: "desc" },
+    orderBy: {
+      event: {
+        eventDate: "asc",
+      },
+    },
     take: 8,
   });
+
+  const topContestants = contestants
+  .map((contestant) => ({
+    ...contestant,
+    totalVotes: contestant.votes.reduce(
+      (total, vote) => total + vote.quantity,
+      0
+    ),
+  })).sort((a, b) => b.totalVotes - a.totalVotes).slice(0, 8);
+
+  
 
   if (contestants.length === 0) {
     return (
@@ -85,14 +106,11 @@ export async function ContestantPreview() {
         </div>
 
         <div className="contestants-grid active">
-          {contestants.map((contestant, index) => {
-            const voteCount = contestant.votes.reduce(
-              (total, vote) => total + vote.quantity,
-              0,
-            );
+          {topContestants.map((contestant, index) => {
+            const voteCount = contestant.totalVotes;
             const eventTotal = totalsByEvent.get(contestant.event.id) ?? 0;
-            const percent =
-              eventTotal === 0 ? 0 : Math.round((voteCount / eventTotal) * 100);
+
+            const percent = eventTotal === 0 ? 0 : Math.round((voteCount / eventTotal) * 100);
 
             return (
               <ScrollReveal key={contestant.id} delay={index * 120}>
@@ -111,16 +129,18 @@ export async function ContestantPreview() {
                       objectPosition: "top center",
                     }}
                   />
-                  <div className="c-info">
-                    <h4>{contestant.name}</h4>
-                    <span className="c-sub">{contestant.event.title}</span>
-
-                    <div className="vote-bar">
-                      <div className="vote-fill" style={{ width: `${percent}%` }} />
+                  <div className="card-content">
+                    <span className="event-title">{contestant.event.title}</span>
+                    <h3 className="contestant-name">{contestant.name}</h3>
+                    <p className="contestant-state">{contestant.state}</p>
+                    
+                    <div className="vote-metrics">
+                      <span className="vote-percentage">{percent}%</span>
+                      <span className="vote-count">{voteCount.toLocaleString()} votes</span>
                     </div>
-                    <small>
-                      {percent}% · {voteCount.toLocaleString()} votes
-                    </small>
+                    <div className="vote-bar-container">
+                      <div className="vote-bar-fill" style={{ width: `${percent}%` }} />
+                    </div>
 
                     <VoteButton
                       contestantId={contestant.id}

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { CreditPurchaseButton } from "./CreditPurchaseButton";
+import { CreditPackageBuy } from "./CreditPackageBuy";
 import { VOTE_PRICE_NAIRA } from "@/lib/voting-config";
 
 export function TopUpTab({
@@ -9,7 +10,7 @@ export function TopUpTab({
   walletBalance,
   isLoggedIn,
 }: {
-  packages: { id: string; name: string; votes: number; amount: number }[];
+  packages: { id: string; name: string; credits: number; amount: number }[];
   walletBalance: number;
   isLoggedIn: boolean;
 }) {
@@ -27,7 +28,7 @@ export function TopUpTab({
 
       {!isLoggedIn && (
         <p style={{ color: "var(--w70)", textAlign: "center", marginBottom: 24 }}>
-          <a href="/login?next=/vote" style={{ color: "var(--gold)", textDecoration: "underline" }}>
+          <a href="/login?next=/vote/topup" style={{ color: "var(--gold)", textDecoration: "underline" }}>
             Sign in
           </a>{" "}
           to buy credits.
@@ -44,18 +45,18 @@ export function TopUpTab({
                 <h3>{pkg.name}</h3>
                 <div className="pkg-price">₦{pkg.amount.toLocaleString()}</div>
                 <ul>
-                  <li>{pkg.votes.toLocaleString()} Vote Credits</li>
+                  <li>{pkg.credits.toLocaleString()} Vote Credits</li>
                   <li>Never expires</li>
                   <li>Use on any contestant</li>
                   <li>Works across all shows</li>
                 </ul>
-                <CreditPurchaseButton
-                  credits={pkg.votes}
+                <CreditPackageBuy
+                  packageId={pkg.id}
                   className={featured ? "btn btn-gold btn-full" : "btn btn-outline btn-full"}
                   disabled={!isLoggedIn}
                 >
                   Get Started →
-                </CreditPurchaseButton>
+                </CreditPackageBuy>
               </div>
             );
           })}

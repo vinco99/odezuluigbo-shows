@@ -46,10 +46,10 @@ export async function GET(request: Request) {
     if (existingPayment) {
       const event = await prisma.event.findUnique({
         where: { id: metadata.eventId },
-        select: { slug: true },
+        select: { slug: true, id: true },
       });
       return Response.redirect(
-        new URL(`/events/${event?.slug ?? metadata.eventId}`, request.url)
+        new URL(`/events/${event?.id ?? metadata.eventId}`, request.url)
       );
     }
 

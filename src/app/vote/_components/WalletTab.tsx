@@ -1,9 +1,9 @@
 "use client";
+import { useRouter } from "next/navigation";
 
 export function WalletTab({
   balance,
   transactions,
-  onTopUp,
 }: {
   balance: number;
   transactions: {
@@ -15,8 +15,8 @@ export function WalletTab({
     status: string;
     createdAt: Date | string;
   }[];
-  onTopUp: () => void;
 }) {
+  const router = useRouter();
   return (
     <div className="vote-tab-content active">
       <div className="section-header">
@@ -54,7 +54,7 @@ export function WalletTab({
         <p style={{ color: "var(--w70)", fontSize: ".85rem", margin: "0 0 22px" }}>
           Vote Credits · 1 Credit = 1 Vote
         </p>
-        <button className="btn btn-gold" onClick={onTopUp} type="button">
+        <button className="btn btn-gold" onClick={() => router.push("/vote/topup")} type="button">
           Top Up Wallet →
         </button>
       </div>

@@ -1,7 +1,6 @@
 import { requireRole } from "@/lib/permissions";
 import { prisma } from "@/lib/prisma";
-import { ApplicationStatus } from "@/generated/prisma/enums";
-import { notFound, redirect } from "next/dist/client/components/navigation";
+import { notFound, redirect } from "next/navigation";
 import ReviewButtons from "./ReviewButtons";
 
 
@@ -44,7 +43,7 @@ export default async function ContestantReviewPage({params}:{params: Promise<{id
     const { id } = await params;
 
     const contestant = await prisma.contestant.findFirst({
-        where: { id, applicationStatus: ApplicationStatus.PENDING },
+        where: { id, applicationStatus: "PENDING" },
         include: {
             event: true,
             payment: true,
@@ -55,7 +54,7 @@ export default async function ContestantReviewPage({params}:{params: Promise<{id
         notFound();
     }
 
-    if (contestant.applicationStatus !== ApplicationStatus.PENDING) {
+    if (contestant.applicationStatus !== "PENDING") {
         // Already reviewed — redirect back to the list
         redirect("/admin/events");
     }
@@ -95,7 +94,7 @@ export default async function ContestantReviewPage({params}:{params: Promise<{id
             <section className="review-layout" aria-labelledby={name}>
                 <aside className="portrait-column">
                 <figure className="portrait-card">
-                    <img className="portrait-image" src={name} alt={`Portrait photograph for sample contestant ${name}`} />
+                    <img className="portrait-image" src={contestant.portrait ?? ""} alt={`Portrait photograph for sample contestant ${name}`} />
                     <div className="portrait-vignette" aria-hidden="true"></div>
                     <figcaption className="portrait-caption">
                     <span className="portrait-tag"><span className="portrait-tag-dot"></span> CONTESTANT PORTRAIT</span>

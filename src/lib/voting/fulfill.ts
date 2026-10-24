@@ -57,7 +57,7 @@ export async function fulfillVotePayment(reference: string) {
   const meta = (tx.metadata ?? {}) as Record<string, unknown>;
   const kind = typeof meta.kind === "string" ? meta.kind : null;
 
-  if (kind !== "money_vote" && kind !== "credit_purchase") {
+  if (kind !== "money_vote" && kind !== "credit_purchase" && kind !== "credit_package_purchase") {
     console.warn("fulfillVotePayment: wrong payment kind", {
       reference,
       kind,
@@ -136,6 +136,113 @@ export async function fulfillVotePayment(reference: string) {
       });
     }
 
+
+    // Kind is credit_package_purchase
+    if (kind === "credit_package_purchase") {
+      const packageId = typeof meta.packageId === "string" ? meta.packageId : null;
+
+      const creditsRaw = meta.credits;
+      const credits =
+        typeof creditsRaw === "number"
+          ? creditsRaw
+          : typeof creditsRaw === "string"
+            ? Number(creditsRaw)
+            : NaN;
+
+      if (!packageId) {
+        throw new Error("INVALID_PACKAGE_ID");
+      }
+
+      if (!Number.isInteger(credits) || credits <= 0) {
+        throw new Error("INVALID_CREDITS");
+      }
+
+      if (!existing.userId) {
+        throw new Error("MISSING_PAYMENT_USER");
+      }
+
+      const pkg = await prisma.creditPackage.findUnique({
+        where: { id: packageId  },
+        select: {
+          id: true,
+          credits: true,
+          amount: true,
+        },
+      });
+
+      if (!pkg) {
+        throw new Error("PACKAGE_NOT_FOUND");
+      }
+
+      if (pkg.credits !== credits) {
+        throw new Error("PACKAGE_CREDITS_MISMATCH");
+      }
+
+      // Payment.amount is stored in naira; Paystack reports kobo.
+      if (Math.round(paidAmount * 100) !== Math.round(pkg.amount * 100)) {
+        throw new Error("AMOUNT_MISMATCH");
+      }
+
+      return await prisma.$transaction(async (db) => {
+        // Only the request that changes PENDING to PAID can award credits.
+        const updated = await db.payment.updateMany({
+          where: {
+            id: existing.id,
+            status: "PENDING",
+          },
+          data: {
+            status: "PAID",
+          },
+        });
+
+        if (updated.count !== 1) {
+          const current = await db.payment.findUnique({
+            where: { id: existing.id },
+            select: { status: true },
+          });
+
+          if (current?.status === "PAID") {
+            return {
+              ok: true as const,
+              paymentId: existing.id,
+              kind,
+            };
+          }
+
+          throw new Error("PAYMENT_STATUS_CHANGED");
+        }
+
+        await db.user.update({
+          where: { id: existing.userId! },
+          data: {
+            creditBalance: {
+              increment: pkg.credits,
+            },
+          },
+        });
+
+        await db.creditTransaction.create({
+          data: {
+            userId: existing.userId!,
+            amount: pkg.credits,
+            type: "PURCHASE",
+            title: `Purchased ${pkg.credits.toLocaleString()} vote credits — ${packageId}`,
+            detail: `Credit package · ₦${pkg.amount.toLocaleString()} · ref ${reference}`,
+            reference,
+            status: "COMPLETED",
+          },
+        });
+
+        return {
+          ok: true as const,
+          paymentId: existing.id,
+          kind,
+        };
+
+      });
+    }
+
+
     // kind === "credit_purchase"
     const creditsRaw = meta.credits;
     const credits =
@@ -183,11 +290,27 @@ export async function fulfillVotePayment(reference: string) {
     });
   } catch (err) {
     const msg = err instanceof Error ? err.message : "";
-    if (msg === "VOTING_CLOSED" || msg === "AMOUNT_MISMATCH" || msg === "INVALID_CREDITS") {
-      console.warn("fulfillVotePayment: rejected", { reference, msg });
+    if (
+      [
+        "VOTING_CLOSED",
+        "AMOUNT_MISMATCH",
+        "INVALID_CREDITS",
+        "INVALID_PACKAGE_ID",
+        "PACKAGE_NOT_FOUND",
+        "PACKAGE_CREDITS_MISMATCH",
+        "MISSING_PAYMENT_USER",
+        "PAYMENT_STATUS_CHANGED",
+      ].includes(msg)
+    ) {
+      console.warn("fulfillVotePayment: rejected", {
+        reference,
+        msg,
+      });
     } else {
       console.error("fulfillVotePayment: transaction failed", err);
     }
+
     return null;
+
   }
 }

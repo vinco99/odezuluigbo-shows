@@ -22,7 +22,7 @@ export async function GET(req: Request) {
   revalidatePath("/dashboard");
   return NextResponse.redirect(
     new URL(
-      result.kind === "money_vote" ? "/vote?cast=1" : "/vote/wallet?credited=1",
+      result.kind === "money_vote" ? "/vote/pageant?cast=1" : "/vote/topup?credited=1",
       base
     )
   );

@@ -19,6 +19,9 @@ export function VoteProvider({
 
   const open = useCallback(
     (t: VoteTarget) => {
+      console.log("VoteProvider open called:", t);
+      console.log("isLoggedIn:", isLoggedIn);
+
       if (!isLoggedIn) {
         window.location.href = `/login?next=${encodeURIComponent(window.location.pathname)}`;
         return;

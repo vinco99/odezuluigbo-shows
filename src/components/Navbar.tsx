@@ -47,7 +47,7 @@ export default function Navbar({ session }: { session: NavbarSession }){
 
         {name:"Reality TV", href:"/reality-tv"},
 
-        {name:"Vote", href:"/vote"},
+        {name:"Vote", href:"/vote/topup"},
 
         {name:"Blog", href:"/blog"},
 
