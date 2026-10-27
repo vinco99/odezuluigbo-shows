@@ -109,7 +109,9 @@ export async function EventPreview() {
                                     <div className="event-card__actions">
                                         <Link className="btn btn-gold" href={`/events/${event.id}`}>View Details <span aria-hidden="true">→</span></Link>
                                         {isCompeting && (
-                                            <Link className="btn btn-outline" href={`/vote`}>Vote</Link>
+                                            <Link className="btn btn-outline" 
+                                                href={event.type ==="PAGEANT" ? "/vote/pageant" : event.type ==="REALITY_SHOW" ? "/vote/reality" :`/vote`}
+                                            >Vote</Link>
                                         )}
                                     </div>
                                 </div>

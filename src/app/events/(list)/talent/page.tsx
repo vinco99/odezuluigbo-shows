@@ -56,9 +56,9 @@ export default async function TalentEventPage(){
                                 ) : (
                                     <div className="event-card__image-placeholder" aria-hidden="true">O</div>
                                 )}
-                            </div>
-                            <div className="ev-badge">
-                                {event.status === 'LIVE' ? 'Live now' : isCompeting ? 'Competition' : 'Featured Event'}
+                                <div className="ev-badge">
+                                    {event.status === 'LIVE' ? 'Live now' : isCompeting ? 'Competition' : 'Featured Event'}
+                                </div>
                             </div>
                         </Link>
                         <div className="event-card__content">
@@ -79,7 +79,7 @@ export default async function TalentEventPage(){
                                 </div>
                             )}
                             <div className="event-card__actions">
-                                <Link className="btn btn-gold btn-sm" href={`/events/${event.id}`}>View Details</Link>
+                                <Link className="btn btn-gold" href={`/events/${event.id}`}>View Details</Link>
                                 {isCompeting && (
                                     <Link className="btn btn-outline" href={`/vote`}>Vote</Link>
                                 )}

@@ -17,7 +17,16 @@ export async function POST(request:Request, context:{params: Promise<{ id: strin
 
     await prisma.event.update({
         where:  {id},
-        data:   { status:"LIVE", isVotingOpen: true }
+        data:   { 
+            status:"LIVE", 
+            isVotingOpen: true, 
+            ticketPackages: {
+                updateMany: {
+                    where: {},
+                    data: { active: false}
+                }
+            } 
+        }
     });
 
 

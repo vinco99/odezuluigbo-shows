@@ -15,17 +15,8 @@ export function JudgesPanel({
   judges: Judge[];
 }) {
   return (
-    <section style={{ marginBottom: 32 }}>
-      <div
-        className="section-header"
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "flex-end",
-          gap: 12,
-          flexWrap: "wrap",
-        }}
-      >
+    <section style={{ marginBottom:"40", paddingTop: "40px" }}>
+      <div className="section-header">
         <div>
           <span className="section-badge">Judging Panel</span>
           <h2 className="section-title" style={{ fontSize: "1.3rem" }}>
@@ -40,6 +31,7 @@ export function JudgesPanel({
         <Link
           href={`/admin/events/${eventId}/judges`}
           className="btn btn-outline btn-sm"
+          style={{float: "right"}}
         >
           Manage Judges
         </Link>

@@ -9,6 +9,7 @@ type EventWithContestants = {
   title: string;
   type: string;
   votingFee: number;
+  status: string;
   contestants: {
     id: string;
     name: string;
@@ -101,17 +102,10 @@ export function ContestantsTab({
                       <div className="vote-bar-container">
                         <div className="vote-bar-fill" style={{ width: `${percent}%` }} />
                       </div>
-                      <div
-                        style={{
-                          display: "flex",
-                          gap: 6,
-                          marginTop: 8,
-                          flexWrap: "wrap",
-                        }}
-                      >
+                      {event.status === "LIVE" && (
                         <button
                           type="button"
-                          className="btn btn-gold"
+                          className="btn btn-gold btn-sm"
                           onClick={() => {
                             console.log("Vote button clicked");
                             open({
@@ -126,7 +120,7 @@ export function ContestantsTab({
                         >
                           Vote
                         </button>
-                      </div>
+                      )}
                     </div>
                   </div>
                 );

@@ -96,7 +96,7 @@ export default async function AdminEventDetailPage({ params, }: { params: Promis
         <main className="admin-tab-content active">
         {/* Header */}
         <div className="section-header">
-            <div style={{ display: "flex", gap: 12, alignItems: "center", flexWrap: "wrap" }}>
+            <div>
             <span className="section-badge">{event.type.replaceAll("_", " ")}</span>
             <span
                 className="section-badge"
@@ -130,13 +130,6 @@ export default async function AdminEventDetailPage({ params, }: { params: Promis
             {event.state && ` · ${event.state}`}
             {event.country && `, ${event.country}`}
             </p>
-
-            <PrizePoolPanel
-                eventId={event.id}
-                prize1st={event.prize1st}
-                prize2nd={event.prize2nd}
-                prize3rd={event.prize3rd}
-                />
                 
             <div style={{ display: "flex", gap: 10, marginTop: 12, flexWrap: "wrap" }}>
 

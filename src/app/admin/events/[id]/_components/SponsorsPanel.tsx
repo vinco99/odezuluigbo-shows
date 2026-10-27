@@ -16,7 +16,7 @@ type Sponsor = {
 
 export function SponsorsPanel({ sponsors }: { sponsors: Sponsor[] }) {
   return (
-    <section>
+    <section className="section" style={{paddingTop: "40px"}}>
       <div className="section-header">
         <span className="section-badge">Powered By</span>
         <h2 className="section-title" style={{ fontSize: "1.3rem" }}>

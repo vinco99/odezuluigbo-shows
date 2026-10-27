@@ -15,10 +15,10 @@ export default async function TicketOrder({ params, }: {
 
   if (!pkg || pkg.event.slug !== slug || !pkg.active) notFound();
 
-  if (pkg.event.status !== "LIVE") {
+  if (pkg.event.status !== "APPROVED") {
     return (
       <div id="ticketStep3" style={{ maxWidth: 520, margin: "0 auto" }}>
-        <Link href="/tickets" className="btn btn-outline btn-sm" style={{ marginBottom: 24 }}>
+        <Link href="/tickets" className="btn btn-outline btn-sm" style={{ marginBottom: 24, float: "left" }}>
           ← Back to Events
         </Link>
         <div className="section-header">
@@ -31,7 +31,7 @@ export default async function TicketOrder({ params, }: {
 
   return (
     <div id="ticketStep3" style={{ maxWidth: 520, margin: "0 auto" }}>
-      <Link href={`/tickets/${slug}`} className="btn btn-outline btn-sm" style={{ marginBottom: 24 }}>
+      <Link href={`/tickets/${slug}`} className="btn btn-outline btn-sm" style={{ marginBottom: 24, float: "left" }}>
         ← Back to Tickets
       </Link>
       <div className="section-header">

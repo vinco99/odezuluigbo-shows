@@ -9,8 +9,9 @@ export const normalizeName = (s: string) =>
 
 /** guest count per ticket name (normalized) */
 const GUESTS_BY_TICKET: Record<string, number> = {
-  'golden duet': 2,
-  'grand noel':  4,
+  'golden quartet': 4,
+  'grand noel':  6,
+  'prestige pass': 2,
 };
 
 export const guestsForTicket = (name: string): number | null =>

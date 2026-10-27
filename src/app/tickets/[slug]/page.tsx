@@ -14,10 +14,10 @@ export default async function SelectTicket({ params, }: { params: Promise<{ slug
 
     if (!event) notFound();
 
-    if (event.status !== "LIVE") {
+    if (event.status !== "APPROVED") {
         return (
         <div id="ticketStep2">
-            <Link href="/tickets" className="btn btn-outline btn-sm" style={{ marginBottom: 24 }}>
+            <Link href="/tickets" className="btn btn-outline btn-sm" style={{ marginBottom: 24, float: "left" }}>
             ← Back to Events
             </Link>
             <div className="section-header">
@@ -33,7 +33,7 @@ export default async function SelectTicket({ params, }: { params: Promise<{ slug
 
     return (
         <div id="ticketStep2">
-            <Link href="/tickets" className="btn btn-outline btn-sm" style={{ marginBottom: 24 }}>
+            <Link href="/tickets" className="btn btn-outline btn-sm" style={{ marginBottom: 24, float: "left" }}>
                 ← Back to Events
             </Link>
             <div className="section-header">

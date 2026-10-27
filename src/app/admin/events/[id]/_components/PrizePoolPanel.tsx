@@ -33,20 +33,11 @@ export function PrizePoolPanel({
   }
 
   return (
-    <section style={{ marginBottom: 32 }}>
-      <div
-        className="section-header"
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "flex-end",
-          gap: 12,
-          flexWrap: "wrap",
-        }}
-      >
+    <section style={{ marginBottom: "40", paddingTop: "40px" }}>
+      <div className="section-header">
         <div>
           <span className="section-badge">Prizes</span>
-          <h2 className="section-title" style={{ fontSize: "1.3rem" }}>
+          <h2 className="section-title">
             Prize Pool
           </h2>
           {hasAny && (
@@ -63,6 +54,7 @@ export function PrizePoolPanel({
             className="btn btn-outline btn-sm"
             type="button"
             onClick={() => setEditing(true)}
+            style={{float: "right"}}
           >
             {hasAny ? "Edit Prizes" : "Add Prizes"}
           </button>

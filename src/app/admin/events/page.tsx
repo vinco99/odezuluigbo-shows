@@ -67,7 +67,7 @@ export default async function AdminEventsPage(){
             <OrganizersTable applications={organizerApplications} />
 
 
-            <div className="section-header">
+            <div className="section-header" style={{ paddingTop: "36px"}}>
                 <span className="section-badge">Contestants</span>
                 <h2 className="section-title">Contestants Submissions</h2>
                 <p className="section-sub">Contestants who have successfully registered for the show</p>

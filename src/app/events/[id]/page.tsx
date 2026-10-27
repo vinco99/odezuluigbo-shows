@@ -127,7 +127,7 @@ export default async function EventDetailsPage({params}:{params: Promise<{id:str
                 eventId: id,
                 active: true,
                 OR: [
-                    { name: { contains: 'Golden Duet', mode: 'insensitive' } },
+                    { name: { contains: 'Golden Quartet', mode: 'insensitive' } },
                     { name: { contains: 'Grand Noel',  mode: 'insensitive' } },
                 ],
             },
@@ -155,7 +155,7 @@ export default async function EventDetailsPage({params}:{params: Promise<{id:str
                 active: true,
                 NOT: {
                     OR: [
-                        { name: { contains: 'Golden Duet', mode: 'insensitive' } },
+                        { name: { contains: 'Golden Quartet', mode: 'insensitive' } },
                         { name: { contains: 'Grand Noel',  mode: 'insensitive' } },
                     ],
                 }
@@ -306,6 +306,8 @@ export default async function EventDetailsPage({params}:{params: Promise<{id:str
                         </div>
                         <div className="ticket-grid">
                             {regularTickets.map((ticket) => {
+                                const guests = guestsForTicket(ticket.name);          
+                                const guestWord = guests != null ? numberToWord(guests) : null;
                                 const sold      = ticket._count.tickets;                                  // or sum of quantities
                                 const remaining = ticket.maxQuantity == null ? null : Math.max(ticket.maxQuantity - sold, 0);
                                 const isSoldOut = remaining === 0;
@@ -313,11 +315,11 @@ export default async function EventDetailsPage({params}:{params: Promise<{id:str
                                 return(
                                     <article className="ticket" key={ticket.id}>
                                         <div className="ticket-type">
-                                            {ticket.name} {normalizeName(ticket.name) === "Prestige Pass" && <span className="ticket-subtype">VVIP · One guest</span>}
+                                            {ticket.name} {normalizeName(ticket.name) === "prestige pass" ? (<span className="ticket-subtype">two guests</span>) : (<span className="ticket-subtype">One guest</span>)}
                                         </div>
                                         <div className="ticket-price">₦{ticket.price.toLocaleString("en-Us")}</div>
                                         <div className="ticket-desc">
-                                            <span className="refresh-label">{ticket.perks.length === 1 ? 'Included refreshment' : 'Included refreshments'}</span>
+                                            <span className="refresh-label">{ticket.price === 50000 && 'For two guests '}{ticket.perks.length === 1 ? 'Included refreshment' : 'Included refreshments'}</span>
                                             <strong>
                                                 {ticket.perks.length > 1
                                                         ? `${ticket.perks.slice(0, -1).join(", ")} & ${ticket.perks[ticket.perks.length - 1]}`
@@ -330,7 +332,7 @@ export default async function EventDetailsPage({params}:{params: Promise<{id:str
                                                 <button className="button button-outline" disabled>SOLD OUT</button>
                                             ) : (
                                                 <Link
-                                                    className={`button ${normalizeName(ticket.name) === "VIP" ? 'button-primary' : 'button-outline'}`}
+                                                    className={`button ${normalizeName(ticket.name) === "vip" ? 'button-primary' : 'button-outline'}`}
                                                     data-ticket-sku={`${ticket.name.toLocaleLowerCase()}`}
                                                     href={`/tickets/${event.slug}/${ticket.id}`}
                                                     rel="noopener"
@@ -367,7 +369,7 @@ export default async function EventDetailsPage({params}:{params: Promise<{id:str
                                 return (
                                     <article className="ticket ticket--table" key={ticket.id}>
                                         <div className="ticket-type">
-                                            {ticket.name} {guestWord && (<span className="ticket-subtype"> {`${guestWord} guest${guests === 1 ? '' : 's'}`}</span>)}
+                                            {ticket.name} {guestWord && (<span className="ticket-subtype"> {`${guestWord} guest${guests === 1 ? '' : 's'}`} {guests === 6 && '(Family Table)'}</span>)}
                                         </div>
                                         <div className="ticket-price">₦{ticket.price.toLocaleString("en-Us")}</div>
                                         <div className="ticket-desc">

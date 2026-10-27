@@ -1,3 +1,4 @@
+import { EndEventButton } from "./EndEventButton";
 import { EventReviewButtons } from "./EventReviewButton";
 import { GoLiveButton } from "./GoLiveButton";
 import { SuspendEventButton } from "./SuspendEventButton";
@@ -16,6 +17,7 @@ export function EventActions({
     <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
       {status === "PENDING" && <EventReviewButtons id={id} />}
       {status === "APPROVED" && <GoLiveButton id={id} />}
+      {status === "LIVE" && <EndEventButton id={id} /> }
       {status === "LIVE" && <SuspendEventButton id={id} />}
       {status === "SUSPENDED" && <UnsuspendEventButton id={id} />}
       {/* COMPLETED and REJECTED show no actions */}

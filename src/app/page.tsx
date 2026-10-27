@@ -11,6 +11,7 @@ import { SponsorsSection } from "@/components/SponsorsSection";
 import { AdSlot } from "@/components/ads/AdSlot";
 import { StatsSection } from "@/components/StatsSection";
 import { prisma } from "@/lib/prisma";
+import { PromoVideo } from "@/components/PromoVideo";
 
 export const dynamic = "force-dynamic";
 
@@ -145,6 +146,8 @@ export default async function Home(){
       {/* Streaming Promo */}
       
       <StreamingPromo />
+
+      <PromoVideo />
 
 
       {/* FEATURED EVENTS */}

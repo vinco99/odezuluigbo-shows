@@ -141,19 +141,20 @@ export async function ContestantPreview() {
                     <div className="vote-bar-container">
                       <div className="vote-bar-fill" style={{ width: `${percent}%` }} />
                     </div>
-
-                    <VoteButton
-                      contestantId={contestant.id}
-                      contestantName={contestant.name}
-                      eventId={contestant.event.id}
-                      eventTitle={contestant.event.title}
-                      isRealityShow={contestant.event.type === "REALITY_SHOW"}
-                      votingFee={
-                        contestant.event.votingFee > 0
-                          ? contestant.event.votingFee
-                          : DEFAULT_VOTING_FEE_NAIRA
-                      }
-                    />
+                    {contestant.event.status === "LIVE" && (
+                      <VoteButton
+                        contestantId={contestant.id}
+                        contestantName={contestant.name}
+                        eventId={contestant.event.id}
+                        eventTitle={contestant.event.title}
+                        isRealityShow={contestant.event.type === "REALITY_SHOW"}
+                        votingFee={
+                          contestant.event.votingFee > 0
+                            ? contestant.event.votingFee
+                            : DEFAULT_VOTING_FEE_NAIRA
+                        }
+                      />
+                    )}
                   </div>
                 </div>
               </ScrollReveal>

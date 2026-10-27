@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
-import { EDITORIAL_STATS } from "@/lib/site-stats";   // or hard-code below
+import { EDITORIAL_STATS } from "@/lib/site-stats";
+import StatsCounter from "./StatsCounter";
 
 const COUNTED_STATUSES = ["APPROVED", "LIVE", "COMPLETED"] as const;
 
@@ -68,17 +69,12 @@ export async function StatsSection() {
         <div className="stats-grid">
           {stats.map((s) => (
             <div className="stat-item" key={s.key}>
-              {s.animate ? (
-                <>
-                  <span className="stat-num" data-target={s.value}>0</span>
-                  {s.suffix && <span className="stat-plus">{s.suffix}</span>}
-                </>
-              ) : (
-                <>
-                  <span className="stat-num">{s.value}</span>
-                  {s.suffix && <span className="stat-plus">{s.suffix}</span>}
-                </>
-              )}
+              <StatsCounter
+                value={s.value}
+                suffix={s.suffix}
+                animate={s.animate}
+              />
+
               <span className="stat-label">{s.label}</span>
             </div>
           ))}
