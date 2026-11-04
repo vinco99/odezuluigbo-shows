@@ -3,7 +3,7 @@ import { fulfillTicket } from "@/lib/tickets/fulfill";
 import { sendTicketEmail } from "@/lib/tickets/email";
 
 export async function GET(req: Request) {
-  const base = process.env.NEXT_PUBLIC_APP_URL ?? req.url;
+  const base = process.env.AUTH_URL ?? req.url;
   const { searchParams } = new URL(req.url);
   const reference = searchParams.get("reference");
 

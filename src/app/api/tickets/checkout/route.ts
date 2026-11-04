@@ -19,7 +19,7 @@ export async function POST(req: Request) {
   if (!pkg || !pkg.active) {
     return NextResponse.json({ error: "Package not found" }, { status: 404 });
   }
-  if (pkg.event.status !== "LIVE") {
+  if (pkg.event.status !== "APPROVED") {
     return NextResponse.json({ error: "Event not on sale" }, { status: 400 });
   }
 
@@ -32,7 +32,7 @@ export async function POST(req: Request) {
     }
   }
 
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL;
+  const appUrl = process.env.AUTH_URL;
   if (!appUrl || !process.env.PAYSTACK_SECRET_KEY) {
     return NextResponse.json({ error: "Payment is not configured" }, { status: 500 });
   }

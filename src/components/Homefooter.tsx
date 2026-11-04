@@ -118,7 +118,6 @@ export default function Footer(){
                 </div>
                 <div className="footer-bottom">
                     <p>© 2026 Odezuluigbo Global Ltd. All Rights Reserved.</p>
-                    <p>Designed with <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" style={{verticalAlign: "middle"}}><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> for the Igbo people worldwide.</p>
                 </div>
             </div>
         </footer>

@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import { fulfillVotePayment } from "@/lib/voting/fulfill";
 
 export async function GET(req: Request) {
-  const base = process.env.NEXT_PUBLIC_APP_URL ?? req.url;
+  const base = process.env.AUTH_URL ?? req.url;
   const ref = new URL(req.url).searchParams.get("reference");
 
   if (!ref) return NextResponse.redirect(new URL("/vote/failed", base));

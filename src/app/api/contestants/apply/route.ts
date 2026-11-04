@@ -53,7 +53,7 @@ export async function POST(request: Request) {
 
 
   // ---- 2. Payment config check ----
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL;
+  const appUrl = process.env.AUTH_URL;
   if (!appUrl || !process.env.PAYSTACK_SECRET_KEY) {
     return Response.json(
       { error: "Payment is not configured" },

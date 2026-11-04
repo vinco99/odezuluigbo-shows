@@ -102,8 +102,8 @@ export async function fulfillTicket(reference: string) {
     console.warn("fulfillTicket: package inactive", { reference, packageId });
     return null;
   }
-  if (pkg.event.status !== "LIVE") {
-    console.warn("fulfillTicket: event not LIVE", {
+  if (pkg.event.status !== "APPROVED") {
+    console.warn("fulfillTicket: event tickets not Available", {
       reference,
       status: pkg.event.status,
     });

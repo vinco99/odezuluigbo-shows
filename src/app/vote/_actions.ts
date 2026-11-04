@@ -284,7 +284,7 @@ export async function initMoneyVote(
         email: session.user.email,
         amount: amountKobo,
         reference,
-        callback_url: `${process.env.NEXT_PUBLIC_APP_URL}/vote/callback`,
+        callback_url: `${process.env.AUTH_URL}/vote/callback`,
         metadata: {
           kind: "money_vote",
           contestantId: contestant.id,
@@ -357,7 +357,7 @@ export async function initCreditPurchase(
         email: session.user.email,
         amount: amount * 100,
         reference,
-        callback_url: `${process.env.NEXT_PUBLIC_APP_URL}/vote/callback`,
+        callback_url: `${process.env.AUTH_URL}/vote/callback`,
         metadata: {
           kind: "credit_purchase",
           credits: quantity,
@@ -454,7 +454,7 @@ export async function initCreditPackagePurchase(
         email: session.user.email,
         amount: amount * 100,
         reference,
-        callback_url: `${process.env.NEXT_PUBLIC_APP_URL}/vote/callback`,
+        callback_url: `${process.env.AUTH_URL}/vote/callback`,
         metadata: {
           kind: "credit_package_purchase",
           packageId,

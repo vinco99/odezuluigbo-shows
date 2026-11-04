@@ -71,7 +71,7 @@ export async function POST(request: Request) {
     }
 
     // ── Votes / contestants: keep the existing HTTP dispatch ──
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL;
+    const appUrl = process.env.AUTH_URL;
     if (!appUrl) {
         return Response.json(
             { error: "Webhook application URL is not configured" }, 
