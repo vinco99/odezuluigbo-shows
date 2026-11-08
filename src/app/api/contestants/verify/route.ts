@@ -86,7 +86,7 @@ export async function GET(request: Request) {
 
     // ---- 4. Amount check ----
     const paidAmount = Number(data.data.amount) / 100;
-    if (Math.abs(paidAmount - Number(event.registrationFee)) > 0.01) {
+    if (paidAmount < Number(event.registrationFee)) {
       await cleanupAssets(pending);
       return Response.json(
         { error: "Payment amount does not match the event registration fee" },
