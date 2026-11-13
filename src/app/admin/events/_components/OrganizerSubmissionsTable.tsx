@@ -30,7 +30,12 @@ export function OrganizersTable({ applications }: { applications: ApplicationRow
                             <td style={{ padding: "10px" }}>{application.businessName}</td>
                             <td style={{ padding: "10px" }}>{application.user.name || application.user.email}</td>
                             <td style={{ padding: "10px" }}>{application.phone}</td>
-                            <td style={{ padding: "10px" }}>{application.status}</td>
+                            <td style={{ padding: "10px" }}>
+                                <span className={`application-status application-status-${application.status.toLowerCase()}`}>
+                                    <span className="application-status-dot" />
+                                    {application.status}
+                                </span>
+                            </td>
                             <td style={{ padding: "10px" }}>
                                 {application.status === "PENDING" &&
                                     <Link href={`/admin/events/organizers/${application.id}`} className="btn btn-outline btn-xs">Review Application</Link>

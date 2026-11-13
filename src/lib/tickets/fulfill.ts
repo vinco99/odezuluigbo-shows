@@ -112,7 +112,7 @@ export async function fulfillTicket(reference: string) {
 
   // ---- 4. Amount check --------------------------------------------------
   const paidAmount = tx.amount / 100;
-  if (Math.abs(paidAmount - Number(pkg.price)) > 0.01) {
+  if (paidAmount < Number(pkg.price)) {
     console.warn("fulfillTicket: amount mismatch", {
       reference,
       paid: paidAmount,

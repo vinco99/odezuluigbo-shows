@@ -1,17 +1,44 @@
 "use client";
 
+import { useState } from "react";
+
 export default function ReviewButtons({ id}: { id: string}) {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   async function review(status: "APPROVED" | "REJECTED") {
-    await fetch(
-      `/api/admin/organizers/${id}`, 
-      { 
-        method: "POST", 
-        headers: { "Content-Type": "application/json" }, 
-        body: JSON.stringify({ status }) 
+    setLoading(true);
+    setError("");
+
+    try {
+      const response = await fetch(
+        `/api/admin/organizers/${id}`, 
+        { 
+          method: "POST", 
+          headers: { 
+            "Content-Type": "application/json" 
+          }, 
+          body: JSON.stringify({ status }) 
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Unable to review application");
       }
-    );
-    window.location.reload();
+
+      window.location.assign("/admin/events");
+    
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Something went wrong"
+      );
+      setLoading(false);
+    }
+   
   }
   return (
     <>

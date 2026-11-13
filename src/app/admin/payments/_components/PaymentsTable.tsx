@@ -34,7 +34,10 @@ export function PaymentTable({ payments }: { payments: PaymentRow[] }) {
                             <td style={{ padding: "10px" }}>₦{payment.amount.toString()}</td>
                             <td style={{ padding: "10px", color: "var(--w30)" }}>{payment.reference}</td>
                             <td style={{ padding: "10px" }}>
-                                <span className="status-badge approved">{payment.status.toLocaleLowerCase()}</span>
+                                <span className={`payment-status payment-status-${payment.status.toLowerCase()}`}>
+                                    <span className="payment-status-dot" />
+                                    {payment.status.toLowerCase()}
+                                </span>
                             </td>
                         </tr>
                     )}

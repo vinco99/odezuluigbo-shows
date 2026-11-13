@@ -34,8 +34,18 @@ export function ContestantTable({ contestants }: { contestants: ContestantRow[] 
                         <td style={{ padding: "10px" }}>{contestant.email}</td>
                         <td style={{ padding: "10px" }}>{contestant.phone}</td>
                         <td style={{ padding: "10px" }}>{contestant.event.title}</td>
-                        <td style={{ padding: "10px" }}>{contestant.payment.status}</td>
-                        <td style={{ padding: "10px" }}>{contestant.applicationStatus}</td>
+                        <td style={{ padding: "10px" }}>
+                            <span className={`payment-status payment-status-${contestant.payment.status.toLowerCase()}`}>
+                                <span className="payment-status-dot" />
+                                {contestant.payment.status}
+                            </span>
+                        </td>
+                        <td style={{ padding: "10px" }}>
+                            <span className={`application-status application-status-${contestant.applicationStatus.toLowerCase()}`}>
+                                <span className="application-status-dot" />
+                                {contestant.applicationStatus}
+                            </span>
+                        </td>
                         <td style={{ padding: "10px" }}>
                             {contestant.applicationStatus === "PENDING" &&
                                 <Link href={`/admin/events/contestants/${contestant.id}`} className="btn btn-outline btn-xs">Review Application</Link>

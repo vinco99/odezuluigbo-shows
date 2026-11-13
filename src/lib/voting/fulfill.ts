@@ -118,7 +118,7 @@ export async function fulfillVotePayment(reference: string) {
         }
 
         // Amount must match what we promised at init.
-        if (Math.abs(paidAmount - Number(vote.amount)) > 0.01) {
+        if (paidAmount < vote.amount) {
           throw new Error("AMOUNT_MISMATCH");
         }
 
@@ -179,7 +179,7 @@ export async function fulfillVotePayment(reference: string) {
       }
 
       // Payment.amount is stored in naira; Paystack reports kobo.
-      if (Math.round(paidAmount * 100) !== Math.round(pkg.amount * 100)) {
+      if (paidAmount < pkg.amount) {
         throw new Error("AMOUNT_MISMATCH");
       }
 
@@ -260,7 +260,8 @@ export async function fulfillVotePayment(reference: string) {
       // Amount check: credits × current unit price must equal paid amount.
       const { VOTE_PRICE_NAIRA } = await import("@/lib/voting-config");
       const expected = credits * VOTE_PRICE_NAIRA;
-      if (Math.abs(paidAmount - expected) > 0.01) {
+      
+      if (paidAmount < expected) {
         throw new Error("AMOUNT_MISMATCH");
       }
 

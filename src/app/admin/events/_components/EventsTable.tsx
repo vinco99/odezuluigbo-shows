@@ -31,7 +31,10 @@ export function EventsTable({ events }: { events: EventRow[] }) {
                                 <td style={{ padding: "10px" }} className="lowercase first-letter:uppercase">{event.type.replaceAll("_", " ")}</td>
                                 <td style={{ padding: "10px" }}>{event.organizer.name}</td>
                                 <td style={{ padding: "10px" }} >
-                                    <span className={`status-badge ${event.status.toLowerCase()}`}>{event.status.toLocaleLowerCase()}</span>
+                                    <span className={`payment-status payment-status-${event.status.toLowerCase()}`}>
+                                        <span className="payment-status-dot" />
+                                        {event.status}
+                                    </span>
                                 </td>
                                 <td style={{ padding: "10px" }}>
                                     <Link href={`/admin/events/${event.id}`} className="btn btn-outline btn-xs">Manage & Review Event</Link>

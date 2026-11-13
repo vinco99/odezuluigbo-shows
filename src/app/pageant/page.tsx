@@ -303,16 +303,6 @@ export default async function PageantPage() {
                         <div className="rule-item">
                             <b>06</b>
                             <div>
-                                <strong>Availability and personal arrangements</strong>
-                                <p>
-                                    Be available for the Sunday, 15 November audition and for official activities communicated to you. 
-                                    Travel, accommodation and personal expenses remain your responsibility unless expressly agreed otherwise.
-                                </p>
-                            </div>
-                        </div>
-                        <div className="rule-item">
-                            <b>07</b>
-                            <div>
                                 <strong>Photography, privacy and promotions</strong>
                                 <p>
                                     We will explain how photos, videos and application information may be used and obtain appropriate permissions, 
@@ -321,7 +311,7 @@ export default async function PageantPage() {
                             </div>
                         </div>
                         <div className="rule-item">
-                            <b>08</b>
+                            <b>07</b>
                             <div>
                                 <strong>Participation and brand responsibilities</strong>
                                 <p>

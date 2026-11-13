@@ -1,6 +1,7 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { contestantApplicationSchema } from "@/lib/validation";
+import { randomUUID } from "node:crypto";
 
 export async function POST(request: Request) {
   const session = await auth();
@@ -167,7 +168,23 @@ export async function POST(request: Request) {
     },
   });
 
-  // ---- 8. Initialize Paystack ----
+
+  // ---- 8. Create pending payment transaction ----
+  const reference = `REG_${randomUUID()}`;
+
+  const payment = await prisma.payment.create({
+    data: {
+      reference,
+      amount: Number(event.registrationFee),
+      status: "PENDING",
+      userId: session.user.id,
+      eventId: event.id,
+      type: "CONTESTANT_REGISTRATION",
+    },
+  });
+
+
+  // ---- 9. Initialize Paystack ----
   let paystackResponse: Response;
   let paystackData: any;
 
@@ -183,9 +200,11 @@ export async function POST(request: Request) {
         body: JSON.stringify({
           email: session.user.email,
           amount,
-          callback_url: `${appUrl}/api/contestants/verify`,
+          reference,
+          callback_url: `${appUrl.replace(/\/$/, "")}/api/contestants/verify`,
           metadata: {
             pendingId: pending.id,
+            paymentId: payment.id,
             userId: session.user.id,
             eventId: input.eventId,
             type: "CONTESTANT_REGISTRATION",
@@ -196,6 +215,11 @@ export async function POST(request: Request) {
 
     paystackData = await paystackResponse.json();
   } catch {
+    await prisma.payment.update({
+      where: { id: payment.id },
+      data: { status: "FAILED" },
+    });
+
     return Response.json(
       { error: "Unable to initialize payment" },
       { status: 502 }
@@ -203,6 +227,11 @@ export async function POST(request: Request) {
   }
 
   if (!paystackResponse.ok || !paystackData.status) {
+    await prisma.payment.update({
+      where: { id: payment.id },
+      data: { status: "FAILED" },
+    });
+
     return Response.json(
       { error: paystackData.message ?? "Unable to initialize payment" },
       { status: 400 }
@@ -211,6 +240,6 @@ export async function POST(request: Request) {
 
   return Response.json({
     authorization_url: paystackData.data.authorization_url,
-    reference: paystackData.data.reference,
+    reference,
   });
 }
