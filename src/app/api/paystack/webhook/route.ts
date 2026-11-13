@@ -1,6 +1,7 @@
 import crypto from "node:crypto";
 import { fulfillTicket } from "@/lib/tickets/fulfill";
 import { sendTicketEmail } from "@/lib/tickets/email";
+import { applyRefundWebhook } from "@/lib/refunds";
 
 export async function POST(request: Request) {
     const rawBody = await request.text();
@@ -37,6 +38,17 @@ export async function POST(request: Request) {
             { received: true }, 
             { status: 200 }
         );
+    }
+
+    // ── Refund status updates (refund.pending / processing / processed / failed) ──
+    if (payload.event?.startsWith("refund.")) {
+        try {
+            await applyRefundWebhook(payload.event, (payload.data ?? {}) as Record<string, unknown>);
+        } catch (err) {
+            console.error("Webhook: refund update failed", { event: payload.event, err });
+            return Response.json({ error: "Refund update failed" }, { status: 500 });
+        }
+        return Response.json({ received: true }, { status: 200 });
     }
 
     if (payload.event !== "charge.success" || !payload.data?.reference) {

@@ -48,6 +48,8 @@ model User {
   taskCompletions       UserTaskCompletion[]
   otps                  Otp[]
   resetTokens           ResetToken[]
+  refundsRequested      Refund[]              @relation("RefundsRequested")
+  refundOtps            RefundOtp[]
 
   suspended             Boolean   @default(false)   
   suspendedAt           DateTime?
@@ -275,9 +277,59 @@ model Payment {
   event      Event?         @relation(fields: [eventId], references: [id])
   ticket     Ticket?
   contestant Contestant? 
+  refund     Refund?
+  refundOtps RefundOtp[]
 
   @@index([eventId, status])
   @@index([userId])
+  @@index([status, createdAt])
+}
+
+enum RefundStatus {
+  PROCESSING   // claimed locally, Paystack call in flight
+  PENDING      // accepted by Paystack, waiting for the money to move
+  PROCESSED    // Paystack confirmed the money was returned
+  FAILED       // Paystack rejected or failed the refund
+}
+
+/// One refund per payment (full refunds only). Created when an admin confirms with an OTP.
+model Refund {
+  id               String       @id @default(cuid())
+  paymentId        String       @unique
+  amount           Decimal      @db.Decimal(10, 2)
+  reason           String
+  status           RefundStatus @default(PROCESSING)
+  paystackRefundId String?      @unique
+  failureReason    String?
+  /// What was reversed locally (credits taken back, ticket/vote/contestant changes), for audit and rollback.
+  reversal         Json?
+  requestedById    String
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+  processedAt      DateTime?
+
+  payment          Payment      @relation(fields: [paymentId], references: [id])
+  requestedBy      User         @relation("RefundsRequested", fields: [requestedById], references: [id])
+
+  @@index([status])
+}
+
+/// Short-lived code emailed to an admin to confirm one specific refund.
+model RefundOtp {
+  id        String    @id @default(cuid())
+  adminId   String
+  paymentId String
+  codeHash  String
+  reason    String
+  attempts  Int       @default(0)
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  admin     User      @relation(fields: [adminId], references: [id], onDelete: Cascade)
+  payment   Payment   @relation(fields: [paymentId], references: [id], onDelete: Cascade)
+
+  @@index([adminId, paymentId])
 }
 
 model Judge {
